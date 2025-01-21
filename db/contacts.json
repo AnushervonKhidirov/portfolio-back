@@ -1,0 +1,20 @@
+[
+    {
+        "id": "67df03b-1ab6-4f255-8f64-04223908be35",
+        "title": "Phone",
+        "value": "+992 77 100 7676",
+        "link": "tel:+992771007676"
+    },
+    {
+        "id": "67df033b-1ab6-4f255-8f64-042e39084be35",
+        "title": "Email",
+        "value": "ankhid98@gmail.com",
+        "link": "mailto:ankhid98@gmail.com"
+    },
+    {
+        "id": "67df03b-1ab6-4432fd5-8f64-042e3908be35",
+        "title": "Telegram",
+        "value": "@akhid",
+        "link": "https://t.me/akhid"
+    }
+]

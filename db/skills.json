@@ -1,0 +1,68 @@
+[
+    {
+        "id": "67df087b-1ab6-4f55-8f64-042e3908be35",
+        "name": "HTML",
+        "progress": 100,
+        "group": "Front-End"
+    },
+    {
+        "id": "67df087b-1ab6-4f55-8f64-042e3908be25",
+        "name": "CSS",
+        "progress": 100,
+        "group": "Front-End"
+    },
+    {
+        "id": "67df87b-1ab6-4f55-8f64-042e3908be35",
+        "name": "JavaScript",
+        "progress": 90,
+        "group": "Front-End"
+    },
+    {
+        "id": "67df087b-1ab6-4f55-8f64-42e3908be35",
+        "name": "TypeScript",
+        "progress": 60,
+        "group": "Front-End"
+    },
+    {
+        "id": "67df087b-1ab6-4f555-8f64-042e3908be35",
+        "name": "React",
+        "progress": 80,
+        "group": "Front-End"
+    },
+    {
+        "id": "67df087b-1ab36-4f55-8f64-042e3908be35",
+        "name": "Next",
+        "progress": 70,
+        "group": "Front-End"
+    },
+    {
+        "id": "67df087b-1ab6-4f55-8f64-042e390sbe35",
+        "name": "Node",
+        "progress": 40,
+        "group": "Back-End"
+    },
+    {
+        "id": "67df087b-1ab6-4f55-3f64-042e3908be35",
+        "name": "Nest",
+        "progress": 15,
+        "group": "Back-End"
+    },
+    {
+        "id": "67df087b-1abf6-4f55-8f64-042e3908be35",
+        "name": "Go",
+        "progress": 25,
+        "group": "'Back-End"
+    },
+    {
+        "id": "671f087b-1ab6-4f55-8f64-042e3908be35",
+        "name": "MySql",
+        "progress": 35,
+        "group": "Back-End"
+    },
+    {
+        "id": "67df087b-1ab6-4f55-85j4-042e3908be35",
+        "name": "Prisma",
+        "progress": 15,
+        "group": "Back-End"
+    }
+]
