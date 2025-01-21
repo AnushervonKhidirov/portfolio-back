@@ -4,10 +4,12 @@ import { Injectable } from '@nestjs/common';
 import { join } from 'node:path';
 import { readFile } from 'fs/promises';
 
+import { EndpointDB } from '@constant/endpoints';
+
 @Injectable()
 export class SkillsService {
   async getSkill(id: string) {
-    const skillsJson = await readFile(join(process.cwd(), 'db/skills.json'), {
+    const skillsJson = await readFile(join(process.cwd(), EndpointDB.Skills), {
       encoding: 'utf-8',
     });
 
@@ -17,7 +19,7 @@ export class SkillsService {
   }
 
   async getSkills(query: TSkillQuery) {
-    const skillsJson = await readFile(join(process.cwd(), 'db/skills.json'), {
+    const skillsJson = await readFile(join(process.cwd(), EndpointDB.Skills), {
       encoding: 'utf-8',
     });
 
@@ -38,7 +40,7 @@ export class SkillsService {
   }
 
   async getSkillsByGroup(skills: TSkill[], group: string) {
-    return skills.filter((skill) => skill.group === group);
+    return skills.filter((skill) => skill.groupId === group);
   }
 
   async getSkillsByMinProgress(skills: TSkill[], progress: number) {

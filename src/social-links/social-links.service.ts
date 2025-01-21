@@ -4,11 +4,13 @@ import { Injectable } from '@nestjs/common';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
 
+import { EndpointDB } from '@constant/endpoints';
+
 @Injectable()
 export class SocialLinksService {
   async getSocialLinks() {
     const socialLinksJson = await readFile(
-      join(process.cwd(), 'db/social-links.json'),
+      join(process.cwd(), EndpointDB.SocialLinks),
       { encoding: 'utf-8' },
     );
 

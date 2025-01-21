@@ -1,8 +1,8 @@
 export type TSkill = {
   id: string;
-  name: string;
+  skillId: string;
   progress: number;
-  group: string;
+  groupId: string;
 };
 
 export type TSkillQuery = {
