@@ -1,18 +1,18 @@
 [
     {
-        "id": "67df03b-1ab6-4f255-8f64-04223908be35",
+        "id": "416a65a9-68ec-40da-bf2f-305b9ca6249d",
         "title": "Phone",
         "value": "+992 77 100 7676",
         "link": "tel:+992771007676"
     },
     {
-        "id": "67df033b-1ab6-4f255-8f64-042e39084be35",
+        "id": "1d8421b6-adac-4480-8fd9-2d9e5f8b4ee3",
         "title": "Email",
         "value": "ankhid98@gmail.com",
         "link": "mailto:ankhid98@gmail.com"
     },
     {
-        "id": "67df03b-1ab6-4432fd5-8f64-042e3908be35",
+        "id": "682cbbeb-a5b1-4236-8494-2719936c8a70",
         "title": "Telegram",
         "value": "@akhid",
         "link": "https://t.me/akhid"

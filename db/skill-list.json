@@ -1,0 +1,154 @@
+[
+    {
+        "id": "3227e30d-9e10-4c0f-92db-3252ab70fed4",
+        "value": "HTML"
+    },
+    {
+        "id": "78af50a8-3952-43fc-8be0-8068797492e7",
+        "value": "CSS"
+    },
+    {
+        "id": "a3ef22b6-8653-4f8b-902e-e4b94c5c5582",
+        "value": "JavaScript"
+    },
+    {
+        "id": "2b801d63-624e-48d2-b6df-18ccc52bc181",
+        "value": "TypeScript"
+    },
+    {
+        "id": "5e5ba0b7-8714-4856-84eb-4a6c96abc216",
+        "value": "React"
+    },
+    {
+        "id": "1b746f0a-0a39-417e-88d7-a029cffc1163",
+        "value": "Preact"
+    },
+    {
+        "id": "42e9dbf0-4746-4c7d-a293-ee326ff42193",
+        "value": "Next"
+    },
+    {
+        "id": "31b69bb0-becb-437e-8701-59235c8a813c",
+        "value": "Nuxt.js"
+    },
+    {
+        "id": "67b86d48-7f71-4f1c-9087-cb67bf53ce2f",
+        "value": "Angular"
+    },
+    {
+        "id": "023789fb-2632-4059-91d9-058ca7f91ed6",
+        "value": "Vue"
+    },
+    {
+        "id": "7ef01e32-2874-4af6-bced-c21cb18d0d81",
+        "value": "Node.js"
+    },
+    {
+        "id": "1e00cd7e-430f-4917-ba4e-5b4d4efa5f06",
+        "value": "NestJS"
+    },
+    {
+        "id": "6a852fd9-083d-4eb6-8e70-74846d994d25",
+        "value": "Go"
+    },
+    {
+        "id": "f90ede3a-20e1-45a8-b840-b2932d1d7852",
+        "value": "PHP"
+    },
+    {
+        "id": "be9e7442-2582-4528-bb1f-68f7747206d8",
+        "value": "Python"
+    },
+    {
+        "id": "55a71204-7f45-4d3d-8e5a-8e299c76c13c",
+        "value": "Java"
+    },
+    {
+        "id": "ed9bba0f-1ec7-48cc-837a-8ebc698e28aa",
+        "value": "C"
+    },
+    {
+        "id": "e73dbf7d-4036-402c-b6a2-56fcc93ff3fc",
+        "value": "C#"
+    },
+    {
+        "id": "4f547020-094f-432e-9ddf-eeb91c7496e9",
+        "value": "C++"
+    },
+    {
+        "id": "6f6f1ba1-25d6-40c4-b963-a924f61571d0",
+        "value": "Swift"
+    },
+    {
+        "id": "24842351-93eb-4017-b098-0d8583fd16ca",
+        "value": "Redux"
+    },
+    {
+        "id": "ea101b21-b514-46de-a1d9-da701bc7ed5f",
+        "value": "Zustand"
+    },
+    {
+        "id": "6d850802-08db-4c73-9497-d5a24504526c",
+        "value": "MobX"
+    },
+    {
+        "id": "c8cbb3f0-4edd-4750-a62c-5359b6197412",
+        "value": "Prisma"
+    },
+    {
+        "id": "8f4c0ca3-713c-4fc1-bff4-98936427c919",
+        "value": "Sequelize"
+    },
+    {
+        "id": "50ff5359-1a7e-4c0b-b44d-952c182d8291",
+        "value": "Mongoose"
+    },
+    {
+        "id": "4829ab52-cdb2-4d2a-a715-aa8752e8eae7",
+        "value": "Typegoose"
+    },
+    {
+        "id": "374bf615-0bb8-468a-ad46-1750cf1d7f7b",
+        "value": "TypeORM"
+    },
+    {
+        "id": "b2eea751-36fd-4652-9555-4db47f6e592a",
+        "value": "MySql"
+    },
+    {
+        "id": "8fa4931a-7f36-4f27-91a5-65bda42b431f",
+        "value": "PostgreSQL"
+    },
+    {
+        "id": "83da08ec-dca4-4283-b7d4-313f5d65be1a",
+        "value": "Oracle"
+    },
+    {
+        "id": "f61ce48b-cb9d-47d0-aab7-f0abbebda25d",
+        "value": "SQLite"
+    },
+    {
+        "id": "78596af6-dd87-4ade-ab04-754eca80eec1",
+        "value": "Amazon RDS"
+    },
+    {
+        "id": "e9791610-d4ba-4689-855d-e8ab0543a1c5",
+        "value": "MongoDB"
+    },
+    {
+        "id": "5aa402bd-dc4a-49bc-87d0-4fbdb3b01aec",
+        "value": "Amazon DocumentDB"
+    },
+    {
+        "id": "ea0a980d-f6ae-4401-9dbd-edd2c6fefff4",
+        "value": "Azure Cosmos DB"
+    },
+    {
+        "id": "3af17d4c-286e-48a3-b58c-caf0f9078aa4",
+        "value": "Elastic"
+    },
+    {
+        "id": "24cc42ce-3537-4f93-bc6a-44e1e81dfaeb",
+        "value": "Redis"
+    }
+]

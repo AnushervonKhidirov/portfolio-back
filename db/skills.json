@@ -1,68 +1,68 @@
 [
     {
-        "id": "67df087b-1ab6-4f55-8f64-042e3908be35",
-        "name": "HTML",
+        "id": "fa9effab-f9aa-4ff8-bd41-d645f61fe852",
+        "skillId": "3227e30d-9e10-4c0f-92db-3252ab70fed4",
         "progress": 100,
-        "group": "Front-End"
+        "groupId": "f08969f1-38f0-4a46-9ab6-319b61cb8541"
     },
     {
-        "id": "67df087b-1ab6-4f55-8f64-042e3908be25",
-        "name": "CSS",
+        "id": "632f2d67-d306-4d86-b3bb-aeb7f502cf4b",
+        "skillId": "78af50a8-3952-43fc-8be0-8068797492e7",
         "progress": 100,
-        "group": "Front-End"
+        "groupId": "f08969f1-38f0-4a46-9ab6-319b61cb8541"
     },
     {
-        "id": "67df87b-1ab6-4f55-8f64-042e3908be35",
-        "name": "JavaScript",
+        "id": "ceffeecc-421d-4317-95ce-7426cb12c252",
+        "skillId": "a3ef22b6-8653-4f8b-902e-e4b94c5c5582",
         "progress": 90,
-        "group": "Front-End"
+        "groupId": "f08969f1-38f0-4a46-9ab6-319b61cb8541"
     },
     {
-        "id": "67df087b-1ab6-4f55-8f64-42e3908be35",
-        "name": "TypeScript",
+        "id": "a1c4203d-eba5-43f0-9ff4-ac3dad57d236",
+        "skillId": "2b801d63-624e-48d2-b6df-18ccc52bc181",
         "progress": 60,
-        "group": "Front-End"
+        "groupId": "f08969f1-38f0-4a46-9ab6-319b61cb8541"
     },
     {
-        "id": "67df087b-1ab6-4f555-8f64-042e3908be35",
-        "name": "React",
+        "id": "b7932102-1d86-4b3b-b8d4-3dff03c78a0b",
+        "skillId": "5e5ba0b7-8714-4856-84eb-4a6c96abc216",
         "progress": 80,
-        "group": "Front-End"
+        "groupId": "909e9781-3965-4678-8353-71f798aff3f1"
     },
     {
-        "id": "67df087b-1ab36-4f55-8f64-042e3908be35",
-        "name": "Next",
+        "id": "8f9b939d-e864-4f7c-a140-a23e29ce321e",
+        "skillId": "42e9dbf0-4746-4c7d-a293-ee326ff42193",
         "progress": 70,
-        "group": "Front-End"
+        "groupId": "909e9781-3965-4678-8353-71f798aff3f1"
     },
     {
-        "id": "67df087b-1ab6-4f55-8f64-042e390sbe35",
-        "name": "Node",
+        "id": "8f4b6412-d810-4141-a4c4-7ef7d0a3cfd8",
+        "skillId": "7ef01e32-2874-4af6-bced-c21cb18d0d81",
         "progress": 40,
-        "group": "Back-End"
+        "groupId": "f08969f1-38f0-4a46-9ab6-319b61cb8541"
     },
     {
-        "id": "67df087b-1ab6-4f55-3f64-042e3908be35",
-        "name": "Nest",
+        "id": "a61838f3-5354-4a48-bdd0-6ae57b0d6c34",
+        "skillId": "1e00cd7e-430f-4917-ba4e-5b4d4efa5f06",
         "progress": 15,
-        "group": "Back-End"
+        "groupId": "909e9781-3965-4678-8353-71f798aff3f1"
     },
     {
-        "id": "67df087b-1abf6-4f55-8f64-042e3908be35",
-        "name": "Go",
+        "id": "a9624628-5f87-4228-bccd-748a62ed7beb",
+        "skillId": "6a852fd9-083d-4eb6-8e70-74846d994d25",
         "progress": 25,
-        "group": "'Back-End"
+        "groupId": "'f08969f1-38f0-4a46-9ab6-319b61cb8541"
     },
     {
-        "id": "671f087b-1ab6-4f55-8f64-042e3908be35",
-        "name": "MySql",
+        "id": "a8cc6b15-f424-4f2d-b1af-560d4feba3f9",
+        "skillId": "8fa4931a-7f36-4f27-91a5-65bda42b431f",
         "progress": 35,
-        "group": "Back-End"
+        "groupId": "59cf070b-427b-4a23-a066-d59caa9ad6d6"
     },
     {
-        "id": "67df087b-1ab6-4f55-85j4-042e3908be35",
-        "name": "Prisma",
+        "id": "89f4e901-980c-4a20-afab-1bdf2ebb7094",
+        "skillId": "c8cbb3f0-4edd-4750-a62c-5359b6197412",
         "progress": 15,
-        "group": "Back-End"
+        "groupId": "832e69ef-e219-47e7-9c28-c10019ccb3e0"
     }
 ]
