@@ -4,9 +4,10 @@ import { SkillsModule } from './skills/skills.module';
 import { ContactsModule } from './contacts/contacts.module';
 import { SocialLinksModule } from './social-links/social-links.module';
 import { PositionsModule } from './positions/positions.module';
+import { GradesModule } from './grades/grades.module';
 
 @Module({
-  imports: [UserModule, SkillsModule, ContactsModule, SocialLinksModule, PositionsModule],
+  imports: [UserModule, SkillsModule, ContactsModule, SocialLinksModule, PositionsModule, GradesModule],
   controllers: [],
   providers: [],
 })
