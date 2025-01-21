@@ -6,7 +6,7 @@ export class ContactsController {
   constructor(private readonly contactsService: ContactsService) {}
 
   @Get()
-  getContacts() {
-    return this.contactsService.getContacts();
+  async getContacts() {
+    return await this.contactsService.getContacts();
   }
 }
