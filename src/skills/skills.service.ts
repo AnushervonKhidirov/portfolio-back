@@ -39,11 +39,11 @@ export class SkillsService {
     return skills;
   }
 
-  async getSkillsByGroup(skills: TSkill[], group: string) {
-    return skills.filter((skill) => skill.groupId === group);
+  private async getSkillsByGroup(skills: TSkill[], group_id: string) {
+    return skills.filter((skill) => skill.groupId === group_id);
   }
 
-  async getSkillsByMinProgress(skills: TSkill[], progress: number) {
+  private async getSkillsByMinProgress(skills: TSkill[], progress: number) {
     return skills.filter((skill) => skill.progress >= progress);
   }
 }
