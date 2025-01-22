@@ -8,7 +8,7 @@ import { EndpointDB } from '@constant/endpoints';
 
 @Injectable()
 export class PositionsService {
-  async getPositions() {
+  async findAll() {
     const positionsJson = await readFile(
       join(process.cwd(), EndpointDB.Positions),
       {
@@ -19,7 +19,7 @@ export class PositionsService {
     return JSON.parse(positionsJson) as TPosition[];
   }
 
-  async getPosition(id: string) {
+  async findOne(id: string) {
     const positionsJson = await readFile(
       join(process.cwd(), EndpointDB.Positions),
       {

@@ -16,7 +16,7 @@ export class UserService {
     private readonly gradesService: GradesService,
   ) {}
 
-  async getUser() {
+  async findOne() {
     const userInfoJson = await readFile(
       join(process.cwd(), EndpointDB.UserInfo),
       {
@@ -31,10 +31,8 @@ export class UserService {
   }
 
   private async getUserResponseData(user: TUser) {
-    const userGrade = await this.gradesService.getGrade(user.gradeId);
-    const userPosition = await this.positionsService.getPosition(
-      user.positionId,
-    );
+    const userGrade = await this.gradesService.findOne(user.gradeId);
+    const userPosition = await this.positionsService.findOne(user.positionId);
 
     const userResponse = { ...user } as TUserResponse;
 

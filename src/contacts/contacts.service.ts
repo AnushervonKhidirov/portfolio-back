@@ -6,7 +6,7 @@ import { join } from 'path';
 
 @Injectable()
 export class ContactsService {
-  async getContacts() {
+  async findAll() {
     const contactsJson = await readFile(
       join(process.cwd(), 'db/contacts.json'),
       {

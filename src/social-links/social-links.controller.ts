@@ -6,7 +6,7 @@ export class SocialLinksController {
   constructor(private readonly socialLinksService: SocialLinksService) {}
 
   @Get()
-  async getContacts() {
-    return this.socialLinksService.getSocialLinks();
+  async findAll() {
+    return this.socialLinksService.findAll();
   }
 }

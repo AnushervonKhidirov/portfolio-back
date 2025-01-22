@@ -6,12 +6,12 @@ export class PositionsController {
   constructor(private readonly positionsService: PositionsService) {}
 
   @Get()
-  async getPositions() {
-    return await this.positionsService.getPositions();
+  async findAll() {
+    return await this.positionsService.findAll();
   }
 
   @Get(':id')
-  async getPosition(@Param('id') id: string) {
-    return await this.positionsService.getPosition(id);
+  async findOne(@Param('id') id: string) {
+    return await this.positionsService.findOne(id);
   }
 }

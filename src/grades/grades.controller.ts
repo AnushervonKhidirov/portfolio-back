@@ -6,12 +6,12 @@ export class GradesController {
   constructor(private readonly gradesService: GradesService) {}
 
   @Get()
-  async getGrades() {
-    return await this.gradesService.getGrades();
+  async findAll() {
+    return await this.gradesService.findAll();
   }
 
   @Get(':id')
-  async getGrade(@Param('id') id: string) {
-    return await this.gradesService.getGrade(id);
+  async findOne(@Param('id') id: string) {
+    return await this.gradesService.findOne(id);
   }
 }

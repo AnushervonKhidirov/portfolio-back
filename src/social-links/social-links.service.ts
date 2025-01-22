@@ -8,7 +8,7 @@ import { EndpointDB } from '@constant/endpoints';
 
 @Injectable()
 export class SocialLinksService {
-  async getSocialLinks() {
+  async findAll() {
     const socialLinksJson = await readFile(
       join(process.cwd(), EndpointDB.SocialLinks),
       { encoding: 'utf-8' },
