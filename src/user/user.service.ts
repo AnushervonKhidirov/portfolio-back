@@ -1,13 +1,21 @@
-import type { TUser } from './user.type';
+import type { TUser, TUserResponse } from './user.type';
 
 import { Injectable } from '@nestjs/common';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
 
+import { PositionsService } from 'src/positions/positions.service';
+import { GradesService } from 'src/grades/grades.service';
+
 import { EndpointDB } from '@constant/endpoints';
 
 @Injectable()
 export class UserService {
+  constructor(
+    private readonly positionsService: PositionsService,
+    private readonly gradesService: GradesService,
+  ) {}
+
   async getUser() {
     const userInfoJson = await readFile(
       join(process.cwd(), EndpointDB.UserInfo),
@@ -16,6 +24,26 @@ export class UserService {
       },
     );
 
-    return JSON.parse(userInfoJson) as TUser;
+    const user = JSON.parse(userInfoJson) as TUser;
+    const userResponse = this.getUserResponseData(user);
+
+    return userResponse;
+  }
+
+  private async getUserResponseData(user: TUser) {
+    const userGrade = await this.gradesService.getGrade(user.gradeId);
+    const userPosition = await this.positionsService.getPosition(
+      user.positionId,
+    );
+
+    const userResponse = { ...user } as TUserResponse;
+
+    delete userResponse.gradeId;
+    delete userResponse.positionId;
+
+    userResponse.grade = userGrade.value;
+    userResponse.position = userPosition.value;
+
+    return userResponse;
   }
 }

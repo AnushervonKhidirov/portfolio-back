@@ -4,5 +4,10 @@ export type TUser = {
   birthDate: string;
   about: string;
   positionId: string;
-  gradeId?: string;
+  gradeId: string;
+};
+
+export type TUserResponse = TUser & {
+  position: string;
+  grade: string;
 };
