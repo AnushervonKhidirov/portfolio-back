@@ -10,8 +10,8 @@ import { EndpointDB } from '@constant/endpoints';
 @Injectable()
 export class AchievementsService {
   async findOne(id: string) {
-    const achievementsJson = await this.findAll();
-    return achievementsJson.find((achievement) => achievement.id === id);
+    const achievements = await this.findAll();
+    return achievements.find((achievement) => achievement.id === id);
   }
 
   async findAll() {
