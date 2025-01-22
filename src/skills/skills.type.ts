@@ -6,7 +6,7 @@ export type TSkill = {
 };
 
 export type TSkillResponse = TSkill & {
-  skill: string;
+  name: string;
   type: string;
 };
 

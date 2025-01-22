@@ -78,7 +78,7 @@ export class SkillsService {
     let skillResponse = [...skills] as TSkillResponse[];
 
     skillResponse = skillResponse.map((skill) => {
-      skill.skill = convertedAvailableSkills[skill.skillId];
+      skill.name = convertedAvailableSkills[skill.skillId];
       skill.type = convertedSkillTypes[skill.typeId];
 
       delete skill.skillId;
