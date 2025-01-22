@@ -84,12 +84,56 @@
         "value": "Redux"
     },
     {
+        "id": "24842351-93eb-4017-b098-0d8583fd16cb",
+        "value": "Redux Toolkit"
+    },
+    {
+        "id": "24842351-93eb-4017-z098-0d8583fd16cb",
+        "value": "Redux-Saga"
+    },
+    {
+        "id": "24842351-93eb-4017-z098-0d85v3fd16cb",
+        "value": "Redux Thunk"
+    },
+    {
         "id": "ea101b21-b514-46de-a1d9-da701bc7ed5f",
         "value": "Zustand"
     },
     {
         "id": "6d850802-08db-4c73-9497-d5a24504526c",
         "value": "MobX"
+    },
+    {
+        "id": "24842351-93eb-4017-z098-0d8583fd16cq",
+        "value": "WebSocket"
+    },
+    {
+        "id": "2j842351-93eb-4017-z098-0d8583fd16cq",
+        "value": "Jest"
+    },
+    {
+        "id": "2j842351-93eb-40j7-z098-0d8583fd16cq",
+        "value": "Mocha"
+    },
+    {
+        "id": "2jc42351-93eb-40j7-z098-0d8583fd16cq",
+        "value": "Jasmine"
+    },
+    {
+        "id": "2jc42351-93eb-40j7-z0g8-0d8583fd16cq",
+        "value": "Enzyme"
+    },
+    {
+        "id": "2j842351-93zb-4017-z098-0d8583fd16cq",
+        "value": "Cypress"
+    },
+    {
+        "id": "2j842351-93zb-4017-z098-0d85c3fd16cq",
+        "value": "Puppeteer"
+    },
+    {
+        "id": "2j842351-93zb-4a17-z098-0d85c3fd16cq",
+        "value": "React Testing Library"
     },
     {
         "id": "c8cbb3f0-4edd-4750-a62c-5359b6197412",
