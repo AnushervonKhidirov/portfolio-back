@@ -1,0 +1,97 @@
+[
+    {
+        "id": "",
+        "name": "Contobox",
+        "link": "https://www.advertisers.contobox.com",
+        "country": "Canada",
+        "positionId": "16ba3290-cbea-4474-8cbc-94017001de49",
+        "startDate": 1577818800000,
+        "endDate": null,
+        "about": "Company which provides brands with scalable, interactive, high impact, cross-device advertising technologies.",
+        "tasksIds": [
+            "425bcdcd-8128-408b-8f5d-adde648ee761",
+            "0b98b067-f5a3-4dda-849f-2bdef5777c4c",
+            "62313fba-0137-4027-bd79-faf7ecf91cfd",
+            "8ceaa2b6-1054-4395-8582-75ea00b02cfb",
+            "b745518d-9d40-4491-9bea-5e267c32e7a1",
+            "9c380cfb-7661-4502-b26d-35da82258a5a",
+            "36f9d68e-3f2f-4676-9175-795179bc1026",
+            "f2083f96-3d41-4350-998c-9864857196cf",
+            "dd8d1773-4a45-4d25-b012-f1c46e1dd76a"
+        ],
+        "achievementsIds": [
+            "9d3a5ae8-0c17-4836-9751-ccca9ee9a752",
+            "f4edb8df-e1e0-406a-a04e-acec517f30cd",
+            "568fa9bb-9bfe-40a1-9cfa-b6c6d6a92555",
+            "33455ccb-dee7-416c-bb07-189dac462f17"
+        ],
+        "stackIds": [
+            "78af50a8-3952-43fc-8be0-8068797492e7",
+            "a3ef22b6-8653-4f8b-902e-e4b94c5c5582",
+            "2b801d63-624e-48d2-b6df-18ccc52bc181",
+            "5e5ba0b7-8714-4856-84eb-4a6c96abc216",
+            "42e9dbf0-4746-4c7d-a293-ee326ff42193",
+            "24842351-93eb-4017-b098-0d8583fd16ca",
+            "24842351-93eb-4017-b098-0d8583fd16cb",
+            "3227e30d-9e10-4c0f-92db-3252ab70fed4"
+        ],
+        "type": "experience"
+    },
+    {
+        "id": "",
+        "name": "Freelance",
+        "positionId": "16ba3290-cbea-4474-8cbc-94017001de49",
+        "startDate": 1556650800000,
+        "endDate": null,
+        "tasksIds": [
+            "b503fb5d-a306-4cdd-a7c4-cf46cb80bf93",
+            "2ace1e97-017f-4019-ace3-4865336a0283",
+            "6915054e-5f9d-42d0-a5f3-bacf33e79e61",
+            "9c380cfb-7661-4502-b26d-35da82258a5a",
+            "f2083f96-3d41-4350-998c-9864857196cf",
+            "0b98b067-f5a3-4dda-849f-2bdef5777c4c",
+            "62313fba-0137-4027-bd79-faf7ecf91cfd",
+            "dd8d1773-4a45-4d25-b012-f1c46e1dd76a"
+        ],
+        "stackIds": [
+            "3227e30d-9e10-4c0f-92db-3252ab70fed4",
+            "78af50a8-3952-43fc-8be0-8068797492e7",
+            "a3ef22b6-8653-4f8b-902e-e4b94c5c5582",
+            "2b801d63-624e-48d2-b6df-18ccc52bc181",
+            "5e5ba0b7-8714-4856-84eb-4a6c96abc216",
+            "42e9dbf0-4746-4c7d-a293-ee326ff42193",
+            "24842351-93eb-4017-b098-0d8583fd16ca",
+            "24842351-93eb-4017-b098-0d8583fd16cb",
+            "24842351-93eb-4017-z098-0d85v3fd16cb",
+            "ea101b21-b514-46de-a1d9-da701bc7ed5f",
+            "24842351-93eb-4017-z098-0d8583fd16cq"
+        ],
+        "type": "experience"
+    },
+    {
+        "id": "",
+        "name": "Yandex Practicum",
+        "link": "https://practicum.yandex.ru",
+        "positionId": "16ba3290-cbea-4474-8cbc-94017001de49",
+        "startDate": 1685559600000,
+        "endDate": 1690830000000,
+        "tasksIds": [
+            "2ace1e97-017f-4019-ace3-4865336a0283",
+            "6915054e-5f9d-42d0-a5f3-bacf33e79e61",
+            "8832489e-56aa-4bf4-bb11-29dd97debdc8",
+            "e26214a3-383f-424d-9c23-f4e84008d27c",
+            "41cd34cb-f909-4ba0-85aa-22afe449260a"
+        ],
+        "stackIds": [
+            "2b801d63-624e-48d2-b6df-18ccc52bc181",
+            "5e5ba0b7-8714-4856-84eb-4a6c96abc216",
+            "24842351-93eb-4017-b098-0d8583fd16ca",
+            "24842351-93eb-4017-b098-0d8583fd16cb",
+            "24842351-93eb-4017-z098-0d85v3fd16cb",
+            "24842351-93eb-4017-z098-0d8583fd16cq",
+            "2j842351-93eb-4017-z098-0d8583fd16cq",
+            "2j842351-93zb-4017-z098-0d8583fd16cq"
+        ],
+        "type": "training"
+    }
+]
