@@ -5,6 +5,9 @@ import { ContactsModule } from './contacts/contacts.module';
 import { SocialLinksModule } from './social-links/social-links.module';
 import { PositionsModule } from './positions/positions.module';
 import { GradesModule } from './grades/grades.module';
+import { TasksModule } from './tasks/tasks.module';
+import { AchievementsModule } from './achievements/achievements.module';
+import { OrganizationsModule } from './organizations/organizations.module';
 
 @Module({
   imports: [
@@ -14,6 +17,9 @@ import { GradesModule } from './grades/grades.module';
     SocialLinksModule,
     PositionsModule,
     GradesModule,
+    TasksModule,
+    AchievementsModule,
+    OrganizationsModule,
   ],
   controllers: [],
   providers: [],
