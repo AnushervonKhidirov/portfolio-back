@@ -7,7 +7,14 @@ import { PositionsModule } from './positions/positions.module';
 import { GradesModule } from './grades/grades.module';
 
 @Module({
-  imports: [UserModule, SkillsModule, ContactsModule, SocialLinksModule, PositionsModule, GradesModule],
+  imports: [
+    UserModule,
+    SkillsModule,
+    ContactsModule,
+    SocialLinksModule,
+    PositionsModule,
+    GradesModule,
+  ],
   controllers: [],
   providers: [],
 })
