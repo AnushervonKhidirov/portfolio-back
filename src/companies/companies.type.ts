@@ -1,3 +1,7 @@
+import type { TTask } from 'src/tasks/tasks.type';
+import type { TAchievement } from 'src/achievements/achievements.type';
+import type { TAvailableSkills } from 'src/skills/skills.type';
+
 export type TCompany = {
   id: string;
   name: string;
@@ -15,7 +19,7 @@ export type TCompany = {
 
 export type TCompanyResponse = TCompany & {
   position: string;
-  tasks: string[];
-  achievements: string[];
-  stack: string[];
+  tasks: TTask[];
+  achievements: TAchievement[];
+  stacks: TAvailableSkills[];
 };
