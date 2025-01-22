@@ -7,4 +7,7 @@ export enum EndpointDB {
   Skills = 'db/skills.json',
   SocialLinks = 'db/social-links.json',
   UserInfo = 'db/user-info.json',
+  Achievements = 'db/achievements.json',
+  Companies = 'db/companies.json',
+  Tasks = 'db/tasks.json',
 }
