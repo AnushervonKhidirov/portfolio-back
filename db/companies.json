@@ -1,12 +1,11 @@
 [
     {
-        "id": "",
+        "id": "d100929a-6370-4313-b98c-ecf8568567fb",
         "name": "Contobox",
         "link": "https://www.advertisers.contobox.com",
         "country": "Canada",
         "positionId": "16ba3290-cbea-4474-8cbc-94017001de49",
         "startDate": 1577818800000,
-        "endDate": null,
         "about": "Company which provides brands with scalable, interactive, high impact, cross-device advertising technologies.",
         "tasksIds": [
             "425bcdcd-8128-408b-8f5d-adde648ee761",
@@ -38,11 +37,10 @@
         "type": "experience"
     },
     {
-        "id": "",
+        "id": "91face17-dfec-4982-b4d8-4ca9c94cf204",
         "name": "Freelance",
         "positionId": "16ba3290-cbea-4474-8cbc-94017001de49",
         "startDate": 1556650800000,
-        "endDate": null,
         "tasksIds": [
             "b503fb5d-a306-4cdd-a7c4-cf46cb80bf93",
             "2ace1e97-017f-4019-ace3-4865336a0283",
@@ -69,7 +67,7 @@
         "type": "experience"
     },
     {
-        "id": "",
+        "id": "541a1328-639c-4fa2-8821-aa47ccb5f3df",
         "name": "Yandex Practicum",
         "link": "https://practicum.yandex.ru",
         "positionId": "16ba3290-cbea-4474-8cbc-94017001de49",
