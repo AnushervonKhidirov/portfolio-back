@@ -23,3 +23,7 @@ export type TCompanyResponse = TCompany & {
   achievements: TAchievement[];
   stacks: TAvailableSkills[];
 };
+
+export type TCompanyQuery = {
+  type?: string;
+};

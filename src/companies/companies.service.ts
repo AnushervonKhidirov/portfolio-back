@@ -1,4 +1,8 @@
-import type { TCompany, TCompanyResponse } from './companies.type';
+import type {
+  TCompany,
+  TCompanyResponse,
+  TCompanyQuery,
+} from './companies.type';
 
 import { Injectable } from '@nestjs/common';
 
@@ -26,7 +30,7 @@ export class CompaniesService {
     return companies.find((company) => company.id === id);
   }
 
-  async findAll() {
+  async findAll(query?: TCompanyQuery) {
     const companiesJson = await readFile(
       join(process.cwd(), EndpointDB.Companies),
       { encoding: 'utf-8' },
@@ -34,6 +38,12 @@ export class CompaniesService {
 
     const companies = JSON.parse(companiesJson) as TCompany[];
     const companiesResponse = await this.getCompaniesResponse(companies);
+
+    if (query.type) {
+      return companiesResponse.filter(
+        (companyResponse) => companyResponse.type === query.type,
+      );
+    }
 
     return companiesResponse;
   }
