@@ -7,7 +7,7 @@ import { PositionsModule } from './positions/positions.module';
 import { GradesModule } from './grades/grades.module';
 import { TasksModule } from './tasks/tasks.module';
 import { AchievementsModule } from './achievements/achievements.module';
-import { OrganizationsModule } from './organizations/organizations.module';
+import { CompaniesModule } from './companies/companies.module';
 
 @Module({
   imports: [
@@ -19,7 +19,7 @@ import { OrganizationsModule } from './organizations/organizations.module';
     GradesModule,
     TasksModule,
     AchievementsModule,
-    OrganizationsModule,
+    CompaniesModule,
   ],
   controllers: [],
   providers: [],
