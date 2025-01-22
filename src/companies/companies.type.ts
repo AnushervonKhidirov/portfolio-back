@@ -12,7 +12,7 @@ export type TCompany = {
   endDate?: number;
   about?: string;
   tasksIds: string[];
-  achievementsIds: string[];
+  achievementsIds?: string[];
   stackIds: string[];
   type: string;
 };
