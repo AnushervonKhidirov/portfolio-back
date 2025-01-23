@@ -10,4 +10,5 @@ export enum EndpointDB {
   Achievements = 'db/achievements.json',
   Companies = 'db/companies.json',
   Tasks = 'db/tasks.json',
+  Projects = 'db/projects.json',
 }
