@@ -2,7 +2,7 @@
     {
         "id": "e5644717-1b35-4086-a137-589eb76be0e1",
         "title": "Stellar Burger",
-        "imageUrl": "/home/anushervon/Programming/project/portfolio-back/uploads/images/projects/stellar-burger.png",
+        "imageUrl": "https://raw.githubusercontent.com/AnushervonKhidirov/portfolio-back/refs/heads/master/uploads/images/projects/stellar-burger.png",
         "stackIds": [
             "2b801d63-624e-48d2-b6df-18ccc52bc181",
             "5e5ba0b7-8714-4856-84eb-4a6c96abc216",
@@ -24,7 +24,7 @@
     {
         "id": "4f9451ae-2523-46ec-9518-fea9f52628b9",
         "title": "iZZi Ride",
-        "imageUrl": "/home/anushervon/Programming/project/portfolio-back/uploads/images/projects/izzi-ride.png",
+        "imageUrl": "https://raw.githubusercontent.com/AnushervonKhidirov/portfolio-back/refs/heads/master/uploads/images/projects/izzi-ride.png",
         "stackIds": [
             "2b801d63-624e-48d2-b6df-18ccc52bc181",
             "42e9dbf0-4746-4c7d-a293-ee326ff42193",
@@ -47,7 +47,7 @@
     {
         "id": "8a264b2d-c287-4eab-99c6-5f043a91a2ae",
         "title": "Charge Motion",
-        "imageUrl": "/home/anushervon/Programming/project/portfolio-back/uploads/images/projects/charge-motion.png",
+        "imageUrl": "https://raw.githubusercontent.com/AnushervonKhidirov/portfolio-back/refs/heads/master/uploads/images/projects/charge-motion.png",
         "stackIds": [
             "3227e30d-9e10-4c0f-92db-3252ab70fed4",
             "78af50a8-3952-43fc-8be0-8068797492e7",
