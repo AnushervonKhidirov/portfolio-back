@@ -1,6 +1,6 @@
 [
     {
-        "id": "1",
+        "id": "e5644717-1b35-4086-a137-589eb76be0e1",
         "title": "Stellar Burger",
         "imageUrl": "/home/anushervon/Programming/project/portfolio-back/uploads/images/projects/stellar-burger.png",
         "stackIds": [
@@ -22,7 +22,7 @@
         ]
     },
     {
-        "id": "2",
+        "id": "4f9451ae-2523-46ec-9518-fea9f52628b9",
         "title": "iZZi Ride",
         "imageUrl": "/home/anushervon/Programming/project/portfolio-back/uploads/images/projects/izzi-ride.png",
         "stackIds": [
@@ -45,7 +45,7 @@
         ]
     },
     {
-        "id": "3",
+        "id": "8a264b2d-c287-4eab-99c6-5f043a91a2ae",
         "title": "Charge Motion",
         "imageUrl": "/home/anushervon/Programming/project/portfolio-back/uploads/images/projects/charge-motion.png",
         "stackIds": [
