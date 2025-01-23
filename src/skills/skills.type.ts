@@ -10,7 +10,7 @@ export type TSkillResponse = TSkill & {
   type: string;
 };
 
-export type TAvailableSkills = {
+export type TAvailableSkill = {
   id: string;
   value: string;
 };

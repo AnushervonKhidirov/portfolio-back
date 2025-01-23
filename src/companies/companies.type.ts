@@ -1,6 +1,6 @@
 import type { TTask } from 'src/tasks/tasks.type';
 import type { TAchievement } from 'src/achievements/achievements.type';
-import type { TAvailableSkills } from 'src/skills/skills.type';
+import type { TAvailableSkill } from 'src/skills/skills.type';
 
 export type TCompany = {
   id: string;
@@ -21,7 +21,7 @@ export type TCompanyResponse = TCompany & {
   position: string;
   tasks: TTask[];
   achievements: TAchievement[];
-  stacks: TAvailableSkills[];
+  stacks: TAvailableSkill[];
 };
 
 export type TCompanyQuery = {

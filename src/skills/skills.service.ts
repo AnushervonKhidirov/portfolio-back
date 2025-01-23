@@ -1,7 +1,7 @@
 import type {
   TSkill,
   TSkillQuery,
-  TAvailableSkills,
+  TAvailableSkill,
   TSkillResponse,
   TSkillTypes,
 } from './skills.type';
@@ -52,7 +52,7 @@ export class SkillsService {
       },
     );
 
-    return JSON.parse(skillsJson) as TAvailableSkills[];
+    return JSON.parse(skillsJson) as TAvailableSkill[];
   }
 
   async getSkillTypes() {
