@@ -5,7 +5,7 @@ export type TProject = {
   title: string;
   imageUrl: string;
   stackIds: string[];
-  links: TProjectLink[];
+  links?: TProjectLink[];
 };
 
 export type TProjectResponse = TProject & {
