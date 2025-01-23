@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { SkillsModule } from './skills/skills.module';
 import { ContactsModule } from './contacts/contacts.module';
@@ -9,9 +10,11 @@ import { TasksModule } from './tasks/tasks.module';
 import { AchievementsModule } from './achievements/achievements.module';
 import { CompaniesModule } from './companies/companies.module';
 import { ProjectsModule } from './projects/projects.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     UserModule,
     SkillsModule,
     ContactsModule,
@@ -22,6 +25,7 @@ import { ProjectsModule } from './projects/projects.module';
     AchievementsModule,
     CompaniesModule,
     ProjectsModule,
+    MailModule,
   ],
   controllers: [],
   providers: [],
