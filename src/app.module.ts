@@ -8,6 +8,7 @@ import { GradesModule } from './grades/grades.module';
 import { TasksModule } from './tasks/tasks.module';
 import { AchievementsModule } from './achievements/achievements.module';
 import { CompaniesModule } from './companies/companies.module';
+import { ProjectsModule } from './projects/projects.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { CompaniesModule } from './companies/companies.module';
     TasksModule,
     AchievementsModule,
     CompaniesModule,
+    ProjectsModule,
   ],
   controllers: [],
   providers: [],
