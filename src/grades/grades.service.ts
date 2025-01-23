@@ -8,21 +8,16 @@ import { EndpointDB } from '@constant/endpoints';
 
 @Injectable()
 export class GradesService {
+  async findOne(id: string) {
+    const grades = await this.findAll();
+    return grades.find((grade) => grade.id === id);
+  }
+
   async findAll() {
     const gradesJson = await readFile(join(process.cwd(), EndpointDB.Grades), {
       encoding: 'utf-8',
     });
 
     return JSON.parse(gradesJson) as TGrade[];
-  }
-
-  async findOne(id: string) {
-    const gradesJson = await readFile(join(process.cwd(), EndpointDB.Grades), {
-      encoding: 'utf-8',
-    });
-
-    const grades = JSON.parse(gradesJson) as TGrade[];
-
-    return grades.find((grade) => grade.id === id);
   }
 }
