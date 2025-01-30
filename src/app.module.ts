@@ -26,6 +26,7 @@ import { ProjectsModule } from './projects/projects.module';
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       entities: [Skill],
+      synchronize: true,
     }),
     UserModule,
     SkillsModule,
