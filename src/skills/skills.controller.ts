@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Post,
+  Patch,
   Delete,
   Body,
   Param,
@@ -11,7 +12,9 @@ import {
   ConflictException,
 } from '@nestjs/common';
 import { SkillsService } from './skills.service';
+
 import { CreateSkillDto } from './dto/create-skill.dto';
+import { UpdateSkillDto } from './dto/update-skill.dto';
 
 @Controller('skills')
 export class SkillsController {
@@ -42,9 +45,18 @@ export class SkillsController {
     return skill;
   }
 
+  @Patch(':id')
+  async update(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+    @Body(new ValidationPipe()) updateSkillDto: UpdateSkillDto,
+  ) {
+    const result = await this.skillService.update(id, updateSkillDto);
+    if (!result) throw new NotFoundException(`Skill doesn't exist`);
+  }
+
   @Delete(':id')
-  async delete(@Param('id') id: string) {
+  async delete(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
     const result = await this.skillService.delete(id);
-    if (!result) throw new NotFoundException(`Skill with doesn't exist`);
+    if (!result) throw new NotFoundException(`Skill doesn't exist`);
   }
 }

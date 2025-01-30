@@ -3,7 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { Skill } from './entity/skill.entity';
+
 import { CreateSkillDto } from './dto/create-skill.dto';
+import { UpdateSkillDto } from './dto/update-skill.dto';
 
 @Injectable()
 export class SkillsService {
@@ -51,10 +53,22 @@ export class SkillsService {
     }
   }
 
+  async update(id: string, updateSkillDto: UpdateSkillDto) {
+    try {
+      const isExist = await this.skillRepository.existsBy({ id });
+      if (!isExist) return null;
+
+      return await this.skillRepository.update(id, updateSkillDto);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   async delete(id: string) {
     try {
       const isExist = await this.skillRepository.existsBy({ id });
       if (!isExist) return null;
+
       return await this.skillRepository.delete(id);
     } catch (err) {
       console.log(err);
