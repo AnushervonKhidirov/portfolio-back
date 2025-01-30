@@ -36,7 +36,9 @@ export class SkillsService {
         name: createSkillDto.name,
       });
 
-      if (isExist) return null;
+      if (isExist) {
+        throw new Error(`Skill '${createSkillDto.name}' already exist`);
+      }
 
       const { generatedMaps } =
         await this.skillRepository.insert(createSkillDto);
@@ -56,7 +58,7 @@ export class SkillsService {
   async update(id: string, updateSkillDto: UpdateSkillDto) {
     try {
       const isExist = await this.skillRepository.existsBy({ id });
-      if (!isExist) return null;
+      if (!isExist) throw new Error(`Skill with id: ${id} doesn't exist`);
 
       return await this.skillRepository.update(id, updateSkillDto);
     } catch (err) {
@@ -67,7 +69,7 @@ export class SkillsService {
   async delete(id: string) {
     try {
       const isExist = await this.skillRepository.existsBy({ id });
-      if (!isExist) return null;
+      if (!isExist) throw new Error(`Skill with id: ${id} doesn't exist`);
 
       return await this.skillRepository.delete(id);
     } catch (err) {
