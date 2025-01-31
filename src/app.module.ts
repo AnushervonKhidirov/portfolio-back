@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { SkillEntity } from './skills/entity/skill.entity';
 import { AcquiredSkillEntity } from './acquired-skills/entity/acquired-skills.entity';
 import { PositionEntity } from './positions/entity/position.entity';
+import { GradeEntity } from './grades/entity/grade.entity';
 
 import { UserModule } from './user/user.module';
 import { SkillsModule } from './skills/skills.module';
@@ -28,7 +29,7 @@ import { LearnedSkillsModule } from './acquired-skills/acquired-skills.module';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [SkillEntity, AcquiredSkillEntity, PositionEntity],
+      entities: [SkillEntity, AcquiredSkillEntity, PositionEntity, GradeEntity],
       synchronize: true,
     }),
     UserModule,
