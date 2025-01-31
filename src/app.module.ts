@@ -2,7 +2,8 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Skill } from './skills/entity/skill.entity';
+import { SkillEntity } from './skills/entity/skill.entity';
+import { AcquiredSkillEntity } from './acquired-skills/entity/acquired-skills.entity';
 
 import { UserModule } from './user/user.module';
 import { SkillsModule } from './skills/skills.module';
@@ -14,6 +15,7 @@ import { TasksModule } from './tasks/tasks.module';
 import { AchievementsModule } from './achievements/achievements.module';
 import { CompaniesModule } from './companies/companies.module';
 import { ProjectsModule } from './projects/projects.module';
+import { LearnedSkillsModule } from './acquired-skills/acquired-skills.module';
 
 @Module({
   imports: [
@@ -25,7 +27,7 @@ import { ProjectsModule } from './projects/projects.module';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [Skill],
+      entities: [SkillEntity, AcquiredSkillEntity],
       synchronize: true,
     }),
     UserModule,
@@ -38,6 +40,7 @@ import { ProjectsModule } from './projects/projects.module';
     AchievementsModule,
     CompaniesModule,
     ProjectsModule,
+    LearnedSkillsModule,
   ],
   controllers: [],
   providers: [],
