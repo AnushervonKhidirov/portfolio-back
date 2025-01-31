@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { Skill } from './entity/skill.entity';
+import { SkillEntity } from './entity/skill.entity';
 
 import { CreateSkillDto } from './dto/create-skill.dto';
 import { UpdateSkillDto } from './dto/update-skill.dto';
@@ -10,8 +10,8 @@ import { UpdateSkillDto } from './dto/update-skill.dto';
 @Injectable()
 export class SkillsService {
   constructor(
-    @InjectRepository(Skill)
-    private readonly skillRepository: Repository<Skill>,
+    @InjectRepository(SkillEntity)
+    private readonly skillRepository: Repository<SkillEntity>,
   ) {}
 
   async findOne(id: string) {
@@ -40,16 +40,10 @@ export class SkillsService {
         throw new Error(`Skill '${createSkillDto.name}' already exist`);
       }
 
-      const { generatedMaps } =
-        await this.skillRepository.insert(createSkillDto);
+      const newSkill = this.skillRepository.create(createSkillDto)
+      const createdSkill = await this.skillRepository.save(newSkill)
 
-      const createdSkill: Skill = {
-        id: generatedMaps[0].id,
-        createdAt: generatedMaps[0].createdAt,
-        name: createSkillDto.name,
-      };
-
-      return createdSkill;
+      return createdSkill
     } catch (err) {
       console.log(err);
     }
