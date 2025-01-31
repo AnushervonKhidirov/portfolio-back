@@ -1,26 +1,68 @@
-import type { TPosition } from './positions.type';
-
 import { Injectable } from '@nestjs/common';
-import { readFile } from 'fs/promises';
-import { join } from 'path';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
-import { EndpointDB } from '@constant/endpoints';
+import { PositionEntity } from './entity/position.entity';
+
+import { CreatePositionDto } from './dto/create-position.dto';
+import { UpdatePositionDto } from './dto/update-position.dto';
 
 @Injectable()
 export class PositionsService {
+  constructor(
+    @InjectRepository(PositionEntity)
+    private readonly positionRepository: Repository<PositionEntity>,
+  ) {}
+
   async findOne(id: string) {
-    const positions = await this.findAll();
-    return positions.find((position) => position.id === id);
+    try {
+      return await this.positionRepository.findOneBy({ id });
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   async findAll() {
-    const positionsJson = await readFile(
-      join(process.cwd(), EndpointDB.Positions),
-      {
-        encoding: 'utf-8',
-      },
-    );
+    try {
+      return await this.positionRepository.find();
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
-    return JSON.parse(positionsJson) as TPosition[];
+  async create(createPositionDto: CreatePositionDto) {
+    try {
+      const isExist = await this.positionRepository.existsBy({
+        name: createPositionDto.name,
+      });
+      if (isExist) throw new Error(`${createPositionDto.name} already exists`);
+
+      const newPosition = this.positionRepository.create(createPositionDto);
+      return await this.positionRepository.save(newPosition);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async update(id: string, updatePositionDto: UpdatePositionDto) {
+    try {
+      const isExist = await this.positionRepository.existsBy({ id });
+      if (!isExist) throw new Error(`Position with id: ${id} doesn't exists`);
+
+      return await this.positionRepository.update(id, updatePositionDto);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async delete(id: string) {
+    try {
+      const isExist = await this.positionRepository.existsBy({ id });
+      if (!isExist) throw new Error(`Position with id: ${id} doesn't exists`);
+
+      return await this.positionRepository.delete(id);
+    } catch (err) {
+      console.log(err);
+    }
   }
 }
