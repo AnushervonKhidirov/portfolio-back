@@ -41,9 +41,7 @@ export class SkillsService {
       }
 
       const newSkill = this.skillRepository.create(createSkillDto)
-      const createdSkill = await this.skillRepository.save(newSkill)
-
-      return createdSkill
+      return await this.skillRepository.save(newSkill)
     } catch (err) {
       console.log(err);
     }
