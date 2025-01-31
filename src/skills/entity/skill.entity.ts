@@ -1,17 +1,20 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { AcquiredSkillEntity } from 'src/acquired-skills/entity/acquired-skills.entity';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, OneToOne } from 'typeorm';
 
 @Entity({ name: 'skills' })
-export class Skill {
+export class SkillEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ unique: true })
   name: string;
 
-  @Column({
+  @CreateDateColumn({
     name: 'created_at',
     type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
   })
   createdAt: Date;
+
+  @OneToOne(() => AcquiredSkillEntity, (acquiredSkill) => acquiredSkill.skill)
+  acquiredSkill: AcquiredSkillEntity
 }
