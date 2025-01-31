@@ -1,5 +1,19 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  Param,
+  Body,
+  NotFoundException,
+  ConflictException,
+  ValidationPipe,
+  ParseUUIDPipe,
+} from '@nestjs/common';
 import { GradesService } from './grades.service';
+import { CreateGradeDto } from './dto/create-grade.dto';
+import { UpdateGradeDto } from './dto/update-grade.dto';
 
 @Controller('grades')
 export class GradesController {
@@ -12,6 +26,35 @@ export class GradesController {
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    return await this.gradesService.findOne(id);
+    const grade = await this.gradesService.findOne(id);
+    if (!grade) throw new NotFoundException();
+    return grade;
+  }
+
+  @Post()
+  async create(@Body(new ValidationPipe()) createGradeDto: CreateGradeDto) {
+    const grade = await this.gradesService.create(createGradeDto);
+    if (!grade) {
+      throw new ConflictException(
+        `Position '${createGradeDto.name}' already exist`,
+      );
+    }
+
+    return grade;
+  }
+
+  @Patch(':id')
+  async update(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+    @Body(new ValidationPipe()) updateGradeDto: UpdateGradeDto,
+  ) {
+    const result = await this.gradesService.update(id, updateGradeDto);
+    if (!result) throw new NotFoundException();
+  }
+
+  @Delete(':id')
+  async delete(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
+    const result = await this.gradesService.delete(id);
+    if (!result) throw new NotFoundException();
   }
 }
