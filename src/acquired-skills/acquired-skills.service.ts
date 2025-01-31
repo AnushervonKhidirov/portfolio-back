@@ -61,10 +61,7 @@ export class AcquiredSkillsService {
         skill: skill,
       });
 
-      const createdAcquireSkill =
-        await this.acquiredSkillRepository.save(newAcquiredSkill);
-
-      return createdAcquireSkill;
+      return await this.acquiredSkillRepository.save(newAcquiredSkill);
     } catch (err) {
       console.log(err);
     }
@@ -93,12 +90,7 @@ export class AcquiredSkillsService {
         skill: skill,
       });
 
-      const updatedAcquireSkill = await this.acquiredSkillRepository.update(
-        id,
-        newAcquiredSkill,
-      );
-
-      return updatedAcquireSkill;
+      return await this.acquiredSkillRepository.update(id, newAcquiredSkill);
     } catch (err) {
       console.log(err);
     }
