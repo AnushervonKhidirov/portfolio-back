@@ -9,15 +9,10 @@ import { GradeEntity } from './grades/entity/grade.entity';
 import { TaskEntity } from './tasks/entity/task.entity';
 import { AchievementEntity } from './achievements/entity/achievement.entity';
 
-import { UserModule } from './user/user.module';
 import { SkillsModule } from './skills/skills.module';
-import { ContactsModule } from './contacts/contacts.module';
-import { SocialLinksModule } from './social-links/social-links.module';
 import { PositionsModule } from './positions/positions.module';
 import { GradesModule } from './grades/grades.module';
-import { CompaniesModule } from './companies/companies.module';
-import { ProjectsModule } from './projects/projects.module';
-import { LearnedSkillsModule } from './acquired-skills/acquired-skills.module';
+import { AcquiredSkillsModule } from './acquired-skills/acquired-skills.module';
 import { TasksModule } from './tasks/tasks.module';
 import { AchievementsModule } from './achievements/achievements.module';
 
@@ -41,15 +36,10 @@ import { AchievementsModule } from './achievements/achievements.module';
       ],
       synchronize: true,
     }),
-    UserModule,
     SkillsModule,
-    ContactsModule,
-    SocialLinksModule,
     PositionsModule,
     GradesModule,
-    CompaniesModule,
-    ProjectsModule,
-    LearnedSkillsModule,
+    AcquiredSkillsModule,
     TasksModule,
     AchievementsModule,
   ],
