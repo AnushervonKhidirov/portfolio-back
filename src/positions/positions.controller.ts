@@ -11,19 +11,42 @@ import {
   ParseUUIDPipe,
   NotFoundException,
 } from '@nestjs/common';
+
+import { ApiOkResponse } from '@nestjs/swagger';
+
 import { PositionsService } from './positions.service';
 import { CreatePositionDto } from './dto/create-position.dto';
 import { UpdatePositionDto } from './dto/update-position.dto';
+import { PositionEntity } from './entity/position.entity';
 
 @Controller('positions')
 export class PositionsController {
   constructor(private readonly positionsService: PositionsService) {}
 
+  @ApiOkResponse({
+    type: PositionEntity,
+    isArray: true,
+    example: [
+      {
+        id: '2da87a04-fee4-49e0-939b-1b3ac750406f',
+        name: 'Back-End',
+        createdAt: '2025-01-31T14:23:56.658Z',
+      },
+    ],
+  })
   @Get()
   async findAll() {
     return await this.positionsService.findAll();
   }
 
+  @ApiOkResponse({
+    type: PositionEntity,
+    example: {
+      id: '2da87a04-fee4-49e0-939b-1b3ac750406f',
+      name: 'Back-End',
+      createdAt: '2025-01-31T14:23:56.658Z',
+    },
+  })
   @Get(':id')
   async findOne(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
     const skill = await this.positionsService.findOne(id);
@@ -31,6 +54,14 @@ export class PositionsController {
     return skill;
   }
 
+  @ApiOkResponse({
+    type: PositionEntity,
+    example: {
+      id: '2da87a04-fee4-49e0-939b-1b3ac750406f',
+      name: 'Back-End',
+      createdAt: '2025-01-31T14:23:56.658Z',
+    },
+  })
   @Post()
   async create(
     @Body(new ValidationPipe()) createPositionDto: CreatePositionDto,
