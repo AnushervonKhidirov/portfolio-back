@@ -11,7 +11,6 @@ import {
   ParseUUIDPipe,
   NotFoundException,
 } from '@nestjs/common';
-
 import { ApiOkResponse } from '@nestjs/swagger';
 
 import { PositionsService } from './positions.service';

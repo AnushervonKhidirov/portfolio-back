@@ -11,19 +11,42 @@ import {
   ValidationPipe,
   ParseUUIDPipe,
 } from '@nestjs/common';
+import { ApiOkResponse } from '@nestjs/swagger';
+
 import { GradesService } from './grades.service';
 import { CreateGradeDto } from './dto/create-grade.dto';
 import { UpdateGradeDto } from './dto/update-grade.dto';
+import { GradeEntity } from './entity/grade.entity';
 
 @Controller('grades')
 export class GradesController {
   constructor(private readonly gradesService: GradesService) {}
 
+  @ApiOkResponse({
+    type: GradeEntity,
+    isArray: true,
+    example: [
+      {
+        id: 'be2131c3-4807-4838-83f7-9e28fe32252c',
+        name: 'Middle',
+        createdAt: '2025-01-31T15:00:53.972Z',
+      },
+    ],
+  })
   @Get()
   async findAll() {
     return await this.gradesService.findAll();
   }
 
+  @ApiOkResponse({
+    type: GradeEntity,
+    isArray: true,
+    example: {
+      id: 'be2131c3-4807-4838-83f7-9e28fe32252c',
+      name: 'Middle',
+      createdAt: '2025-01-31T15:00:53.972Z',
+    },
+  })
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const grade = await this.gradesService.findOne(id);
@@ -31,6 +54,15 @@ export class GradesController {
     return grade;
   }
 
+  @ApiOkResponse({
+    type: GradeEntity,
+    isArray: true,
+    example: {
+      id: 'be2131c3-4807-4838-83f7-9e28fe32252c',
+      name: 'Middle',
+      createdAt: '2025-01-31T15:00:53.972Z',
+    },
+  })
   @Post()
   async create(@Body(new ValidationPipe()) createGradeDto: CreateGradeDto) {
     const grade = await this.gradesService.create(createGradeDto);
