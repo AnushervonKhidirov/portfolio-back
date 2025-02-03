@@ -7,6 +7,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
+import type { TSkillType } from '../acquired-skills.type';
+
 import { SkillEntity } from 'src/skills/entity/skill.entity';
 
 @Entity({ name: 'acquired_skills' })
@@ -16,6 +18,9 @@ export class AcquiredSkillEntity {
 
   @Column({ type: 'tinyint' })
   progress: number;
+
+  @Column({ name: 'skill_type' })
+  skillType: TSkillType
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
   createdAt: Date;
