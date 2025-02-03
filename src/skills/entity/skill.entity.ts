@@ -4,9 +4,11 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   OneToOne,
+  ManyToMany,
 } from 'typeorm';
 
 import { AcquiredSkillEntity } from 'src/acquired-skills/entity/acquired-skills.entity';
+import { CompanyEntity } from 'src/companies/entity/company.entity';
 
 @Entity({ name: 'skills' })
 export class SkillEntity {
@@ -21,4 +23,7 @@ export class SkillEntity {
 
   @OneToOne(() => AcquiredSkillEntity, (acquiredSkill) => acquiredSkill.skill)
   acquiredSkill: AcquiredSkillEntity;
+
+  @ManyToMany(() => CompanyEntity, (company) => company.stack)
+  stack: CompanyEntity[];
 }

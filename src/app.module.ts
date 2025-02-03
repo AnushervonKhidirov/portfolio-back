@@ -8,13 +8,15 @@ import { PositionEntity } from './positions/entity/position.entity';
 import { GradeEntity } from './grades/entity/grade.entity';
 import { TaskEntity } from './tasks/entity/task.entity';
 import { AchievementEntity } from './achievements/entity/achievement.entity';
+import { CompanyEntity } from './companies/entity/company.entity';
 
 import { SkillsModule } from './skills/skills.module';
+import { AcquiredSkillsModule } from './acquired-skills/acquired-skills.module';
 import { PositionsModule } from './positions/positions.module';
 import { GradesModule } from './grades/grades.module';
-import { AcquiredSkillsModule } from './acquired-skills/acquired-skills.module';
 import { TasksModule } from './tasks/tasks.module';
 import { AchievementsModule } from './achievements/achievements.module';
+import { CompaniesModule } from './companies/companies.module';
 
 @Module({
   imports: [
@@ -33,6 +35,7 @@ import { AchievementsModule } from './achievements/achievements.module';
         GradeEntity,
         TaskEntity,
         AchievementEntity,
+        CompanyEntity,
       ],
       synchronize: true,
     }),
@@ -42,6 +45,7 @@ import { AchievementsModule } from './achievements/achievements.module';
     AcquiredSkillsModule,
     TasksModule,
     AchievementsModule,
+    CompaniesModule,
   ],
   controllers: [],
   providers: [],

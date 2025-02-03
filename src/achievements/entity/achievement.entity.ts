@@ -3,7 +3,10 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
+  ManyToMany,
 } from 'typeorm';
+
+import { CompanyEntity } from 'src/companies/entity/company.entity';
 
 @Entity({ name: 'achievements' })
 export class AchievementEntity {
@@ -15,4 +18,7 @@ export class AchievementEntity {
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;
+
+  @ManyToMany(() => CompanyEntity, (company) => company.achievements)
+  company: CompanyEntity[]
 }
