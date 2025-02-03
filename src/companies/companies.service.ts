@@ -1,98 +1,172 @@
-import type {
-  TCompany,
-  TCompanyResponse,
-  TCompanyQuery,
-} from './companies.type';
-
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
-import { readFile } from 'fs/promises';
-import { join } from 'path';
+import { CompanyEntity } from './entity/company.entity';
+import { GradeEntity } from 'src/grades/entity/grade.entity';
+import { PositionEntity } from 'src/positions/entity/position.entity';
+import { TaskEntity } from 'src/tasks/entity/task.entity';
+import { AchievementEntity } from 'src/achievements/entity/achievement.entity';
+import { SkillEntity } from 'src/skills/entity/skill.entity';
 
-import { PositionsService } from 'src/positions/positions.service';
-import { TasksService } from 'src/tasks/tasks.service';
-import { AchievementsService } from 'src/achievements/achievements.service';
-import { SkillsService } from 'src/skills/skills.service';
-
-import { EndpointDB } from '@constant/endpoints';
+import { CreateCompanyDto } from './dto/create-company.dto';
+import { UpdateCompanyDto } from './dto/update-company.dto';
 
 @Injectable()
 export class CompaniesService {
   constructor(
-    private readonly positionsService: PositionsService,
-    private readonly tasksService: TasksService,
-    private readonly achievementsService: AchievementsService,
-    private readonly skillsService: SkillsService,
+    @InjectRepository(CompanyEntity)
+    private readonly companyRepository: Repository<CompanyEntity>,
+
+    @InjectRepository(GradeEntity)
+    private readonly gradeRepository: Repository<GradeEntity>,
+
+    @InjectRepository(PositionEntity)
+    private readonly positionRepository: Repository<PositionEntity>,
+
+    @InjectRepository(TaskEntity)
+    private readonly taskRepository: Repository<TaskEntity>,
+
+    @InjectRepository(AchievementEntity)
+    private readonly achievementRepository: Repository<AchievementEntity>,
+
+    @InjectRepository(SkillEntity)
+    private readonly skillRepository: Repository<SkillEntity>,
   ) {}
 
   async findOne(id: string) {
-    const companies = await this.findAll();
-    return companies.find((company) => company.id === id);
-  }
-
-  async findAll(query?: TCompanyQuery) {
-    const companiesJson = await readFile(
-      join(process.cwd(), EndpointDB.Companies),
-      { encoding: 'utf-8' },
-    );
-
-    const companies = JSON.parse(companiesJson) as TCompany[];
-    const companiesResponse = await this.getCompaniesResponse(companies);
-
-    if (query.type) {
-      return companiesResponse.filter(
-        (companyResponse) => companyResponse.type === query.type,
-      );
+    try {
+      return await this.companyRepository.findOneBy({ id });
+    } catch (err) {
+      console.log(err);
     }
-
-    return companiesResponse;
   }
 
-  private async getCompanyResponse(company: TCompany) {
-    const position = await this.positionsService.findOne(company.positionId);
-    const allTasks = await this.tasksService.findAll();
-    const allStacks = await this.skillsService.getAvailableSkills();
-
-    const tasks = allTasks.filter((task) => company.tasksIds.includes(task.id));
-
-    const stacks = allStacks.filter((stack) =>
-      company.stackIds.includes(stack.id),
-    );
-
-    const companyResponse = {
-      ...company,
-      position: position.value,
-      tasks,
-      stacks,
-    } as TCompanyResponse;
-
-    if (company.achievementsIds) {
-      const allAchievements = await this.achievementsService.findAll();
-      companyResponse.achievements = allAchievements.filter((achievement) =>
-        company.achievementsIds.includes(achievement.id),
-      );
+  async findAll() {
+    try {
+      return await this.companyRepository.find();
+    } catch (err) {
+      console.log(err);
     }
-
-    delete companyResponse.positionId;
-    delete companyResponse.tasksIds;
-    delete companyResponse.achievementsIds;
-    delete companyResponse.stackIds;
-
-    return companyResponse;
   }
 
-  private async getCompaniesResponse(
-    companies: TCompany[],
-    index: number = 0,
-    companiesResponse: TCompanyResponse[] = [],
-  ): Promise<TCompanyResponse[]> {
-    if (companiesResponse.length === companies.length) return companiesResponse;
-    const companyResponse = await this.getCompanyResponse(companies[index]);
-    const newCompaniesResponse = [...companiesResponse, companyResponse];
-    return this.getCompaniesResponse(
-      companies,
-      index + 1,
-      newCompaniesResponse,
-    );
+  async create(createCompanyDto: CreateCompanyDto) {
+    try {
+      const grade = await this.getGrade(createCompanyDto.gradeId);
+      const position = await this.getPosition(createCompanyDto.positionId);
+      const tasks = await this.getTasks(createCompanyDto.taskIds);
+      const achievements = await this.getAchievements(
+        createCompanyDto.achievementIds,
+      );
+      const stack = await this.getStack(createCompanyDto.stackIds);
+
+      const newCompany = this.companyRepository.create({
+        ...createCompanyDto,
+        grade,
+        position,
+        tasks,
+        achievements,
+        stack,
+      });
+
+      return await this.companyRepository.save(newCompany);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async update(id: string, updateCompanyDto: UpdateCompanyDto) {
+    try {
+      return await this.companyRepository.update(id, updateCompanyDto);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async delete(id: string) {
+    try {
+      const isExist = await this.companyRepository.existsBy({ id });
+      if (!isExist) throw new Error(`Company with id: ${id} doesn't exist`);
+      return await this.companyRepository.delete(id);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  private async getGrade(id: string) {
+    try {
+      const grade = await this.gradeRepository.findOneBy({
+        id: id,
+      });
+
+      if (!grade) {
+        throw new Error(`Grade with id: ${id} doesn't exist`);
+      }
+
+      return grade;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  private async getPosition(id: string) {
+    try {
+      const position = await this.positionRepository.findOneBy({
+        id: id,
+      });
+
+      if (!position) {
+        throw new Error(`Position with id: ${id} doesn't exist`);
+      }
+
+      return position;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  private async getTasks(ids: string[]) {
+    try {
+      const tasks = await this.taskRepository
+        .createQueryBuilder('tasks')
+        .where('tasks.id In (:...ids)', { ids })
+        .getMany();
+
+      if (!tasks || tasks.length === 0) throw new Error("Tasks doesn't exist");
+      return tasks;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  private async getAchievements(ids: string[]) {
+    try {
+      const achievements = await this.achievementRepository
+        .createQueryBuilder('achievements')
+        .where('achievements.id In (:...ids)', { ids })
+        .getMany();
+
+      if (!achievements || achievements.length === 0) {
+        throw new Error("Achievements doesn't exist");
+      }
+
+      return achievements;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  private async getStack(ids: string[]) {
+    try {
+      const stack = await this.skillRepository
+        .createQueryBuilder('skills')
+        .where('skills.id In (:...ids)', { ids })
+        .getMany();
+
+      if (!stack || stack.length === 0) throw new Error("Stack doesn't exist");
+      return stack;
+    } catch (err) {
+      console.log(err);
+    }
   }
 }
