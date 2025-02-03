@@ -14,7 +14,6 @@ import {
 import { ApiOkResponse } from '@nestjs/swagger';
 
 import { SkillsService } from './skills.service';
-
 import { CreateSkillDto } from './dto/create-skill.dto';
 import { UpdateSkillDto } from './dto/update-skill.dto';
 import { SkillEntity } from './entity/skill.entity';
