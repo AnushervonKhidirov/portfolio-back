@@ -14,11 +14,9 @@ import {
 import { ApiOkResponse } from '@nestjs/swagger';
 
 import { TasksService } from './tasks.service';
-
-import { TaskEntity } from './entity/task.entity';
-
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
+import { TaskEntity } from './entity/task.entity';
 
 @Controller('tasks')
 export class TasksController {
