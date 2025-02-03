@@ -18,6 +18,18 @@ import { CreateAcquiredSkillDto } from './dto/create-acquired-skill.dto';
 import { UpdateAcquiredSkillDto } from './dto/update-acquired-skill.dto';
 import { AcquiredSkillEntity } from './entity/acquired-skills.entity';
 
+const example = {
+  id: 'e7ecf04f-5ed3-4cc2-a233-495409c54e25',
+  progress: 80,
+  skillType: 'Programming languages',
+  createdAt: '2025-02-03T16:44:40.810Z',
+  skill: {
+    id: 'f8ad5f19-15e4-4127-9534-44e84f9264c6',
+    name: 'JavaScript',
+    createdAt: '2025-02-03T05:35:39.495Z',
+  },
+};
+
 @Controller('acquired-skills')
 export class AcquiredSkillsController {
   constructor(private readonly acquiredSkills: AcquiredSkillsService) {}
@@ -25,18 +37,7 @@ export class AcquiredSkillsController {
   @ApiOkResponse({
     type: AcquiredSkillEntity,
     isArray: true,
-    example: [
-      {
-        id: '9046a660-fdd1-4756-8f8f-4c2daa8cb446',
-        progress: 80,
-        skill: {
-          id: '3e0603be-5916-4073-a571-02522d7609ab',
-          name: 'NestJS',
-          createdAt: '2025-01-31T07:49:21.396Z',
-        },
-        createdAt: '2025-02-03T05:00:23.326Z',
-      },
-    ],
+    example: [example],
   })
   @Get()
   async findAll() {
@@ -45,16 +46,7 @@ export class AcquiredSkillsController {
 
   @ApiOkResponse({
     type: AcquiredSkillEntity,
-    example: {
-      id: '9046a660-fdd1-4756-8f8f-4c2daa8cb446',
-      progress: 80,
-      skill: {
-        id: '3e0603be-5916-4073-a571-02522d7609ab',
-        name: 'NestJS',
-        createdAt: '2025-01-31T07:49:21.396Z',
-      },
-      createdAt: '2025-02-03T05:00:23.326Z',
-    },
+    example: example,
   })
   @Get(':id')
   async findOne(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
@@ -66,16 +58,7 @@ export class AcquiredSkillsController {
 
   @ApiOkResponse({
     type: AcquiredSkillEntity,
-    example: {
-      id: '9046a660-fdd1-4756-8f8f-4c2daa8cb446',
-      progress: 80,
-      skill: {
-        id: '3e0603be-5916-4073-a571-02522d7609ab',
-        name: 'NestJS',
-        createdAt: '2025-01-31T07:49:21.396Z',
-      },
-      createdAt: '2025-02-03T05:00:23.326Z',
-    },
+    example: example,
   })
   @Post()
   async create(
