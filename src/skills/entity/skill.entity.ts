@@ -13,7 +13,7 @@ export class SkillEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ unique: true })
+  @Column({ unique: true, length: '20' })
   name: string;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
