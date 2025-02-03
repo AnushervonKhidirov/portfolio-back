@@ -10,4 +10,4 @@ import { SkillEntity } from 'src/skills/entity/skill.entity';
   controllers: [AcquiredSkillsController],
   providers: [AcquiredSkillsService],
 })
-export class LearnedSkillsModule {}
+export class AcquiredSkillsModule {}
