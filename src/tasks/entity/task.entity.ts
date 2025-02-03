@@ -10,7 +10,7 @@ export class TaskEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'varchar' })
+  @Column()
   value: string;
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
