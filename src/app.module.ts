@@ -9,6 +9,7 @@ import { GradeEntity } from './grades/entity/grade.entity';
 import { TaskEntity } from './tasks/entity/task.entity';
 import { AchievementEntity } from './achievements/entity/achievement.entity';
 import { CompanyEntity } from './companies/entity/company.entity';
+import { UserEntity } from './user/entity/user.entity';
 
 import { SkillsModule } from './skills/skills.module';
 import { AcquiredSkillsModule } from './acquired-skills/acquired-skills.module';
@@ -17,6 +18,8 @@ import { GradesModule } from './grades/grades.module';
 import { TasksModule } from './tasks/tasks.module';
 import { AchievementsModule } from './achievements/achievements.module';
 import { CompaniesModule } from './companies/companies.module';
+import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -36,6 +39,7 @@ import { CompaniesModule } from './companies/companies.module';
         TaskEntity,
         AchievementEntity,
         CompanyEntity,
+        UserEntity,
       ],
       synchronize: true,
     }),
@@ -46,6 +50,8 @@ import { CompaniesModule } from './companies/companies.module';
     TasksModule,
     AchievementsModule,
     CompaniesModule,
+    AuthModule,
+    UserModule,
   ],
   controllers: [],
   providers: [],
