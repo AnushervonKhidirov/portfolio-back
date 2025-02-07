@@ -10,6 +10,7 @@ import { TaskEntity } from './tasks/entity/task.entity';
 import { AchievementEntity } from './achievements/entity/achievement.entity';
 import { CompanyEntity } from './companies/entity/company.entity';
 import { UserEntity } from './user/entity/user.entity';
+import { TokenEntity } from './token/entity/token.entity';
 
 import { SkillsModule } from './skills/skills.module';
 import { AcquiredSkillsModule } from './acquired-skills/acquired-skills.module';
@@ -20,6 +21,7 @@ import { AchievementsModule } from './achievements/achievements.module';
 import { CompaniesModule } from './companies/companies.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
+import { TokenModule } from './token/token.module';
 
 @Module({
   imports: [
@@ -40,6 +42,7 @@ import { UserModule } from './user/user.module';
         AchievementEntity,
         CompanyEntity,
         UserEntity,
+        TokenEntity,
       ],
       synchronize: true,
     }),
@@ -52,6 +55,7 @@ import { UserModule } from './user/user.module';
     CompaniesModule,
     AuthModule,
     UserModule,
+    TokenModule,
   ],
   controllers: [],
   providers: [],

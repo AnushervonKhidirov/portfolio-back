@@ -3,13 +3,15 @@ import {
   Post,
   Body,
   ValidationPipe,
+  UnauthorizedException,
+  BadRequestException,
   ConflictException,
-  NotFoundException,
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
 
+import { AuthService } from './auth.service';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { SignInDto } from './dto/sigh-in.dto';
+import { RefreshTokenDto } from './dto/refresh-token.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -18,7 +20,6 @@ export class AuthController {
   @Post('sign-up')
   async signUp(@Body(new ValidationPipe()) createUserDto: CreateUserDto) {
     const user = await this.authService.signUp(createUserDto);
-
     if (!user) {
       throw new ConflictException(
         `User with email: '${createUserDto.email}' already exist`,
@@ -31,7 +32,14 @@ export class AuthController {
   @Post('sign-in')
   async signIn(@Body(new ValidationPipe()) signInDto: SignInDto) {
     const user = await this.authService.signIn(signInDto);
-    if (!user) throw new NotFoundException();
+    if (!user) throw new BadRequestException('Wrong email or password');
     return user;
+  }
+
+  @Post('refresh')
+  async refreshToken(@Body(new ValidationPipe()) token: RefreshTokenDto) {
+    const tokens = await this.authService.refreshToken(token.refreshToken);
+    if (!tokens) throw new UnauthorizedException('Invalid token');
+    return tokens;
   }
 }
