@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 import { hash } from 'bcrypt';
 
 import { UserEntity } from './entity/user.entity';
@@ -17,8 +17,15 @@ export class UserService {
 
   async findOne(id: string) {
     try {
-      const { password, ...user } = await this.userRepository.findOneBy({ id });
-      return user;
+      return await this.userRepository.findOneBy({ id });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async findOneBy(by: FindOptionsWhere<UserEntity> | FindOptionsWhere<UserEntity>[]) {
+    try {
+      return await this.userRepository.findOneBy(by);
     } catch (err) {
       console.log(err);
     }
@@ -26,13 +33,7 @@ export class UserService {
 
   async findAll() {
     try {
-      const users = await this.userRepository.find();
-      const usersWithoutPassword = users.map((user) => {
-        const { password, ...userWithoutPassword } = user;
-        return userWithoutPassword;
-      });
-
-      return usersWithoutPassword;
+      return await this.userRepository.find();
     } catch (err) {
       console.log(err);
     }
@@ -56,8 +57,7 @@ export class UserService {
         ...createUserDto,
         password: hashedPassword,
       });
-      const { password, ...user } = await this.userRepository.save(newUser);
-      return user;
+      return await this.userRepository.save(newUser);
     } catch (err) {
       console.log(err);
     }
