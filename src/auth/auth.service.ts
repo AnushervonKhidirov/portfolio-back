@@ -55,20 +55,17 @@ export class AuthService {
     }
   }
 
-  async refreshToken(refreshToken: string) {
+  refreshToken(refreshToken: string) {
     try {
-      return await this.tokenService.refresh(refreshToken);
+      return this.tokenService.refresh(refreshToken);
     } catch (err) {
       console.log(err);
     }
   }
 
-  private async generateTokens(userId: string, userEmail: string) {
+  private generateTokens(userId: string, userEmail: string) {
     try {
-      const tokens = this.tokenService.generate({ userId, userEmail });
-      await this.tokenService.save(tokens.refreshToken);
-
-      return tokens;
+      return this.tokenService.generate({ userId, userEmail });
     } catch (err) {
       console.log(err);
     }
