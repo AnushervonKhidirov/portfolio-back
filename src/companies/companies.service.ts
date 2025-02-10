@@ -77,7 +77,24 @@ export class CompaniesService {
 
   async update(id: string, updateCompanyDto: UpdateCompanyDto) {
     try {
-      return await this.companyRepository.update(id, updateCompanyDto);
+      const grade = await this.getGrade(updateCompanyDto.gradeId);
+      const position = await this.getPosition(updateCompanyDto.positionId);
+      const tasks = await this.getTasks(updateCompanyDto.taskIds);
+      const achievements = await this.getAchievements(
+        updateCompanyDto.achievementIds,
+      );
+      const stack = await this.getStack(updateCompanyDto.stackIds);
+
+      const company = this.companyRepository.create({
+        ...updateCompanyDto,
+        grade,
+        position,
+        tasks,
+        achievements,
+        stack,
+      });
+
+      return await this.companyRepository.update(id, company);
     } catch (err) {
       console.log(err);
     }
