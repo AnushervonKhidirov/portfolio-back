@@ -1,6 +1,13 @@
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+
+import { LoggerMiddleware } from './middleware/logger.middleware';
 
 import { SkillEntity } from './skills/entity/skill.entity';
 import { AcquiredSkillEntity } from './acquired-skills/entity/acquired-skills.entity';
@@ -58,4 +65,11 @@ import { TokenModule } from './token/token.module';
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(LoggerMiddleware)
+      .exclude({ path: '*', method: RequestMethod.GET }, 'auth/*')
+      .forRoutes('*');
+  }
+}
