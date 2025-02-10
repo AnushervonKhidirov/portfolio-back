@@ -36,9 +36,14 @@ export class AuthController {
     return user;
   }
 
+  @Post('sign-out')
+  async signOut(@Body(new ValidationPipe()) token: RefreshTokenDto) {
+    await this.authService.signOut(token.refreshToken);
+  }
+
   @Post('refresh')
-  refreshToken(@Body(new ValidationPipe()) token: RefreshTokenDto) {
-    const tokens = this.authService.refreshToken(token.refreshToken);
+  async refreshToken(@Body(new ValidationPipe()) token: RefreshTokenDto) {
+    const tokens = await this.authService.refreshToken(token.refreshToken);
     if (!tokens) throw new UnauthorizedException('Invalid token');
     return tokens;
   }
