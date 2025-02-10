@@ -41,6 +41,11 @@ export class AuthController {
     await this.authService.signOut(token.refreshToken);
   }
 
+  @Post('sign-out-everywhere')
+  async signOutEverywhere(@Body(new ValidationPipe()) token: RefreshTokenDto) {
+    await this.authService.signOutEverywhere(token.refreshToken);
+  }
+
   @Post('refresh')
   async refreshToken(@Body(new ValidationPipe()) token: RefreshTokenDto) {
     const tokens = await this.authService.refreshToken(token.refreshToken);
