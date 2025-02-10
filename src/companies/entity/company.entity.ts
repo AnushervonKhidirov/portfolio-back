@@ -59,7 +59,7 @@ export class CompanyEntity {
   @JoinTable({ name: 'companies_achievements' })
   achievements: AchievementEntity[];
 
-  @ManyToMany(() => SkillEntity, (skill) => skill.stack, { eager: true })
+  @ManyToMany(() => SkillEntity, (skill) => skill.companyStack, { eager: true })
   @JoinTable({ name: 'companies_stack' })
   stack: SkillEntity[];
 
