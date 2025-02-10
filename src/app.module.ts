@@ -17,6 +17,7 @@ import { TaskEntity } from './tasks/entity/task.entity';
 import { AchievementEntity } from './achievements/entity/achievement.entity';
 import { CompanyEntity } from './companies/entity/company.entity';
 import { UserEntity } from './user/entity/user.entity';
+import { TokenEntity } from './token/entity/token.entity';
 
 import { SkillsModule } from './skills/skills.module';
 import { AcquiredSkillsModule } from './acquired-skills/acquired-skills.module';
@@ -48,6 +49,7 @@ import { TokenModule } from './token/token.module';
         AchievementEntity,
         CompanyEntity,
         UserEntity,
+        TokenEntity,
       ],
       synchronize: true,
     }),

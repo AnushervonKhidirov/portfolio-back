@@ -1,6 +1,11 @@
 import type { SignOptions } from 'jsonwebtoken';
+
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { sign, verify, decode } from 'jsonwebtoken';
+import { TokenEntity } from './entity/token.entity';
+import { UserEntity } from 'src/user/entity/user.entity';
 
 export type TTokenPayload = {
   userId: string;
@@ -14,7 +19,13 @@ export class TokenService {
   accessExp: SignOptions['expiresIn'];
   refreshExp: SignOptions['expiresIn'];
 
-  constructor() {
+  constructor(
+    @InjectRepository(TokenEntity)
+    private readonly tokenRepository: Repository<TokenEntity>,
+
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
+  ) {
     this.accessKey = process.env.TOKEN_ACCESS_KEY;
     this.refreshKey = process.env.TOKEN_REFRESH_KEY;
     this.accessExp = process.env.TOKEN_ACCESS_EXP as SignOptions['expiresIn'];
@@ -36,11 +47,54 @@ export class TokenService {
     }
   }
 
-  refresh(refreshToken: string) {
+  async refresh(refreshToken: string) {
     try {
       const { userId, userEmail } = decode(refreshToken) as TTokenPayload;
       const isValid = this.validateRefreshToken(refreshToken);
-      if (isValid) return this.generate({ userId, userEmail });
+      if (isValid) throw new Error('Token is not valid');
+
+      const tokens = await this.generateAndSave({ userId, userEmail });
+
+      if (!tokens) throw new Error('Unable to generate tokens');
+      return tokens;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async save(refreshToken: string) {
+    try {
+      const { userId } = decode(refreshToken) as TTokenPayload;
+
+      const user = await this.userRepository.findOneBy({ id: userId });
+      if (!user) throw new Error('User not found');
+
+      const newRefreshToken = this.tokenRepository.create({
+        refreshToken,
+        user,
+      });
+
+      return await this.tokenRepository.save(newRefreshToken);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async generateAndSave(payload: TTokenPayload) {
+    try {
+      const tokens = this.generate(payload);
+      await this.save(tokens.refreshToken);
+      return tokens;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async delete(refreshToken: string) {
+    try {
+      const isValid = this.validateRefreshToken(refreshToken);
+      if (!isValid) throw new Error('Token is not valid');
+      await this.tokenRepository.delete({ refreshToken });
     } catch (err) {
       console.log(err);
     }

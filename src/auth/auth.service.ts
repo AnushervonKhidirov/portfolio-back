@@ -24,10 +24,13 @@ export class AuthService {
         );
       }
 
-      return this.tokenService.generate({
+      const tokens = await this.tokenService.generateAndSave({
         userId: user.id,
         userEmail: user.email,
       });
+
+      if (!tokens) throw new Error('Unable to generate tokens');
+      return tokens;
     } catch (err) {
       console.log(err);
     }
@@ -52,18 +55,29 @@ export class AuthService {
         throw new Error('Wrong password');
       }
 
-      return this.tokenService.generate({
+      const tokens = await this.tokenService.generateAndSave({
         userId: user.id,
         userEmail: user.email,
       });
+
+      if (!tokens) throw new Error('Unable to generate tokens');
+      return tokens;
     } catch (err) {
       console.log(err);
     }
   }
 
-  refreshToken(refreshToken: string) {
+  async signOut(refreshToken: string) {
     try {
-      return this.tokenService.refresh(refreshToken);
+      await this.tokenService.delete(refreshToken);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async refreshToken(refreshToken: string) {
+    try {
+      return await this.tokenService.refresh(refreshToken);
     } catch (err) {
       console.log(err);
     }
