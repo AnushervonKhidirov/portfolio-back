@@ -37,8 +37,8 @@ export class AuthController {
   }
 
   @Post('refresh')
-  async refreshToken(@Body(new ValidationPipe()) token: RefreshTokenDto) {
-    const tokens = await this.authService.refreshToken(token.refreshToken);
+  refreshToken(@Body(new ValidationPipe()) token: RefreshTokenDto) {
+    const tokens = this.authService.refreshToken(token.refreshToken);
     if (!tokens) throw new UnauthorizedException('Invalid token');
     return tokens;
   }
