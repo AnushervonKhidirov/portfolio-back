@@ -24,7 +24,10 @@ export class AuthService {
         );
       }
 
-      return this.generateTokens(user.id, user.email);
+      return this.tokenService.generate({
+        userId: user.id,
+        userEmail: user.email,
+      });
     } catch (err) {
       console.log(err);
     }
@@ -49,7 +52,10 @@ export class AuthService {
         throw new Error('Wrong password');
       }
 
-      return this.generateTokens(user.id, user.email);
+      return this.tokenService.generate({
+        userId: user.id,
+        userEmail: user.email,
+      });
     } catch (err) {
       console.log(err);
     }
@@ -58,14 +64,6 @@ export class AuthService {
   refreshToken(refreshToken: string) {
     try {
       return this.tokenService.refresh(refreshToken);
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  private generateTokens(userId: string, userEmail: string) {
-    try {
-      return this.tokenService.generate({ userId, userEmail });
     } catch (err) {
       console.log(err);
     }
