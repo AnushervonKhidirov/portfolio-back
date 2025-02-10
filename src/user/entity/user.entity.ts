@@ -1,5 +1,4 @@
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { TokenEntity } from 'src/token/entity/token.entity';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -11,7 +10,4 @@ export class UserEntity {
 
   @Column()
   password: string;
-
-  @OneToOne(() => TokenEntity, (token) => token.user)
-  token: TokenEntity;
 }

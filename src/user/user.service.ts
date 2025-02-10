@@ -23,7 +23,9 @@ export class UserService {
     }
   }
 
-  async findOneBy(by: FindOptionsWhere<UserEntity> | FindOptionsWhere<UserEntity>[]) {
+  async findOneBy(
+    by: FindOptionsWhere<UserEntity> | FindOptionsWhere<UserEntity>[],
+  ) {
     try {
       return await this.userRepository.findOneBy(by);
     } catch (err) {
@@ -57,6 +59,7 @@ export class UserService {
         ...createUserDto,
         password: hashedPassword,
       });
+
       return await this.userRepository.save(newUser);
     } catch (err) {
       console.log(err);
