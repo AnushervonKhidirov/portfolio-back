@@ -75,6 +75,14 @@ export class AuthService {
     }
   }
 
+  async signOutEverywhere(refreshToken: string) {
+    try {
+      await this.tokenService.deleteAll(refreshToken);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   async refreshToken(refreshToken: string) {
     try {
       return await this.tokenService.refresh(refreshToken);

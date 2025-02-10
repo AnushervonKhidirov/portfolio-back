@@ -100,6 +100,16 @@ export class TokenService {
     }
   }
 
+  async deleteAll(refreshToken: string) {
+    try {
+      const { userId } = this.validateRefreshToken(refreshToken) as TTokenPayload;
+      if (!userId) throw new Error('Token is not valid');
+      await this.tokenRepository.delete({ userId });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   validateAccessToken(token: string) {
     try {
       return verify(token, this.accessKey);
