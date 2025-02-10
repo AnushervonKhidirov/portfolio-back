@@ -18,8 +18,8 @@ export class TokenService {
 
   generate(payload: TTokenPayload) {
     try {
-      const accessToken = sign(payload, this.accessKey, { expiresIn: '10s' });
-      const refreshToken = sign(payload, this.refreshKey, { expiresIn: '1m' });
+      const accessToken = sign(payload, this.accessKey, { expiresIn: '1m' });
+      const refreshToken = sign(payload, this.refreshKey, { expiresIn: '2m' });
 
       return { accessToken, refreshToken };
     } catch (err) {
