@@ -9,6 +9,7 @@ import {
 
 import { AcquiredSkillEntity } from 'src/acquired-skills/entity/acquired-skills.entity';
 import { CompanyEntity } from 'src/companies/entity/company.entity';
+import { ProjectEntity } from 'src/projects/entity/project.entity';
 
 @Entity({ name: 'skills' })
 export class SkillEntity {
@@ -25,5 +26,8 @@ export class SkillEntity {
   acquiredSkill: AcquiredSkillEntity;
 
   @ManyToMany(() => CompanyEntity, (company) => company.stack)
-  stack: CompanyEntity[];
+  companyStack: CompanyEntity[];
+
+  @ManyToMany(() => ProjectEntity, (project) => project.stack)
+  projectStack: ProjectEntity[];
 }

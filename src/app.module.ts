@@ -18,6 +18,8 @@ import { AchievementEntity } from './achievements/entity/achievement.entity';
 import { CompanyEntity } from './companies/entity/company.entity';
 import { UserEntity } from './user/entity/user.entity';
 import { TokenEntity } from './token/entity/token.entity';
+import { ProjectEntity } from './projects/entity/project.entity';
+import { ProjectLinkEntity } from './projects/entity/project-link.entity';
 
 import { SkillsModule } from './skills/skills.module';
 import { AcquiredSkillsModule } from './acquired-skills/acquired-skills.module';
@@ -29,6 +31,7 @@ import { CompaniesModule } from './companies/companies.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { TokenModule } from './token/token.module';
+import { ProjectsModule } from './projects/projects.module';
 
 @Module({
   imports: [
@@ -50,6 +53,8 @@ import { TokenModule } from './token/token.module';
         CompanyEntity,
         UserEntity,
         TokenEntity,
+        ProjectEntity,
+        ProjectLinkEntity,
       ],
       synchronize: true,
     }),
@@ -63,6 +68,7 @@ import { TokenModule } from './token/token.module';
     AuthModule,
     UserModule,
     TokenModule,
+    ProjectsModule,
   ],
   controllers: [],
   providers: [],
