@@ -50,9 +50,10 @@ export class TokenService {
   async refresh(refreshToken: string) {
     try {
       const { userId, userEmail } = decode(refreshToken) as TTokenPayload;
-      const isValid = this.validateRefreshToken(refreshToken);
-      if (isValid) throw new Error('Token is not valid');
+      const isValid = await this.validateRefreshToken(refreshToken);
+      if (!isValid) throw new Error('Token is not valid');
 
+      await this.delete(refreshToken)
       const tokens = await this.generateAndSave({ userId, userEmail });
 
       if (!tokens) throw new Error('Unable to generate tokens');
@@ -92,7 +93,7 @@ export class TokenService {
 
   async delete(refreshToken: string) {
     try {
-      const isValid = this.validateRefreshToken(refreshToken);
+      const isValid = await this.validateRefreshToken(refreshToken);
       if (!isValid) throw new Error('Token is not valid');
       await this.tokenRepository.delete({ refreshToken });
     } catch (err) {
@@ -102,7 +103,9 @@ export class TokenService {
 
   async deleteAll(refreshToken: string) {
     try {
-      const { userId } = this.validateRefreshToken(refreshToken) as TTokenPayload;
+      const { userId } = (await this.validateRefreshToken(
+        refreshToken,
+      )) as TTokenPayload;
       if (!userId) throw new Error('Token is not valid');
       await this.tokenRepository.delete({ userId });
     } catch (err) {
@@ -110,17 +113,22 @@ export class TokenService {
     }
   }
 
-  validateAccessToken(token: string) {
+  validateAccessToken(accessToken: string) {
     try {
-      return verify(token, this.accessKey);
+      return verify(accessToken, this.accessKey);
     } catch (err) {
       console.log(err);
     }
   }
 
-  validateRefreshToken(token: string) {
+  async validateRefreshToken(refreshToken: string) {
     try {
-      return verify(token, this.refreshKey);
+      const isTokenExist = await this.tokenRepository.existsBy({
+        refreshToken,
+      });
+
+      if (!isTokenExist) throw new Error("Token doesn't exist");
+      return verify(refreshToken, this.refreshKey);
     } catch (err) {
       console.log(err);
     }
