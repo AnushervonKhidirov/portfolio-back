@@ -11,6 +11,7 @@ import { TokenService } from 'src/token/token.service';
 export class LoggerMiddleware implements NestMiddleware {
   constructor(private readonly tokenService: TokenService) {}
 
+  // TODO: get token from headers!!!!
   use(req: Request, res: Response, next: NextFunction) {
     const accessToken = req.body.accessToken;
 
