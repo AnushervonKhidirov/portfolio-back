@@ -69,20 +69,22 @@ export class AcquiredSkillsService {
 
   async update(id: string, updateAcquiredSkillDto: UpdateAcquiredSkillDto) {
     try {
+      const acquiredSkill = await this.findOne(id)
+      console.log(acquiredSkill.skill.id);
+      
+
+      if (!acquiredSkill) {
+        throw new Error(`Acquired skill with id: ${id} doesn't exist`);
+      }
+
       const skill = await this.skillRepository.findOneBy({
-        id: updateAcquiredSkillDto.skillId,
+        id: updateAcquiredSkillDto.skillId ?? acquiredSkill.skill.id,
       });
 
       if (!skill) {
         throw new Error(
           `Skill with id: ${updateAcquiredSkillDto.skillId} doesn't exist`,
         );
-      }
-
-      const isExist = await this.acquiredSkillRepository.existsBy({ id });
-
-      if (!isExist) {
-        throw new Error(`Acquired skill with id: ${id} doesn't exist`);
       }
 
       const newAcquiredSkill = this.acquiredSkillRepository.create({
