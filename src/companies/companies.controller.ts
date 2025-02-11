@@ -82,8 +82,6 @@ export class CompaniesController {
   })
   @Get()
   async findAll(@Query() query?: { activity?: TActivity }) {
-    console.log(query);
-    
     return await this.companiesService.findAll(query);
   }
 
