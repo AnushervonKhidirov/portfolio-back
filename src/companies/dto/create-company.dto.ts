@@ -18,6 +18,12 @@ export class CreateCompanyDto {
   @IsNotEmpty()
   name: string;
 
+  @ApiProperty({ example: 'USA' })
+  @IsString()
+  @IsNotEmpty()
+  @ValidateIf((_, value) => value !== undefined)
+  country: string;
+
   @ApiProperty({ example: 'be2131c3-4807-4838-83f7-9e28fe32252c' })
   @IsUUID('4')
   @IsNotEmpty()

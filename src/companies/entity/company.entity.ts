@@ -25,6 +25,9 @@ export class CompanyEntity {
   @Column({ length: 30 })
   name: string;
 
+  @Column({ length: 30 })
+  country: string;
+
   @ManyToOne(() => GradeEntity, (grade) => grade.company, {
     eager: true,
   })
