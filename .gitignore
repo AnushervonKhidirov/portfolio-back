@@ -3,6 +3,7 @@
 /node_modules
 /build
 /db_data
+/uploads
 
 # Logs
 logs
