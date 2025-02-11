@@ -5,5 +5,5 @@ export class CreateTaskDto {
   @ApiProperty({ example: 'Refactoring code' })
   @IsString()
   @IsNotEmpty()
-  value: string;
+  name: string;
 }

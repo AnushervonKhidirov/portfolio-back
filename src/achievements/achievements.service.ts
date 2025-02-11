@@ -33,7 +33,7 @@ export class AchievementsService {
   async create(createAchievementDto: CreateAchievementDto) {
     try {
       const isExist = await this.achievementRepository.existsBy({
-        value: createAchievementDto.value,
+        name: createAchievementDto.name,
       });
 
       if (isExist) throw new Error('Achievement already exist');

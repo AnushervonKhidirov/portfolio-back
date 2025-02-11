@@ -14,7 +14,7 @@ export class AchievementEntity {
   id: string;
 
   @Column({ type: 'varchar' })
-  value: string;
+  name: string;
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;

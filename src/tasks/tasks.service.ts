@@ -33,7 +33,7 @@ export class TasksService {
   async create(createTaskDto: CreateTaskDto) {
     try {
       const isExist = await this.taskRepository.existsBy({
-        value: createTaskDto.value,
+        name: createTaskDto.name,
       });
 
       if (isExist) throw new Error('Task already exist');

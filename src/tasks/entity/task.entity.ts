@@ -14,7 +14,7 @@ export class TaskEntity {
   id: string;
 
   @Column()
-  value: string;
+  name: string;
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;

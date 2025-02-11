@@ -5,5 +5,5 @@ export class CreateAchievementDto {
   @ApiProperty({ example: 'Reading old code' })
   @IsString()
   @IsNotEmpty()
-  value: string;
+  name: string;
 }
