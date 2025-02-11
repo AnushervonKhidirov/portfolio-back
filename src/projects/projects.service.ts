@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { writeFile, mkdir } from 'fs/promises';
+import { existsSync } from 'fs';
+import { join } from 'path';
+import { v4 as uuid } from 'uuid';
 
 import { ProjectEntity } from './entity/project.entity';
 import { ProjectLinkEntity } from './entity/project-link.entity';
@@ -12,6 +16,9 @@ import { CreateProjectLinkDto } from './dto/create-project-link.dto';
 
 @Injectable()
 export class ProjectsService {
+  uploadsPath: string = 'uploads/images/projects';
+  imageRequestPath: string = 'projects/image';
+
   constructor(
     @InjectRepository(ProjectEntity)
     private readonly projectRepository: Repository<ProjectEntity>,
@@ -34,6 +41,34 @@ export class ProjectsService {
   async findAll() {
     try {
       return await this.projectRepository.find();
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async uploadImage(imageFile: Express.Multer.File) {
+    try {
+      const extension = imageFile.originalname.split('.')[1];
+      const imageName = `${uuid()}.${extension}`;
+      const path = join(process.cwd(), this.uploadsPath, imageName);
+      const imagePath = join('/', this.imageRequestPath, imageName);
+
+      await this.createFoldersIfNotExist();
+      await writeFile(path, imageFile.buffer);
+
+      return { imagePath };
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async findImage(imageName: string) {
+    try {
+      const path = join(process.cwd(), this.uploadsPath, imageName);
+      const isExist = existsSync(path);
+
+      if (!isExist) throw new Error(`Image '${imageName}' doesn't exist`);
+      return path;
     } catch (err) {
       console.log(err);
     }
@@ -99,6 +134,16 @@ export class ProjectsService {
     try {
       const newLinks = this.projectLinkRepository.create(createProjectLinkDto);
       return await this.projectLinkRepository.save(newLinks);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  private async createFoldersIfNotExist() {
+    try {
+      const path = join(process.cwd(), this.uploadsPath);
+      const isExist = existsSync(path);
+      if (!isExist) await mkdir(path, { recursive: true });
     } catch (err) {
       console.log(err);
     }
