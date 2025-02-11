@@ -70,8 +70,6 @@ export class AcquiredSkillsService {
   async update(id: string, updateAcquiredSkillDto: UpdateAcquiredSkillDto) {
     try {
       const acquiredSkill = await this.findOne(id)
-      console.log(acquiredSkill.skill.id);
-      
 
       if (!acquiredSkill) {
         throw new Error(`Acquired skill with id: ${id} doesn't exist`);
