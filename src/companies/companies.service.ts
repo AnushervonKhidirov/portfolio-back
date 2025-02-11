@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { TActivity } from './companies.type';
 
 import { CompanyEntity } from './entity/company.entity';
 import { GradeEntity } from 'src/grades/entity/grade.entity';
@@ -42,8 +43,14 @@ export class CompaniesService {
     }
   }
 
-  async findAll() {
+  async findAll(query?: { activity?: TActivity }) {
     try {
+      if (query?.activity) {
+        return await this.companyRepository.find({
+          where: { activity: query.activity },
+        });
+      }
+
       return await this.companyRepository.find();
     } catch (err) {
       console.log(err);

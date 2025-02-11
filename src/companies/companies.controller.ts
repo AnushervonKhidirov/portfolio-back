@@ -6,12 +6,14 @@ import {
   Delete,
   Param,
   Body,
+  Query,
   ParseUUIDPipe,
   ValidationPipe,
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
 import { ApiOkResponse } from '@nestjs/swagger';
+import { TActivity } from './companies.type';
 
 import { CompanyEntity } from './entity/company.entity';
 import { CompaniesService } from './companies.service';
@@ -79,8 +81,10 @@ export class CompaniesController {
     example: [example],
   })
   @Get()
-  async findAll() {
-    return await this.companiesService.findAll();
+  async findAll(@Query() query?: { activity?: TActivity }) {
+    console.log(query);
+    
+    return await this.companiesService.findAll(query);
   }
 
   @ApiOkResponse({
