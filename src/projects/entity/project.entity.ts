@@ -17,6 +17,9 @@ export class ProjectEntity {
   @Column()
   title: string;
 
+  @Column({ nullable: true })
+  image: string;
+
   @ManyToMany(() => SkillEntity, (skill) => skill.projectStack, { eager: true })
   @JoinTable({ name: 'projects_stacks' })
   stack: SkillEntity[];
@@ -24,7 +27,9 @@ export class ProjectEntity {
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
   createdAt: Date;
 
-  @ManyToMany(() => ProjectLinkEntity, (projectLink) => projectLink.project, { eager: true })
+  @ManyToMany(() => ProjectLinkEntity, (projectLink) => projectLink.project, {
+    eager: true,
+  })
   @JoinTable()
   links: ProjectLinkEntity[];
 }
