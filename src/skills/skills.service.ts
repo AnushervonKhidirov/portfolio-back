@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, FindManyOptions } from 'typeorm';
 
 import { SkillEntity } from './entity/skill.entity';
 
@@ -30,6 +30,14 @@ export class SkillsService {
     }
   }
 
+  async findMany(condition: FindManyOptions<SkillEntity>) {
+    try {
+      return await this.skillRepository.find(condition);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   async create(createSkillDto: CreateSkillDto) {
     try {
       const isExist = await this.skillRepository.existsBy({
@@ -40,8 +48,8 @@ export class SkillsService {
         throw new Error(`Skill '${createSkillDto.name}' already exist`);
       }
 
-      const newSkill = this.skillRepository.create(createSkillDto)
-      return await this.skillRepository.save(newSkill)
+      const newSkill = this.skillRepository.create(createSkillDto);
+      return await this.skillRepository.save(newSkill);
     } catch (err) {
       console.log(err);
     }
