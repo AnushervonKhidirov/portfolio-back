@@ -46,10 +46,15 @@ export class PositionsService {
 
   async update(id: string, updatePositionDto: UpdatePositionDto) {
     try {
-      const isExist = await this.positionRepository.existsBy({ id });
-      if (!isExist) throw new Error(`Position with id: ${id} doesn't exists`);
+      const position = await this.positionRepository.findOneBy({ id });
+      if (!position) throw new Error(`Position with id: ${id} doesn't exists`);
 
-      return await this.positionRepository.update(id, updatePositionDto);
+      const updatedPosition = this.positionRepository.create({
+        ...position,
+        ...updatePositionDto,
+      });
+
+      return await this.positionRepository.save(updatedPosition);
     } catch (err) {
       console.log(err);
     }

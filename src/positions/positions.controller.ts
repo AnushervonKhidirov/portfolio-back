@@ -82,6 +82,7 @@ export class PositionsController {
   ) {
     const position = await this.positionsService.update(id, updatePositionDto);
     if (!position) throw new NotFoundException();
+    return position;
   }
 
   @Delete(':id')
