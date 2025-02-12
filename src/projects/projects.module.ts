@@ -3,11 +3,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProjectsController } from './projects.controller';
 import { ProjectsService } from './projects.service';
 import { ProjectEntity } from './entity/project.entity';
-import { ProjectLinkEntity } from './entity/project-link.entity';
-import { SkillEntity } from 'src/skills/entity/skill.entity';
+import { LinksModule } from 'src/links/links.module';
+import { SkillsModule } from 'src/skills/skills.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ProjectEntity, ProjectLinkEntity, SkillEntity])],
+  imports: [SkillsModule, LinksModule, TypeOrmModule.forFeature([ProjectEntity])],
   controllers: [ProjectsController],
   providers: [ProjectsService],
 })

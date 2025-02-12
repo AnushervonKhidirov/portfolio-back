@@ -72,8 +72,9 @@ export class ProjectsController {
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
     @Body(new ValidationPipe()) updateProjectDto: UpdateProjectDto,
   ) {
-    const result = await this.projectsService.update(id, updateProjectDto);
-    if (!result) throw new NotFoundException();
+    const project = await this.projectsService.update(id, updateProjectDto);
+    if (!project) throw new NotFoundException();
+    return project;
   }
 
   @Delete(':id')

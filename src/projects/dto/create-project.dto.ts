@@ -8,7 +8,7 @@ import {
   ValidateIf,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { CreateProjectLinkDto } from './create-project-link.dto';
+import { CreateLinkDto } from 'src/links/dto/create-link.dto';
 
 export class CreateProjectDto {
   @IsString()
@@ -28,6 +28,6 @@ export class CreateProjectDto {
   @IsArray()
   @ArrayNotEmpty()
   @ValidateNested({ each: true })
-  @Type(() => CreateProjectLinkDto)
-  links: CreateProjectLinkDto[];
+  @Type(() => CreateLinkDto)
+  links: CreateLinkDto[];
 }

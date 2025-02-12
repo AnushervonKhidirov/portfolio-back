@@ -1,18 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, In } from 'typeorm';
 import { writeFile, mkdir } from 'fs/promises';
 import { existsSync } from 'fs';
 import { join } from 'path';
 import { v4 as uuid } from 'uuid';
 
 import { ProjectEntity } from './entity/project.entity';
-import { ProjectLinkEntity } from './entity/project-link.entity';
-import { SkillEntity } from 'src/skills/entity/skill.entity';
+import { LinksService } from 'src/links/links.service';
+import { SkillsService } from 'src/skills/skills.service';
 
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
-import { CreateProjectLinkDto } from './dto/create-project-link.dto';
 
 @Injectable()
 export class ProjectsService {
@@ -23,11 +22,8 @@ export class ProjectsService {
     @InjectRepository(ProjectEntity)
     private readonly projectRepository: Repository<ProjectEntity>,
 
-    @InjectRepository(ProjectLinkEntity)
-    private readonly projectLinkRepository: Repository<ProjectLinkEntity>,
-
-    @InjectRepository(SkillEntity)
-    private readonly skillRepository: Repository<SkillEntity>,
+    private readonly skillsService: SkillsService,
+    private readonly linksService: LinksService,
   ) {}
 
   async findOne(id: string) {
@@ -76,8 +72,11 @@ export class ProjectsService {
 
   async create(createProjectDto: CreateProjectDto) {
     try {
-      const stack = await this.getStack(createProjectDto.stackIds);
-      const links = await this.createProjectLinks(createProjectDto.links);
+      const stack = await this.skillsService.findMany({
+        where: { id: In([...createProjectDto.stackIds]) },
+      });
+
+      const links = await this.linksService.createMany(createProjectDto.links);
 
       const newProject = this.projectRepository.create({
         ...createProjectDto,
@@ -93,14 +92,24 @@ export class ProjectsService {
 
   async update(id: string, updateProjectDto: UpdateProjectDto) {
     try {
-      const stack = await this.getStack(updateProjectDto.stackIds);
+      const project = await this.projectRepository.findOneBy({ id });
+      if (!project) throw new Error('Project not found');
 
-      const newProject = this.projectRepository.create({
+      const stack = updateProjectDto.stackIds
+        ? await this.skillsService.findMany({
+            where: { id: In([...updateProjectDto.stackIds]) },
+          })
+        : project.stack;
+
+      if (!stack) throw new Error('Stack not found');
+
+      const updatedProject = this.projectRepository.create({
+        ...project,
         ...updateProjectDto,
         stack,
       });
 
-      return await this.projectRepository.update(id, newProject);
+      return await this.projectRepository.save(updatedProject);
     } catch (err) {
       console.log(err);
     }
@@ -109,31 +118,6 @@ export class ProjectsService {
   async delete(id: string) {
     try {
       return await this.projectRepository.delete(id);
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  private async getStack(ids: string[]) {
-    try {
-      const stack = await this.skillRepository
-        .createQueryBuilder('skills')
-        .where('skills.id In (:...ids)', { ids })
-        .getMany();
-
-      if (!stack || stack.length === 0) throw new Error("Stack doesn't exist");
-      return stack;
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  private async createProjectLinks(
-    createProjectLinkDto: CreateProjectLinkDto[],
-  ) {
-    try {
-      const newLinks = this.projectLinkRepository.create(createProjectLinkDto);
-      return await this.projectLinkRepository.save(newLinks);
     } catch (err) {
       console.log(err);
     }
