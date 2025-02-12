@@ -73,8 +73,9 @@ export class TasksController {
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
     @Body(new ValidationPipe()) updateTaskDto: UpdateTaskDto,
   ) {
-    const result = await this.tasksService.update(id, updateTaskDto);
-    if (!result) throw new NotFoundException();
+    const task = await this.tasksService.update(id, updateTaskDto);
+    if (!task) throw new NotFoundException();
+    return task;
   }
 
   @Delete(':id')

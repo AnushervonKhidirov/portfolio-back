@@ -47,10 +47,14 @@ export class TasksService {
 
   async update(id: string, updateTaskDto: UpdateTaskDto) {
     try {
-      const isExist = await this.taskRepository.existsBy({ id });
-      if (!isExist) throw new Error(`Task with id ${id} doesn't exist`);
+      const task = await this.taskRepository.findOneBy({ id });
+      if (!task) throw new Error(`Task with id ${id} doesn't exist`);
 
-      return await this.taskRepository.update(id, updateTaskDto);
+      const updatedTask = this.taskRepository.create({
+        ...task,
+        ...updateTaskDto,
+      });
+      return await this.taskRepository.save(updatedTask);
     } catch (err) {
       console.log(err);
     }
