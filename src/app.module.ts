@@ -19,7 +19,7 @@ import { CompanyEntity } from './companies/entity/company.entity';
 import { UserEntity } from './user/entity/user.entity';
 import { TokenEntity } from './token/entity/token.entity';
 import { ProjectEntity } from './projects/entity/project.entity';
-import { ProjectLinkEntity } from './projects/entity/project-link.entity';
+import { LinkEntity } from './links/entity/link.entity';
 
 import { SkillsModule } from './skills/skills.module';
 import { AcquiredSkillsModule } from './acquired-skills/acquired-skills.module';
@@ -32,6 +32,7 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { TokenModule } from './token/token.module';
 import { ProjectsModule } from './projects/projects.module';
+import { LinksModule } from './links/links.module';
 
 @Module({
   imports: [
@@ -54,7 +55,7 @@ import { ProjectsModule } from './projects/projects.module';
         UserEntity,
         TokenEntity,
         ProjectEntity,
-        ProjectLinkEntity,
+        LinkEntity,
       ],
       synchronize: true,
     }),
@@ -69,6 +70,7 @@ import { ProjectsModule } from './projects/projects.module';
     UserModule,
     TokenModule,
     ProjectsModule,
+    LinksModule,
   ],
   controllers: [],
   providers: [],
