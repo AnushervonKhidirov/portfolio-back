@@ -49,9 +49,14 @@ export class GradesService {
 
   async update(id: string, updateGradeDto: UpdateGradeDto) {
     try {
-      const isExist = await this.gradeRepository.existsBy({ id });
-      if (!isExist) throw new Error(`Grade with id: ${id} doesn't exist`);
-      return await this.gradeRepository.update(id, updateGradeDto);
+      const grade = await this.gradeRepository.findOneBy({ id });
+      if (!grade) throw new Error(`Grade with id: ${id} doesn't exist`);
+
+      const updatedGrade = this.gradeRepository.create({
+        ...grade,
+        ...updateGradeDto,
+      });
+      return await this.gradeRepository.save(updatedGrade);
     } catch (err) {
       console.log(err);
     }

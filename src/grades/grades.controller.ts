@@ -80,8 +80,9 @@ export class GradesController {
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
     @Body(new ValidationPipe()) updateGradeDto: UpdateGradeDto,
   ) {
-    const result = await this.gradesService.update(id, updateGradeDto);
-    if (!result) throw new NotFoundException();
+    const grade = await this.gradesService.update(id, updateGradeDto);
+    if (!grade) throw new NotFoundException();
+    return grade;
   }
 
   @Delete(':id')
