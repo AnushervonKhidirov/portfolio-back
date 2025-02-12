@@ -46,12 +46,9 @@ export class AcquiredSkillsService {
         );
       }
 
-      const isExist = await this.acquiredSkillRepository
-        .createQueryBuilder('acquired_skills')
-        .where('acquired_skills.skill_id = :id', {
-          id: createAcquiredSkillDto.skillId,
-        })
-        .getOne();
+      const isExist = await this.acquiredSkillRepository.findOneBy({
+        skillId: createAcquiredSkillDto.skillId,
+      });
 
       if (isExist)
         throw new Error(`Acquired skill '${skill.name}' already exist`);
@@ -69,7 +66,7 @@ export class AcquiredSkillsService {
 
   async update(id: string, updateAcquiredSkillDto: UpdateAcquiredSkillDto) {
     try {
-      const acquiredSkill = await this.findOne(id)
+      const acquiredSkill = await this.findOne(id);
 
       if (!acquiredSkill) {
         throw new Error(`Acquired skill with id: ${id} doesn't exist`);
@@ -86,11 +83,12 @@ export class AcquiredSkillsService {
       }
 
       const newAcquiredSkill = this.acquiredSkillRepository.create({
+        ...acquiredSkill,
         ...updateAcquiredSkillDto,
         skill: skill,
       });
 
-      return await this.acquiredSkillRepository.update(id, newAcquiredSkill);
+      return await this.acquiredSkillRepository.save(newAcquiredSkill);
     } catch (err) {
       console.log(err);
     }

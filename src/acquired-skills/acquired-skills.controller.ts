@@ -80,8 +80,13 @@ export class AcquiredSkillsController {
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
     @Body(new ValidationPipe()) updateAcquiredSkillDto: UpdateAcquiredSkillDto,
   ) {
-    const result = await this.acquiredSkills.update(id, updateAcquiredSkillDto);
-    if (!result) throw new NotFoundException(`Skill doesn't exist`);
+    const acquiredSkill = await this.acquiredSkills.update(
+      id,
+      updateAcquiredSkillDto,
+    );
+    
+    if (!acquiredSkill) throw new NotFoundException(`Skill doesn't exist`);
+    return acquiredSkill;
   }
 
   @Delete(':id')

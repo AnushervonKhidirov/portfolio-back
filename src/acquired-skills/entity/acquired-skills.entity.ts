@@ -16,11 +16,14 @@ export class AcquiredSkillEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column({ name: 'skill_id' })
+  skillId: string;
+
   @Column({ type: 'tinyint' })
   progress: number;
 
   @Column({ name: 'skill_type' })
-  skillType: TSkillType
+  skillType: TSkillType;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
   createdAt: Date;
