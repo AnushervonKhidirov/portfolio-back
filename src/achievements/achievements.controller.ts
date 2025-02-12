@@ -76,11 +76,13 @@ export class AchievementsController {
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
     @Body(new ValidationPipe()) updateAchievementDto: UpdateAchievementDto,
   ) {
-    const result = await this.achievementsService.update(
+    const achievement = await this.achievementsService.update(
       id,
       updateAchievementDto,
     );
-    if (!result) throw new NotFoundException();
+
+    if (!achievement) throw new NotFoundException();
+    return achievement;
   }
 
   @Delete(':id')

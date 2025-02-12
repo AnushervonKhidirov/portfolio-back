@@ -49,10 +49,16 @@ export class AchievementsService {
 
   async update(id: string, updateAchievementDto: UpdateAchievementDto) {
     try {
-      const isExist = await this.achievementRepository.existsBy({ id });
-      if (!isExist) throw new Error(`Achievement with id ${id} doesn't exist`);
+      const achievement = await this.achievementRepository.findOneBy({ id });
+      if (!achievement)
+        throw new Error(`Achievement with id ${id} doesn't exist`);
 
-      return await this.achievementRepository.update(id, updateAchievementDto);
+      const updatedAchievement = this.achievementRepository.create({
+        ...achievement,
+        ...updateAchievementDto,
+      });
+
+      return await this.achievementRepository.save(updatedAchievement);
     } catch (err) {
       console.log(err);
     }
