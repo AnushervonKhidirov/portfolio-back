@@ -79,8 +79,9 @@ export class SkillsController {
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
     @Body(new ValidationPipe()) updateSkillDto: UpdateSkillDto,
   ) {
-    const result = await this.skillService.update(id, updateSkillDto);
-    if (!result) throw new NotFoundException(`Skill doesn't exist`);
+    const skill = await this.skillService.update(id, updateSkillDto);
+    if (!skill) throw new NotFoundException(`Skill doesn't exist`);
+    return skill;
   }
 
   @Delete(':id')

@@ -57,10 +57,15 @@ export class SkillsService {
 
   async update(id: string, updateSkillDto: UpdateSkillDto) {
     try {
-      const isExist = await this.skillRepository.existsBy({ id });
-      if (!isExist) throw new Error(`Skill with id: ${id} doesn't exist`);
+      const skill = await this.skillRepository.findOneBy({ id });
+      if (!skill) throw new Error(`Skill with id: ${id} doesn't exist`);
 
-      return await this.skillRepository.update(id, updateSkillDto);
+      const updatedSkill = this.skillRepository.create({
+        ...skill,
+        ...updateSkillDto,
+      });
+
+      return await this.skillRepository.save(updatedSkill);
     } catch (err) {
       console.log(err);
     }
