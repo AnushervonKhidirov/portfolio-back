@@ -48,10 +48,15 @@ export class LinksService {
 
   async update(id: string, updateLinkDto: UpdateLinkDto) {
     try {
-      const isExist = await this.linkRepository.existsBy({ id });
-      if (!isExist) throw new Error('Link not found');
+      const link = await this.linkRepository.findOneBy({ id });
+      if (!link) throw new Error('Link not found');
 
-      return await this.linkRepository.update(id, updateLinkDto);
+      const updateLink = this.linkRepository.create({
+        ...link,
+        ...updateLinkDto,
+      });
+
+      return await this.linkRepository.save(updateLink);
     } catch (err) {
       console.log(err);
     }
