@@ -10,6 +10,7 @@ import { UserService } from 'src/user/user.service';
 import { JwtService } from 'src/jwt/jwt.service';
 
 import { UserDto } from 'src/user/dto/user.dto';
+import { SignOutDto } from './dto/sign-out.dto';
 
 @Injectable()
 export class AuthService {
@@ -49,6 +50,14 @@ export class AuthService {
       );
     }
 
+    const result = await this.jwtService.save(user, token.refreshToken);
+
+    if (!result) {
+      throw new BadRequestException(
+        'Unable to create token, please try again later',
+      );
+    }
+
     return token;
   }
 
@@ -71,8 +80,30 @@ export class AuthService {
       );
     }
 
+    const result = await this.jwtService.save(user, token.refreshToken);
+
+    if (!result) {
+      throw new BadRequestException(
+        'Unable to create token, please try again later',
+      );
+    }
+
     return token;
   }
 
-  async signOut() {}
+  async signOut(signOutDto: SignOutDto) {
+    const isValidToken = this.jwtService.verifyRefresh(signOutDto.refreshToken);
+    if (!isValidToken) throw new UnauthorizedException();
+
+    const result = await this.jwtService.delete(signOutDto);
+    if (!result) throw new UnauthorizedException();
+  }
+
+  async signOutFromAllDevices(signOutDto: SignOutDto) {
+    const isValidToken = this.jwtService.verifyRefresh(signOutDto.refreshToken);
+    if (!isValidToken) throw new UnauthorizedException();
+
+    const result = await this.jwtService.deleteAll(signOutDto);
+    if (!result) throw new UnauthorizedException();
+  }
 }
