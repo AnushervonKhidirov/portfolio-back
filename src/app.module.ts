@@ -4,11 +4,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 // modules
 import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
+import { JwtModule } from './jwt/jwt.module';
 
 // entities
 import { UserEntity } from './user/entity/user.entity';
-import { AuthModule } from './auth/auth.module';
-import { JwtModule } from './jwt/jwt.module';
+import { JwtEntity } from './jwt/entity/jwt.entity';
 
 @Module({
   imports: [
@@ -20,7 +21,7 @@ import { JwtModule } from './jwt/jwt.module';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [UserEntity],
+      entities: [UserEntity, JwtEntity],
       synchronize: true,
     }),
     UserModule,
