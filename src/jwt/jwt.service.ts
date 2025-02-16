@@ -38,7 +38,7 @@ export class JwtService {
         user,
       });
 
-      return await this.tokenRepository.insert(tokenUserPair);
+      return await this.tokenRepository.save(tokenUserPair);
     } catch (err) {
       console.log(err);
     }
