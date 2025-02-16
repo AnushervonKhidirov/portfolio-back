@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindManyOptions, Repository } from 'typeorm';
+import { FindManyOptions, FindOptionsWhere, Repository } from 'typeorm';
 
 import { UserEntity } from './entity/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -13,9 +13,13 @@ export class UserService {
     private readonly userRepository: Repository<UserEntity>,
   ) {}
 
-  async findOne(id: number) {
+  async findOne(options: FindOptionsWhere<UserEntity>) {
+    const { password, ...properOption } = options;
+
     try {
-      return await this.userRepository.findOneBy({ id });
+      const user = await this.userRepository.findOneBy(properOption);
+      if (!user) throw new Error('User not found');
+      return user;
     } catch (err) {
       console.log(err);
     }
@@ -32,6 +36,7 @@ export class UserService {
   async create(createUserDto: CreateUserDto) {
     try {
       const newUser = this.userRepository.create(createUserDto);
+      if (!newUser) throw new Error('Unable to create user');
       return await this.userRepository.save(newUser);
     } catch (err) {
       console.log(err);
@@ -40,15 +45,14 @@ export class UserService {
 
   async update(id: number, updateUserDto: UpdateUserDto) {
     const user = await this.userRepository.findOneBy({ id });
-    if (!user) return null;
-
+    if (!user) throw new Error('User not found');
     return user;
   }
 
   async delete(id: number) {
     try {
       const user = await this.userRepository.findOneBy({ id });
-      if (!user) return null;
+      if (!user) throw new Error('User not found');
 
       await this.userRepository.delete(id);
       return user;
