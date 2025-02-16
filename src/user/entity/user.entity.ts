@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { JwtEntity } from 'src/jwt/entity/jwt.entity';
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -10,4 +11,7 @@ export class UserEntity {
 
   @Column()
   password: string;
+
+  @OneToMany(() => JwtEntity, (token) => token.user)
+  token: JwtEntity;
 }
