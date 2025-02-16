@@ -7,10 +7,12 @@ import { UserModule } from './user/user.module';
 
 // entities
 import { UserEntity } from './user/entity/user.entity';
+import { AuthModule } from './auth/auth.module';
+import { JwtModule } from './jwt/jwt.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.DB_HOST,
@@ -22,6 +24,8 @@ import { UserEntity } from './user/entity/user.entity';
       synchronize: true,
     }),
     UserModule,
+    AuthModule,
+    JwtModule,
   ],
   controllers: [],
   providers: [],
