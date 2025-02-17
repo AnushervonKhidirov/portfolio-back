@@ -16,7 +16,7 @@ export class UserEntity {
     name: 'created_at',
     type: 'bigint',
   })
-  createdAt: Date;
+  createdAt: number;
 
   @OneToMany(() => JwtEntity, (token) => token.user)
   token: JwtEntity;

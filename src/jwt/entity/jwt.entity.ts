@@ -13,7 +13,13 @@ export class JwtEntity {
     name: 'created_at',
     type: 'bigint',
   })
-  createdAt: Date;
+  createdAt: number;
+
+  @Column({
+    name: 'expired_at',
+    type: 'bigint',
+  })
+  expiredAt: number;
 
   @ManyToOne(() => UserEntity, (user) => user.token)
   @JoinColumn({ name: 'user_id' })
