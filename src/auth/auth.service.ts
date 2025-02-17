@@ -109,12 +109,27 @@ export class AuthService {
   }
 
   async refreshToken({ refreshToken }: RefreshTokenDto) {
+    const isValidToken = await this.jwtService.verifyRefresh(refreshToken);
+    if (!isValidToken) throw new UnauthorizedException();
+
+    const result = await this.jwtService.delete(refreshToken);
+    if (!result) throw new UnauthorizedException();
+
     const { sub } = decode(refreshToken) as JwtPayload;
     const user = await this.userService.findOne({ id: parseInt(sub) });
     if (!user) throw new NotFoundException('User not found');
 
-    const token = await this.jwtService.refresh(user, refreshToken);
-    if (!token) throw new UnauthorizedException('Token expired');
+    const payload: JwtPayload = { sub: user.id.toString(), email: user.email };
+    const token = this.jwtService.generate(payload);
+
+    const savedToken = await this.jwtService.save(user, token.refreshToken);
+
+    if (!savedToken) {
+      throw new BadRequestException(
+        'Unable to create token, please try again later',
+      );
+    }
+
     return token;
   }
 }

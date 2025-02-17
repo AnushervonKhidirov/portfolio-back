@@ -37,27 +37,6 @@ export class JwtService {
     }
   }
 
-  async refresh(user: UserEntity, refreshToken: string) {
-    try {
-      const isValid = await this.verifyRefresh(refreshToken);
-      if (!isValid) throw new Error('Token is not valid');
-
-      await this.delete(refreshToken);
-
-      const newToken = this.generate({
-        sub: user.id.toString(),
-        email: user.email,
-      });
-
-      const savedToken = await this.save(user, newToken.refreshToken);
-      if (!savedToken) throw new Error('Unable to save refresh token');
-
-      return newToken;
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
   verifyAccess(accessToken: string) {
     try {
       verify(accessToken, this.accessSecret, (err) => {
