@@ -9,6 +9,12 @@ export class JwtEntity {
   @Column({ name: 'user_id' })
   userId: string;
 
+  @Column({
+    name: 'created_at',
+    type: 'bigint',
+  })
+  createdAt: Date;
+
   @ManyToOne(() => UserEntity, (user) => user.token)
   @JoinColumn({ name: 'user_id' })
   user: UserEntity;

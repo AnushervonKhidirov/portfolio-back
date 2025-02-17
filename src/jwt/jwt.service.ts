@@ -81,6 +81,7 @@ export class JwtService {
       const tokenUserPair = this.tokenRepository.create({
         refreshToken,
         user,
+        createdAt: Date.now(),
       });
 
       return await this.tokenRepository.save(tokenUserPair);

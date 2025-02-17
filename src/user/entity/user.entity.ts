@@ -12,6 +12,12 @@ export class UserEntity {
   @Column()
   password: string;
 
+  @Column({
+    name: 'created_at',
+    type: 'bigint',
+  })
+  createdAt: Date;
+
   @OneToMany(() => JwtEntity, (token) => token.user)
   token: JwtEntity;
 }

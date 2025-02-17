@@ -35,7 +35,10 @@ export class UserService {
 
   async create(createUserDto: CreateUserDto) {
     try {
-      const newUser = this.userRepository.create(createUserDto);
+      const newUser = this.userRepository.create({
+        ...createUserDto,
+        createdAt: Date.now(),
+      });
       if (!newUser) throw new Error('Unable to create user');
       return await this.userRepository.save(newUser);
     } catch (err) {
