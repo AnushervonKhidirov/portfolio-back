@@ -6,11 +6,9 @@ import {
   Repository,
   LessThan,
 } from 'typeorm';
+import { sign, verify, JwtPayload } from 'jsonwebtoken';
 import { JwtEntity } from './entity/jwt.entity';
 import { UserEntity } from 'src/user/entity/user.entity';
-
-import { sign, verify } from 'jsonwebtoken';
-import { SignOutDto } from 'src/auth/dto/sign-out.dto';
 
 import { TimeConverter } from 'src/time-converter/time-converter';
 
@@ -24,7 +22,7 @@ export class JwtService {
     private readonly tokenRepository: Repository<JwtEntity>,
   ) {}
 
-  generate(payload: string | object | Buffer) {
+  generate(payload: JwtPayload) {
     try {
       const accessToken = sign(payload, this.accessSecret, {
         expiresIn: TimeConverter.getSecondsInMinutes(10),
@@ -34,6 +32,27 @@ export class JwtService {
       });
 
       return { accessToken, refreshToken };
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async refresh(user: UserEntity, refreshToken: string) {
+    try {
+      const isValid = await this.verifyRefresh(refreshToken);
+      if (!isValid) throw new Error('Token is not valid');
+
+      await this.delete(refreshToken);
+
+      const newToken = this.generate({
+        sub: user.id.toString(),
+        email: user.email,
+      });
+
+      const savedToken = await this.save(user, newToken.refreshToken);
+      if (!savedToken) throw new Error('Unable to save refresh token');
+
+      return newToken;
     } catch (err) {
       console.log(err);
     }
@@ -51,13 +70,17 @@ export class JwtService {
     }
   }
 
-  verifyRefresh(refreshToken: string) {
+  async verifyRefresh(refreshToken: string) {
     try {
       verify(refreshToken, this.refreshSecret, (err) => {
         if (err) throw new Error('Token is not valid');
       });
 
-      return true;
+      const isTokenExist = await this.tokenRepository.existsBy({
+        refreshToken,
+      });
+
+      return isTokenExist;
     } catch (err) {
       console.log(err);
     }
@@ -98,7 +121,7 @@ export class JwtService {
     }
   }
 
-  async delete({ refreshToken }: SignOutDto) {
+  async delete(refreshToken: string) {
     try {
       const token = await this.findOne({ refreshToken });
       if (!token) throw new Error('Token not found');
@@ -108,7 +131,7 @@ export class JwtService {
     }
   }
 
-  async deleteAll({ refreshToken }: SignOutDto) {
+  async deleteAll(refreshToken: string) {
     try {
       const token = await this.findOne({ refreshToken });
       if (!token) throw new Error('Token not found');

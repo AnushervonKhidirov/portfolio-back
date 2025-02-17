@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UserDto } from 'src/user/dto/user.dto';
-import { SignOutDto } from './dto/sign-out.dto';
+import { RefreshTokenDto } from './dto/refresh-token.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -28,15 +28,22 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('sign-out')
-  async signOut(@Body(new ValidationPipe()) signOutDto: SignOutDto) {
-    await this.authService.signOut(signOutDto);
+  async signOut(@Body(new ValidationPipe()) refreshTokenDto: RefreshTokenDto) {
+    await this.authService.signOut(refreshTokenDto);
   }
 
   @HttpCode(HttpStatus.OK)
   @Post('sign-out-everywhere')
   async signOutFromAllDevices(
-    @Body(new ValidationPipe()) signOutDto: SignOutDto,
+    @Body(new ValidationPipe()) refreshTokenDto: RefreshTokenDto,
   ) {
-    await this.authService.signOutFromAllDevices(signOutDto);
+    await this.authService.signOutFromAllDevices(refreshTokenDto);
+  }
+
+  @Post('refresh')
+  async refreshToken(
+    @Body(new ValidationPipe()) refreshTokenDto: RefreshTokenDto,
+  ) {
+    return await this.authService.refreshToken(refreshTokenDto);
   }
 }

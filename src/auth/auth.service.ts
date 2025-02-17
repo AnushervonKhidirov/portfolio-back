@@ -10,7 +10,8 @@ import { UserService } from 'src/user/user.service';
 import { JwtService } from 'src/jwt/jwt.service';
 
 import { UserDto } from 'src/user/dto/user.dto';
-import { SignOutDto } from './dto/sign-out.dto';
+import { RefreshTokenDto } from './dto/refresh-token.dto';
+import { decode, JwtPayload } from 'jsonwebtoken';
 
 @Injectable()
 export class AuthService {
@@ -41,7 +42,7 @@ export class AuthService {
       );
     }
 
-    const payload = { sub: user.id, email: user.email };
+    const payload: JwtPayload = { sub: user.id.toString(), email: user.email };
     const token = this.jwtService.generate(payload);
 
     if (!token) {
@@ -71,7 +72,7 @@ export class AuthService {
     const isCorrectPassword = compareSync(userDto.password, user.password);
     if (!isCorrectPassword) throw new UnauthorizedException('Wrong password');
 
-    const payload = { sub: user.id, email: user.email };
+    const payload: JwtPayload = { sub: user.id.toString(), email: user.email };
     const token = this.jwtService.generate(payload);
 
     if (!token) {
@@ -91,19 +92,29 @@ export class AuthService {
     return token;
   }
 
-  async signOut(signOutDto: SignOutDto) {
-    const isValidToken = this.jwtService.verifyRefresh(signOutDto.refreshToken);
+  async signOut({ refreshToken }: RefreshTokenDto) {
+    const isValidToken = await this.jwtService.verifyRefresh(refreshToken);
     if (!isValidToken) throw new UnauthorizedException();
 
-    const result = await this.jwtService.delete(signOutDto);
+    const result = await this.jwtService.delete(refreshToken);
     if (!result) throw new UnauthorizedException();
   }
 
-  async signOutFromAllDevices(signOutDto: SignOutDto) {
-    const isValidToken = this.jwtService.verifyRefresh(signOutDto.refreshToken);
+  async signOutFromAllDevices({ refreshToken }: RefreshTokenDto) {
+    const isValidToken = await this.jwtService.verifyRefresh(refreshToken);
     if (!isValidToken) throw new UnauthorizedException();
 
-    const result = await this.jwtService.deleteAll(signOutDto);
+    const result = await this.jwtService.deleteAll(refreshToken);
     if (!result) throw new UnauthorizedException();
+  }
+
+  async refreshToken({ refreshToken }: RefreshTokenDto) {
+    const { sub } = decode(refreshToken) as JwtPayload;
+    const user = await this.userService.findOne({ id: parseInt(sub) });
+    if (!user) throw new NotFoundException('User not found');
+
+    const token = await this.jwtService.refresh(user, refreshToken);
+    if (!token) throw new UnauthorizedException('Token expired');
+    return token;
   }
 }
