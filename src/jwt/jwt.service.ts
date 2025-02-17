@@ -1,11 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindManyOptions, FindOptionsWhere, Repository } from 'typeorm';
+import {
+  FindManyOptions,
+  FindOptionsWhere,
+  Repository,
+  LessThan,
+} from 'typeorm';
 import { JwtEntity } from './entity/jwt.entity';
 import { UserEntity } from 'src/user/entity/user.entity';
 
 import { sign, verify } from 'jsonwebtoken';
 import { SignOutDto } from 'src/auth/dto/sign-out.dto';
+
+import { TimeConverter } from 'src/time-converter/time-converter';
 
 @Injectable()
 export class JwtService {
@@ -20,10 +27,10 @@ export class JwtService {
   generate(payload: string | object | Buffer) {
     try {
       const accessToken = sign(payload, this.accessSecret, {
-        expiresIn: '10m',
+        expiresIn: TimeConverter.getSecondsInMinutes(10),
       });
       const refreshToken = sign(payload, this.refreshSecret, {
-        expiresIn: '1d',
+        expiresIn: TimeConverter.getSecondsInDays(),
       });
 
       return { accessToken, refreshToken };
@@ -82,6 +89,7 @@ export class JwtService {
         refreshToken,
         user,
         createdAt: Date.now(),
+        expiredAt: Date.now() + TimeConverter.getMillisecondsInDays(),
       });
 
       return await this.tokenRepository.save(tokenUserPair);
@@ -105,6 +113,20 @@ export class JwtService {
       const token = await this.findOne({ refreshToken });
       if (!token) throw new Error('Token not found');
       return this.tokenRepository.delete({ userId: token.userId });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async deleteExpiredTokens() {
+    const now = Date.now();
+
+    try {
+      const tokens = await this.findAll({
+        where: { expiredAt: LessThan(now) },
+      });
+
+      this.tokenRepository.remove(tokens);
     } catch (err) {
       console.log(err);
     }
