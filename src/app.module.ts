@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ScheduleModule } from '@nestjs/schedule';
 
 // modules
+import { ScheduledTasksModule } from './scheduled-tasks/scheduled-tasks.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from './jwt/jwt.module';
@@ -24,6 +26,8 @@ import { JwtEntity } from './jwt/entity/jwt.entity';
       entities: [UserEntity, JwtEntity],
       synchronize: true,
     }),
+    ScheduleModule.forRoot(),
+    ScheduledTasksModule,
     UserModule,
     AuthModule,
     JwtModule,
