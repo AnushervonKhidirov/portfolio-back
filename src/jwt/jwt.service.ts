@@ -126,7 +126,7 @@ export class JwtService {
         where: { expiredAt: LessThan(now) },
       });
 
-      this.tokenRepository.remove(tokens);
+      return this.tokenRepository.remove(tokens);
     } catch (err) {
       console.log(err);
     }
