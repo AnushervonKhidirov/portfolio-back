@@ -10,7 +10,7 @@ import { sign, verify, JwtPayload } from 'jsonwebtoken';
 import { JwtEntity } from './entity/jwt.entity';
 import { UserEntity } from 'src/user/entity/user.entity';
 
-import { TimeConverter } from 'src/time-converter/time-converter';
+import { TimeConverter } from 'src/common/time-converter/time-converter';
 
 @Injectable()
 export class JwtService {
