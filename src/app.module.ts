@@ -2,6 +2,12 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+// modules
+import { SkillModule } from './skill/skill.module';
+
+// entities
+import { SkillEntity } from './skill/entity/skill.entity';
+
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -12,9 +18,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [],
+      entities: [SkillEntity],
       synchronize: true,
     }),
+    SkillModule,
   ],
   controllers: [],
   providers: [],
