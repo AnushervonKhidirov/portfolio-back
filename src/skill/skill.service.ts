@@ -1,9 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindManyOptions, FindOptionsWhere, Repository } from 'typeorm';
 import { CreateSkillDto } from './dto/create-skill.dto';
 import { UpdateSkillDto } from './dto/update-skill.dto';
 import { SkillEntity } from './entity/skill.entity';
+import { TServiceResponse } from 'src/common/type/service-response.type';
 
 @Injectable()
 export class SkillService {
@@ -12,34 +18,50 @@ export class SkillService {
     private readonly skillRepository: Repository<SkillEntity>,
   ) {}
 
-  async findOne(where: FindOptionsWhere<SkillEntity>) {
+  async findOne(
+    where: FindOptionsWhere<SkillEntity>,
+  ): TServiceResponse<SkillEntity> {
     try {
-      return await this.skillRepository.findOneBy(where);
+      const skill = await this.skillRepository.findOneBy(where);
+      if (!skill) return [null, new NotFoundException('Skill not found')];
+      return [skill, null];
     } catch (err) {
       console.log(err);
     }
   }
 
-  async findAll(options?: FindManyOptions<SkillEntity>) {
+  async findAll(
+    options?: FindManyOptions<SkillEntity>,
+  ): TServiceResponse<SkillEntity[]> {
     try {
-      return await this.skillRepository.find(options);
+      const skills = await this.skillRepository.find(options);
+
+      if (!Array.isArray(skills)) {
+        return [null, new InternalServerErrorException()];
+      }
+
+      return [skills, null];
     } catch (err) {
       console.log(err);
     }
   }
 
-  async create(createSkillDto: CreateSkillDto) {
+  async create(createSkillDto: CreateSkillDto): TServiceResponse<SkillEntity> {
     try {
       const isExist = await this.skillRepository.existsBy({
         value: createSkillDto.value,
       });
 
       if (isExist) {
-        throw new Error(`Skill ${createSkillDto.value} already exist`);
+        return [
+          null,
+          new ConflictException(`Skill ${createSkillDto.value} already exist`),
+        ];
       }
 
       const newSkill = this.skillRepository.create(createSkillDto);
-      return await this.skillRepository.save(newSkill);
+      const createdSkill = await this.skillRepository.save(newSkill);
+      return [createdSkill, null];
     } catch (err) {
       console.log(err);
     }
@@ -48,33 +70,48 @@ export class SkillService {
   async update(
     id: number,
     updateSkillDto: UpdateSkillDto,
-  ): Promise<SkillEntity> {
+  ): TServiceResponse<SkillEntity> {
     try {
-      const skill = await this.findOne({ id });
+      const skill = await this.skillRepository.findOneBy({ id });
 
       if (!skill) {
-        throw new Error(`Skill with id ${id} doesn't exist`);
+        return [null, new NotFoundException(`Skill with id ${id} not found`)];
+      }
+
+      const existedSkill = await this.skillRepository.findOneBy({
+        value: updateSkillDto.value,
+      });
+
+      if (existedSkill) {
+        return [
+          null,
+          new ConflictException(
+            `Skill '${updateSkillDto.value}' already exist with id ${existedSkill.id}`,
+          ),
+        ];
       }
 
       const newSkill = this.skillRepository.create({
         ...skill,
         ...updateSkillDto,
       });
+      const updatedSkill = await this.skillRepository.save(newSkill);
 
-      return await this.skillRepository.save(newSkill);
+      return [updatedSkill, null];
     } catch (err) {
       console.log(err);
     }
   }
 
-  async delete(id: number) {
+  async delete(id: number): TServiceResponse<SkillEntity> {
     try {
-      const skill = await this.findOne({ id });
-
-      if (!skill) throw new Error("Skill doesn't exist");
+      const skill = await this.skillRepository.findOneBy({ id });
+      if (!skill) {
+        return [null, new NotFoundException(`Skill with id ${id} not found`)];
+      }
 
       await this.skillRepository.delete(id);
-      return skill;
+      return [skill, null];
     } catch (err) {
       console.log(err);
     }

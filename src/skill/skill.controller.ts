@@ -10,8 +10,6 @@ import {
   ValidationPipe,
   HttpCode,
   HttpStatus,
-  ConflictException,
-  NotFoundException,
 } from '@nestjs/common';
 import { SkillService } from './skill.service';
 import { CreateSkillDto } from './dto/create-skill.dto';
@@ -26,14 +24,16 @@ export class SkillController {
   @ApiOkResponse({ type: SkillEntity, isArray: true })
   @Get()
   async findAll() {
-    return await this.skillService.findAll();
+    const [skills, err] = await this.skillService.findAll();
+    if (err) throw err;
+    return skills;
   }
 
   @ApiOkResponse({ type: SkillEntity })
   @Get(':id')
   async findOne(@Param('id', new ParseIntPipe()) id: number) {
-    const skill = await this.skillService.findOne({ id });
-    if (!skill) throw new NotFoundException('Skill not found');
+    const [skill, err] = await this.skillService.findOne({ id });
+    if (err) throw err;
     return skill;
   }
 
@@ -41,8 +41,8 @@ export class SkillController {
   @HttpCode(HttpStatus.OK)
   @Post()
   async create(@Body(new ValidationPipe()) createSkillDto: CreateSkillDto) {
-    const skill = await this.skillService.create(createSkillDto);
-    if (!skill) throw new ConflictException('Skill already exist');
+    const [skill, err] = await this.skillService.create(createSkillDto);
+    if (err) throw err;
     return skill;
   }
 
@@ -52,26 +52,16 @@ export class SkillController {
     @Param('id', new ParseIntPipe()) id: number,
     @Body(new ValidationPipe()) updateSkillDto: UpdateSkillDto,
   ) {
-    const existedSkill = await this.skillService.findOne({
-      value: updateSkillDto.value,
-    });
-
-    if (existedSkill) {
-      throw new ConflictException(
-        `Skill '${updateSkillDto.value}' already exist with id ${existedSkill.id}`,
-      );
-    }
-
-    const skill = await this.skillService.update(id, updateSkillDto);
-    if (!skill) throw new NotFoundException('Skill not found');
+    const [skill, err] = await this.skillService.update(id, updateSkillDto);
+    if (err) throw err;
     return skill;
   }
 
   @ApiOkResponse({ type: SkillEntity })
   @Delete(':id')
   async delete(@Param('id', new ParseIntPipe()) id: number) {
-    const skill = await this.skillService.delete(id);
-    if (!skill) throw new NotFoundException('Skill not found');
+    const [skill, err] = await this.skillService.delete(id);
+    if (err) throw err;
     return skill;
   }
 }
