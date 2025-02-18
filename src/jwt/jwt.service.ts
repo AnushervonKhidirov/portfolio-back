@@ -11,6 +11,7 @@ import { JwtEntity } from './entity/jwt.entity';
 import { UserEntity } from 'src/user/entity/user.entity';
 
 import { TimeConverter } from 'src/common/time-converter/time-converter';
+import { Request } from 'express';
 
 @Injectable()
 export class JwtService {
@@ -132,5 +133,10 @@ export class JwtService {
     } catch (err) {
       console.log(err);
     }
+  }
+
+  extractTokenFromHeader(req: Request) {
+    const [type, token] = req.headers.authorization?.split(' ') ?? [];
+    return type === 'Bearer' ? token : null;
   }
 }
