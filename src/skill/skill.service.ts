@@ -46,7 +46,9 @@ export class SkillService {
     }
   }
 
-  async create(createSkillDto: CreateSkillDto): TServiceAsyncMethodReturn<SkillEntity> {
+  async create(
+    createSkillDto: CreateSkillDto,
+  ): TServiceAsyncMethodReturn<SkillEntity> {
     try {
       const isExist = await this.skillRepository.existsBy({
         value: createSkillDto.value,
@@ -86,7 +88,7 @@ export class SkillService {
         return [
           null,
           new ConflictException(
-            `Skill '${updateSkillDto.value}' already exist with id ${existedSkill.id}`,
+            `Skill '${updateSkillDto.value}' already exist by id ${existedSkill.id}`,
           ),
         ];
       }
