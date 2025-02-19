@@ -33,7 +33,7 @@ export class PositionService {
   }
 
   async findAll(
-    options: FindManyOptions<PositionEntity>,
+    options?: FindManyOptions<PositionEntity>,
   ): TServiceAsyncMethodReturn<PositionEntity[]> {
     try {
       const positions = await this.positionRepository.find(options);
