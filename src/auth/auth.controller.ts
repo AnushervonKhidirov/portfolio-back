@@ -17,19 +17,24 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post('sign-up')
   async signUp(@Body(new ValidationPipe()) userDto: UserDto) {
-    return await this.authService.signUp(userDto);
+    const [token, err] = await this.authService.signUp(userDto);
+    if (err) throw err;
+    return token;
   }
 
   @HttpCode(HttpStatus.OK)
   @Post('sign-in')
   async signIn(@Body(new ValidationPipe()) userDto: UserDto) {
-    return await this.authService.signIn(userDto);
+    const [token, err] = await this.authService.signIn(userDto);
+    if (err) throw err;
+    return token;
   }
 
   @HttpCode(HttpStatus.OK)
   @Post('sign-out')
   async signOut(@Body(new ValidationPipe()) refreshTokenDto: RefreshTokenDto) {
-    await this.authService.signOut(refreshTokenDto);
+    const [_, err] = await this.authService.signOut(refreshTokenDto);
+    if (err) throw err;
   }
 
   @HttpCode(HttpStatus.OK)
@@ -37,13 +42,17 @@ export class AuthController {
   async signOutFromAllDevices(
     @Body(new ValidationPipe()) refreshTokenDto: RefreshTokenDto,
   ) {
-    await this.authService.signOutFromAllDevices(refreshTokenDto);
+    const [_, err] =
+      await this.authService.signOutFromAllDevices(refreshTokenDto);
+    if (err) throw err;
   }
 
   @Post('refresh')
   async refreshToken(
     @Body(new ValidationPipe()) refreshTokenDto: RefreshTokenDto,
   ) {
-    return await this.authService.refreshToken(refreshTokenDto);
+    const [token, err] = await this.authService.refreshToken(refreshTokenDto);
+    if (err) throw err;
+    return token;
   }
 }

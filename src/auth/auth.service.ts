@@ -1,17 +1,20 @@
 import {
-  ConflictException,
   Injectable,
-  BadRequestException,
-  NotFoundException,
   UnauthorizedException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { hash, compareSync } from 'bcrypt';
+import { JwtPayload } from 'jsonwebtoken';
 import { UserService } from 'src/user/user.service';
 import { JwtService } from 'src/jwt/jwt.service';
 
 import { UserDto } from 'src/user/dto/user.dto';
+import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
-import { decode, JwtPayload } from 'jsonwebtoken';
+
+import { JwtEntity } from 'src/jwt/entity/jwt.entity';
+import { TServiceAsyncMethodReturn } from '@common/type/service-method.type';
+import { TToken } from '@common/type/token.type';
 
 @Injectable()
 export class AuthService {
@@ -20,116 +23,113 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async signUp(userDto: UserDto) {
-    const isUserExist = await this.userService.findOne({
-      email: userDto.email,
-    });
+  async signUp(
+    createUserDto: CreateUserDto,
+  ): TServiceAsyncMethodReturn<TToken> {
+    try {
+      const hashedPassword = await hash(createUserDto.password, 10);
+      const [user, userRrr] = await this.userService.create({
+        ...createUserDto,
+        password: hashedPassword,
+      });
 
-    if (isUserExist) {
-      throw new ConflictException(`User with ${userDto.email} already exist`);
-    }
+      if (userRrr) return [null, userRrr];
 
-    const hashedPassword = await hash(userDto.password, 10);
+      const payload: JwtPayload = {
+        sub: user.id.toString(),
+        email: user.email,
+      };
+      const token = this.jwtService.generate(payload);
 
-    const user = await this.userService.create({
-      ...userDto,
-      password: hashedPassword,
-    });
+      if (!token) {
+        return [null, new InternalServerErrorException()];
+      }
 
-    if (!user) {
-      throw new BadRequestException(
-        'Unable to add user, please try again later',
+      const [_, tokenErr] = await this.jwtService.create(
+        user,
+        token.refreshToken,
       );
+
+      if (tokenErr) return [null, tokenErr];
+      return [token, null];
+    } catch (err) {
+      console.log(err);
     }
-
-    const payload: JwtPayload = { sub: user.id.toString(), email: user.email };
-    const token = this.jwtService.generate(payload);
-
-    if (!token) {
-      throw new BadRequestException(
-        'Unable to create token, please try again later',
-      );
-    }
-
-    const result = await this.jwtService.save(user, token.refreshToken);
-
-    if (!result) {
-      throw new BadRequestException(
-        'Unable to create token, please try again later',
-      );
-    }
-
-    return token;
   }
 
-  async signIn(userDto: UserDto) {
-    const user = await this.userService.findOne({
-      email: userDto.email,
-    });
+  async signIn(userDto: UserDto): TServiceAsyncMethodReturn<TToken> {
+    try {
+      const [user, userRrr] = await this.userService.findOne({
+        email: userDto.email,
+      });
 
-    if (!user) throw new NotFoundException('User not found');
+      if (userRrr) return [null, userRrr];
 
-    const isCorrectPassword = compareSync(userDto.password, user.password);
-    if (!isCorrectPassword) throw new UnauthorizedException('Wrong password');
+      const isCorrectPassword = compareSync(userDto.password, user.password);
+      if (!isCorrectPassword)
+        return [null, new UnauthorizedException('Wrong password')];
 
-    const payload: JwtPayload = { sub: user.id.toString(), email: user.email };
-    const token = this.jwtService.generate(payload);
+      const payload: JwtPayload = {
+        sub: user.id.toString(),
+        email: user.email,
+      };
+      const token = this.jwtService.generate(payload);
 
-    if (!token) {
-      throw new BadRequestException(
-        'Unable to create token, please try again later',
+      if (!token) {
+        return [null, new InternalServerErrorException()];
+      }
+
+      const [_, tokenErr] = await this.jwtService.create(
+        user,
+        token.refreshToken,
       );
+
+      if (tokenErr) return [null, tokenErr];
+      return [token, null];
+    } catch (err) {
+      console.log(err);
     }
-
-    const result = await this.jwtService.save(user, token.refreshToken);
-
-    if (!result) {
-      throw new BadRequestException(
-        'Unable to create token, please try again later',
-      );
-    }
-
-    return token;
   }
 
-  async signOut({ refreshToken }: RefreshTokenDto) {
-    const isValidToken = await this.jwtService.verifyRefresh(refreshToken);
-    if (!isValidToken) throw new UnauthorizedException();
+  async signOut({
+    refreshToken,
+  }: RefreshTokenDto): TServiceAsyncMethodReturn<JwtEntity> {
+    try {
+      const isValidToken = await this.jwtService.verifyRefresh(refreshToken);
+      if (!isValidToken) return [null, new UnauthorizedException()];
 
-    const result = await this.jwtService.delete(refreshToken);
-    if (!result) throw new UnauthorizedException();
-  }
-
-  async signOutFromAllDevices({ refreshToken }: RefreshTokenDto) {
-    const isValidToken = await this.jwtService.verifyRefresh(refreshToken);
-    if (!isValidToken) throw new UnauthorizedException();
-
-    const result = await this.jwtService.deleteAll(refreshToken);
-    if (!result) throw new UnauthorizedException();
-  }
-
-  async refreshToken({ refreshToken }: RefreshTokenDto) {
-    const isValidToken = await this.jwtService.verifyRefresh(refreshToken);
-    if (!isValidToken) throw new UnauthorizedException();
-
-    const result = await this.jwtService.delete(refreshToken);
-    if (!result) throw new UnauthorizedException();
-
-    const { sub } = decode(refreshToken) as JwtPayload;
-    const user = await this.userService.findOne({ id: parseInt(sub) });
-    if (!user) throw new NotFoundException('User not found');
-
-    const payload: JwtPayload = { sub: user.id.toString(), email: user.email };
-    const token = this.jwtService.generate(payload);
-
-    const savedToken = await this.jwtService.save(user, token.refreshToken);
-
-    if (!savedToken) {
-      throw new BadRequestException(
-        'Unable to create token, please try again later',
-      );
+      const [token, err] = await this.jwtService.delete(refreshToken);
+      if (err) return [null, new UnauthorizedException()];
+      return [token, null];
+    } catch (err) {
+      console.log(err);
     }
+  }
 
-    return token;
+  async signOutFromAllDevices({
+    refreshToken,
+  }: RefreshTokenDto): TServiceAsyncMethodReturn<JwtEntity> {
+    try {
+      const isValidToken = await this.jwtService.verifyRefresh(refreshToken);
+      if (!isValidToken) return [null, new UnauthorizedException()];
+
+      const [token, err] = await this.jwtService.deleteAll(refreshToken);
+      if (err) return [null, new UnauthorizedException()];
+      return [token, null];
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async refreshToken({
+    refreshToken,
+  }: RefreshTokenDto): TServiceAsyncMethodReturn<TToken> {
+    try {
+      const [token, err] = await this.jwtService.refresh(refreshToken);
+      if (err) return [null, err];
+      return [token, null];
+    } catch (err) {
+      console.log(err);
+    }
   }
 }
