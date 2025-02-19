@@ -1,17 +1,25 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Request } from 'express';
 import {
   FindManyOptions,
   FindOptionsWhere,
   Repository,
   LessThan,
 } from 'typeorm';
-import { sign, verify, JwtPayload } from 'jsonwebtoken';
+import { sign, verify, JwtPayload, decode } from 'jsonwebtoken';
 import { JwtEntity } from './entity/jwt.entity';
 import { UserEntity } from 'src/user/entity/user.entity';
+import { UserService } from 'src/user/user.service';
 
-import { TimeConverter } from 'src/common/time-converter/time-converter';
-import { Request } from 'express';
+import { TimeConverter } from '@common/time-converter/time-converter';
+import { TServiceAsyncMethodReturn } from '@common/type/service-method.type';
+import { TToken } from '@common/type/token.type';
 
 @Injectable()
 export class JwtService {
@@ -21,9 +29,11 @@ export class JwtService {
   constructor(
     @InjectRepository(JwtEntity)
     private readonly tokenRepository: Repository<JwtEntity>,
+
+    private readonly userService: UserService,
   ) {}
 
-  generate(payload: JwtPayload) {
+  generate(payload: JwtPayload): TToken {
     try {
       const accessToken = sign(payload, this.accessSecret, {
         expiresIn: TimeConverter.getSecondsInMinutes(10),
@@ -66,27 +76,37 @@ export class JwtService {
     }
   }
 
-  async findOne(option?: FindOptionsWhere<JwtEntity>) {
+  async findOne(
+    option?: FindOptionsWhere<JwtEntity>,
+  ): TServiceAsyncMethodReturn<JwtEntity> {
     try {
       const token = await this.tokenRepository.findOneBy(option);
-      if (!token) throw new Error('Token not found');
-      return token;
+      if (!token) return [null, new NotFoundException('Token not found')];
+      return [token, null];
     } catch (err) {
       console.log(err);
     }
   }
 
-  async findAll(option?: FindManyOptions<JwtEntity>) {
+  async findAll(
+    option?: FindManyOptions<JwtEntity>,
+  ): TServiceAsyncMethodReturn<JwtEntity[]> {
     try {
       const token = await this.tokenRepository.find(option);
+      if (!Array.isArray(token)) {
+        return [null, new InternalServerErrorException()];
+      }
 
-      return token;
+      return [token, null];
     } catch (err) {
       console.log(err);
     }
   }
 
-  async save(user: UserEntity, refreshToken: string) {
+  async create(
+    user: UserEntity,
+    refreshToken: string,
+  ): TServiceAsyncMethodReturn<JwtEntity> {
     try {
       const tokenUserPair = this.tokenRepository.create({
         refreshToken,
@@ -95,27 +115,57 @@ export class JwtService {
         expiredAt: Date.now() + TimeConverter.getMillisecondsInDays(),
       });
 
-      return await this.tokenRepository.save(tokenUserPair);
+      const token = await this.tokenRepository.save(tokenUserPair);
+      if (!token) return [null, new InternalServerErrorException()];
+      return [token, null];
     } catch (err) {
       console.log(err);
     }
   }
 
-  async delete(refreshToken: string) {
+  async refresh(refreshToken: string): TServiceAsyncMethodReturn<TToken> {
     try {
-      const token = await this.findOne({ refreshToken });
-      if (!token) throw new Error('Token not found');
-      return this.tokenRepository.delete(refreshToken);
+      const isValidToken = await this.verifyRefresh(refreshToken);
+      if (!isValidToken) return [null, new UnauthorizedException()];
+
+      const result = await this.tokenRepository.delete(refreshToken);
+      if (!result) return [null, new UnauthorizedException()];
+
+      const { sub } = decode(refreshToken) as JwtPayload;
+      const [user, err] = await this.userService.findOne({ id: parseInt(sub) });
+      if (err) return [null, err];
+
+      const payload: JwtPayload = {
+        sub: user.id.toString(),
+        email: user.email,
+      };
+      const token = this.generate(payload);
+      const [_, saveErr] = await this.create(user, token.refreshToken);
+      if (saveErr) return [null, saveErr];
+
+      return [token, null];
     } catch (err) {
       console.log(err);
     }
   }
 
-  async deleteAll(refreshToken: string) {
+  async delete(refreshToken: string): TServiceAsyncMethodReturn<JwtEntity> {
     try {
-      const token = await this.findOne({ refreshToken });
-      if (!token) throw new Error('Token not found');
-      return this.tokenRepository.delete({ userId: token.userId });
+      const token = await this.tokenRepository.findOneBy({ refreshToken });
+      if (!token) return [null, new NotFoundException('Token not found')];
+      await this.tokenRepository.delete(refreshToken);
+      return [token, null];
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async deleteAll(refreshToken: string): TServiceAsyncMethodReturn<JwtEntity> {
+    try {
+      const token = await this.tokenRepository.findOneBy({ refreshToken });
+      if (!token) return [null, new NotFoundException('Token not found')];
+      await this.tokenRepository.delete({ userId: token.userId });
+      return [token, null];
     } catch (err) {
       console.log(err);
     }
@@ -125,7 +175,7 @@ export class JwtService {
     const now = Date.now();
 
     try {
-      const tokens = await this.findAll({
+      const tokens = await this.tokenRepository.find({
         where: { expiredAt: LessThan(now) },
       });
 
