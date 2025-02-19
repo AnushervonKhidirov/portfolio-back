@@ -14,11 +14,13 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from './jwt/jwt.module';
 import { SkillModule } from './skill/skill.module';
+import { PositionModule } from './position/position.module';
 
 // entities
 import { UserEntity } from './user/entity/user.entity';
 import { JwtEntity } from './jwt/entity/jwt.entity';
 import { SkillEntity } from './skill/entity/skill.entity';
+import { PositionEntity } from './position/entity/position.entity';
 
 // middlewares
 import { AuthMiddleware } from './common/middleware/auth-middleware';
@@ -33,7 +35,7 @@ import { AuthMiddleware } from './common/middleware/auth-middleware';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [UserEntity, JwtEntity, SkillEntity],
+      entities: [UserEntity, JwtEntity, SkillEntity, PositionEntity],
       synchronize: true,
     }),
     ScheduleModule.forRoot(),
@@ -42,6 +44,7 @@ import { AuthMiddleware } from './common/middleware/auth-middleware';
     AuthModule,
     JwtModule,
     SkillModule,
+    PositionModule,
   ],
   controllers: [],
   providers: [],
