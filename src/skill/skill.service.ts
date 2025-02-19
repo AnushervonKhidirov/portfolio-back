@@ -9,7 +9,7 @@ import { FindManyOptions, FindOptionsWhere, Repository } from 'typeorm';
 import { CreateSkillDto } from './dto/create-skill.dto';
 import { UpdateSkillDto } from './dto/update-skill.dto';
 import { SkillEntity } from './entity/skill.entity';
-import { TServiceResponse } from 'src/common/type/service-response.type';
+import { TServiceAsyncMethodReturn } from '@common/type/service-method.type';
 
 @Injectable()
 export class SkillService {
@@ -20,7 +20,7 @@ export class SkillService {
 
   async findOne(
     where: FindOptionsWhere<SkillEntity>,
-  ): TServiceResponse<SkillEntity> {
+  ): TServiceAsyncMethodReturn<SkillEntity> {
     try {
       const skill = await this.skillRepository.findOneBy(where);
       if (!skill) return [null, new NotFoundException('Skill not found')];
@@ -32,7 +32,7 @@ export class SkillService {
 
   async findAll(
     options?: FindManyOptions<SkillEntity>,
-  ): TServiceResponse<SkillEntity[]> {
+  ): TServiceAsyncMethodReturn<SkillEntity[]> {
     try {
       const skills = await this.skillRepository.find(options);
 
@@ -46,7 +46,7 @@ export class SkillService {
     }
   }
 
-  async create(createSkillDto: CreateSkillDto): TServiceResponse<SkillEntity> {
+  async create(createSkillDto: CreateSkillDto): TServiceAsyncMethodReturn<SkillEntity> {
     try {
       const isExist = await this.skillRepository.existsBy({
         value: createSkillDto.value,
@@ -70,7 +70,7 @@ export class SkillService {
   async update(
     id: number,
     updateSkillDto: UpdateSkillDto,
-  ): TServiceResponse<SkillEntity> {
+  ): TServiceAsyncMethodReturn<SkillEntity> {
     try {
       const skill = await this.skillRepository.findOneBy({ id });
 
@@ -103,7 +103,7 @@ export class SkillService {
     }
   }
 
-  async delete(id: number): TServiceResponse<SkillEntity> {
+  async delete(id: number): TServiceAsyncMethodReturn<SkillEntity> {
     try {
       const skill = await this.skillRepository.findOneBy({ id });
       if (!skill) {
