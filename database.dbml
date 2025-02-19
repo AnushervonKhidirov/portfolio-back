@@ -1,0 +1,129 @@
+// NOTE: install these extension for vscode
+// https://marketplace.visualstudio.com/items?itemName=matt-meyers.vscode-dbml
+// https://marketplace.visualstudio.com/items?itemName=aflalo.dbml-formatter
+// https://marketplace.visualstudio.com/items?itemName=bocovo.dbml-erd-visualizer
+
+Table users {
+  id int [PK]
+  email varchar [unique]
+  password varchar
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table profiles {
+  id int [PK]
+  first_name varchar
+  last_name varchar
+  about text
+  created_at timestamp
+  updated_at timestamp
+  user_id int [ref: > users.id]
+  position_id int [ref: > positions.id]
+  grade_id int [ref: > grades.id]
+}
+
+Table social_links {
+  id int [PK]
+  title varchar
+  href varchar
+  profile_id int [ref: > profiles.id]
+}
+
+Table acquired_skills {
+  id int [PK]
+  progress int [note: "From 0 to 100"]
+  skill_id int [ref: > skills.id]
+  profile_id int [ref: > profiles.id]
+}
+
+Table activities {
+  id int [PK]
+  tag activity_tag
+  name varchar
+  start_at timestamp
+  end_at timestamp [null]
+  about text
+  position_id int [ref: > positions.id]
+  profile_id int [ref: > profiles.id]
+}
+
+Table activities_tasks {
+  activity_id int [ref: > activities.id]
+  task_id int [ref: > tasks.id]
+}
+
+Table activities_achievements {
+  activity_id int [ref: > activities.id]
+  achievement_id int [ref: > achievements.id]
+}
+
+Table activities_stack {
+  activity_id int [ref: > activities.id]
+  stack_id int [ref: > skills.id]
+}
+
+Table projects {
+  id int [PK]
+  tag activity_tag
+  name varchar
+  start_at timestamp
+  end_at timestamp [null]
+  about text
+  position_id int [ref: > positions.id]
+  profile_id int [ref: > profiles.id]
+}
+
+Table projects_tasks {
+  project_id int [ref: > projects.id]
+  task_id int [ref: > tasks.id]
+}
+
+Table projects_achievements {
+  project_id int [ref: > projects.id]
+  achievement_id int [ref: > achievements.id]
+}
+
+Table projects_stack {
+  project_id int [ref: > projects.id]
+  stack_id int [ref: > skills.id]
+}
+
+Table positions {
+  id int [PK]
+  value varchar
+}
+
+Table grades {
+  id int [PK]
+  value varchar
+}
+
+Table skills {
+  id int [PK]
+  value varchar
+  tag skill_tag
+}
+
+Table tasks {
+  id int [PK]
+  value varchar
+}
+
+Table achievements {
+  id int [PK]
+  value varchar
+}
+
+Enum activity_tag {
+  "experience"
+  "training"
+}
+
+Enum skill_tag {
+  "Programming languages"
+  "Databases"
+  "Frameworks & libraries"
+  "ORMs & ODMs"
+  "Soft skills"
+}
