@@ -9,7 +9,7 @@ import { FindManyOptions, FindOptionsWhere, Repository } from 'typeorm';
 import { CreateSkillDto } from './dto/create-skill.dto';
 import { UpdateSkillDto } from './dto/update-skill.dto';
 import { SkillEntity } from './entity/skill.entity';
-import { TServiceAsyncMethodReturn } from 'src/common/type/service-method.type';
+import { TServiceAsyncMethodReturn } from '@common/type/service-method.type';
 
 @Injectable()
 export class SkillService {
