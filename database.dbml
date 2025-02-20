@@ -28,6 +28,8 @@ Table social_links {
   title varchar
   href varchar
   profile_id int [ref: > profiles.id]
+  created_at timestamp
+  updated_at timestamp
 }
 
 Table acquired_skills {
@@ -35,6 +37,8 @@ Table acquired_skills {
   progress int [note: "From 0 to 100"]
   skill_id int [ref: > skills.id]
   profile_id int [ref: > profiles.id]
+  created_at timestamp
+  updated_at timestamp
 }
 
 Table activities {
@@ -44,6 +48,8 @@ Table activities {
   start_at timestamp
   end_at timestamp [null]
   about text
+  created_at timestamp
+  updated_at timestamp
   position_id int [ref: > positions.id]
   profile_id int [ref: > profiles.id]
 }
@@ -70,6 +76,8 @@ Table projects {
   start_at timestamp
   end_at timestamp [null]
   about text
+  created_at timestamp
+  updated_at timestamp
   position_id int [ref: > positions.id]
   profile_id int [ref: > profiles.id]
 }
@@ -92,27 +100,37 @@ Table projects_stack {
 Table positions {
   id int [PK]
   value varchar
+  created_at timestamp
+  updated_at timestamp
 }
 
 Table grades {
   id int [PK]
   value varchar
+  created_at timestamp
+  updated_at timestamp
 }
 
 Table skills {
   id int [PK]
   value varchar
   tag skill_tag
+  created_at timestamp
+  updated_at timestamp
 }
 
 Table tasks {
   id int [PK]
   value varchar
+  created_at timestamp
+  updated_at timestamp
 }
 
 Table achievements {
   id int [PK]
   value varchar
+  created_at timestamp
+  updated_at timestamp
 }
 
 Enum activity_tag {
