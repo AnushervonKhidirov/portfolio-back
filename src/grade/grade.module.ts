@@ -8,5 +8,6 @@ import { GradeEntity } from './entity/grade.entity';
   imports: [TypeOrmModule.forFeature([GradeEntity])],
   providers: [GradeService],
   controllers: [GradeController],
+  exports: [GradeService],
 })
 export class GradeModule {}
