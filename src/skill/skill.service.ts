@@ -61,7 +61,12 @@ export class SkillService {
         ];
       }
 
-      const newSkill = this.skillRepository.create(createSkillDto);
+      const now = Date.now();
+      const newSkill = this.skillRepository.create({
+        ...createSkillDto,
+        createdAt: now,
+        updatedAt: now,
+      });
       const createdSkill = await this.skillRepository.save(newSkill);
       return [createdSkill, null];
     } catch (err) {
@@ -96,6 +101,7 @@ export class SkillService {
       const newSkill = this.skillRepository.create({
         ...skill,
         ...updateSkillDto,
+        updatedAt: Date.now(),
       });
       const updatedSkill = await this.skillRepository.save(newSkill);
 
