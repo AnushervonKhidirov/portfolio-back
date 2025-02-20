@@ -10,16 +10,18 @@ import { ScheduleModule } from '@nestjs/schedule';
 
 // modules
 import { ScheduledTasksModule } from './scheduled-tasks/scheduled-tasks.module';
-import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from './jwt/jwt.module';
+import { UserModule } from './user/user.module';
+import { ProfileModule } from './profile/profile.module';
 import { SkillModule } from './skill/skill.module';
 import { PositionModule } from './position/position.module';
 import { GradeModule } from './grade/grade.module';
 
 // entities
-import { UserEntity } from './user/entity/user.entity';
 import { JwtEntity } from './jwt/entity/jwt.entity';
+import { UserEntity } from './user/entity/user.entity';
+import { ProfileEntity } from './profile/entity/profile.entity';
 import { SkillEntity } from './skill/entity/skill.entity';
 import { PositionEntity } from './position/entity/position.entity';
 import { GradeEntity } from './grade/entity/grade.entity';
@@ -38,8 +40,9 @@ import { AuthMiddleware } from './common/middleware/auth-middleware';
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       entities: [
-        UserEntity,
         JwtEntity,
+        UserEntity,
+        ProfileEntity,
         SkillEntity,
         PositionEntity,
         GradeEntity,
@@ -54,6 +57,7 @@ import { AuthMiddleware } from './common/middleware/auth-middleware';
     SkillModule,
     PositionModule,
     GradeModule,
+    ProfileModule,
   ],
   controllers: [],
   providers: [],

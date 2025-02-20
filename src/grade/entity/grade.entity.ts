@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { ProfileEntity } from 'src/profile/entity/profile.entity';
 
 @Entity({ name: 'grades' })
 export class GradeEntity {
@@ -22,4 +23,7 @@ export class GradeEntity {
     type: 'bigint',
   })
   updatedAt: number;
+
+  @OneToMany(() => ProfileEntity, (profile) => profile.grade)
+  profile: ProfileEntity;
 }

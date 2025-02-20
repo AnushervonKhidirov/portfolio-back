@@ -1,5 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+
 import { JwtEntity } from 'src/jwt/entity/jwt.entity';
+import { ProfileEntity } from 'src/profile/entity/profile.entity';
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -26,4 +28,7 @@ export class UserEntity {
 
   @OneToMany(() => JwtEntity, (token) => token.user)
   token: JwtEntity;
+
+  @OneToMany(() => ProfileEntity, (profile) => profile.user)
+  profile: ProfileEntity;
 }
