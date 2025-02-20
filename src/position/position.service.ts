@@ -65,7 +65,13 @@ export class PositionService {
         ];
       }
 
-      const newPosition = this.positionRepository.create(createPositionDto);
+      const now = Date.now();
+
+      const newPosition = this.positionRepository.create({
+        ...createPositionDto,
+        createdAt: now,
+        updatedAt: now,
+      });
       const createdPosition = await this.positionRepository.save(newPosition);
       if (!createdPosition) return [null, new InternalServerErrorException()];
 
@@ -105,6 +111,7 @@ export class PositionService {
       const newPosition = this.positionRepository.create({
         ...position,
         ...updatePositionDto,
+        updatedAt: Date.now(),
       });
 
       const updatedPosition = await this.positionRepository.save(newPosition);

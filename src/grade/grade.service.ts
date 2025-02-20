@@ -65,7 +65,13 @@ export class GradeService {
         ];
       }
 
-      const newGrade = this.gradeRepository.create(createGradeDto);
+      const now = Date.now();
+
+      const newGrade = this.gradeRepository.create({
+        ...createGradeDto,
+        createdAt: now,
+        updatedAt: now,
+      });
       const createdGrade = await this.gradeRepository.save(newGrade);
       if (!createdGrade) return [null, new InternalServerErrorException()];
 
@@ -102,6 +108,7 @@ export class GradeService {
       const newGrade = this.gradeRepository.create({
         ...grade,
         ...updateGradeDto,
+        updatedAt: Date.now(),
       });
 
       const updatedGrade = await this.gradeRepository.save(newGrade);

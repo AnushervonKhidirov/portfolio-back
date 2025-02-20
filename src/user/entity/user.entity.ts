@@ -18,6 +18,12 @@ export class UserEntity {
   })
   createdAt: number;
 
+  @Column({
+    name: 'updated_at',
+    type: 'bigint',
+  })
+  updatedAt: number;
+
   @OneToMany(() => JwtEntity, (token) => token.user)
   token: JwtEntity;
 }

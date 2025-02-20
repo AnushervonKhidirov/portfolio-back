@@ -49,7 +49,9 @@ export class UserService {
     }
   }
 
-  async create(createUserDto: CreateUserDto): TServiceAsyncMethodReturn<UserEntity> {
+  async create(
+    createUserDto: CreateUserDto,
+  ): TServiceAsyncMethodReturn<UserEntity> {
     try {
       const isExit = await this.userRepository.existsBy({
         email: createUserDto.email,
@@ -64,9 +66,12 @@ export class UserService {
         ];
       }
 
+      const now = Date.now();
+
       const newUser = this.userRepository.create({
         ...createUserDto,
-        createdAt: Date.now(),
+        createdAt: now,
+        updatedAt: now,
       });
       const createUser = await this.userRepository.save(newUser);
 
@@ -86,6 +91,7 @@ export class UserService {
     const newUser = this.userRepository.create({
       ...user,
       ...updateUserDto,
+      updatedAt: Date.now(),
     });
 
     const updatedUser = await this.userRepository.save(newUser);
