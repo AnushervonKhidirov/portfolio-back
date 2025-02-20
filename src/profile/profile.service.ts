@@ -8,14 +8,17 @@ import { FindManyOptions, FindOptionsWhere, Repository } from 'typeorm';
 
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
-import { ProfileEntity } from './entity/profile.entity';
+
 import { UserService } from 'src/user/user.service';
-import { PositionService } from 'src/position/position.service';
-import { GradeService } from 'src/grade/grade.service';
+import { ProfileHelper } from './profile.helper';
+import { ProfileEntity } from './entity/profile.entity';
 
 import { TServiceAsyncMethodReturn } from '@common/type/service-method.type';
 
-type TProfileResponse = Omit<ProfileEntity, 'user' | 'positionId' | 'gradeId'>;
+export type TProfileResponse = Omit<
+  ProfileEntity,
+  'user' | 'positionId' | 'gradeId'
+>;
 
 @Injectable()
 export class ProfileService {
@@ -23,9 +26,8 @@ export class ProfileService {
     @InjectRepository(ProfileEntity)
     private readonly profileRepository: Repository<ProfileEntity>,
 
+    private readonly profileHelper: ProfileHelper,
     private readonly userService: UserService,
-    private readonly positionService: PositionService,
-    private readonly gradeService: GradeService,
   ) {}
 
   async findOne(
@@ -72,15 +74,15 @@ export class ProfileService {
       });
       if (userErr) return [null, userErr];
 
-      const [position, positionErr] = await this.positionService.findOne({
-        id: createProfileDto.positionId,
-      });
+      const [position, positionErr] = await this.profileHelper.getPosition(
+        createProfileDto.positionId,
+      );
 
       if (positionErr) return [null, positionErr];
 
-      const [grade, gradeErr] = await this.gradeService.findOne({
-        id: createProfileDto.gradeId,
-      });
+      const [grade, gradeErr] = await this.profileHelper.getGrade(
+        createProfileDto.gradeId,
+      );
 
       if (gradeErr) return [null, gradeErr];
 
@@ -113,19 +115,17 @@ export class ProfileService {
       const profile = await this.profileRepository.findOneBy({ id });
       if (!profile) return [null, new NotFoundException('Profile not found')];
 
-      const [position, positionErr] = updateProfileDto.positionId
-        ? await this.positionService.findOne({
-            id: updateProfileDto.positionId,
-          })
-        : [profile.position, null];
+      const [position, positionErr] = await this.profileHelper.getPosition(
+        updateProfileDto.positionId,
+        profile,
+      );
 
       if (positionErr) return [null, positionErr];
 
-      const [grade, gradeErr] = updateProfileDto.gradeId
-        ? await this.gradeService.findOne({
-            id: updateProfileDto.gradeId,
-          })
-        : [profile.grade, null];
+      const [grade, gradeErr] = await this.profileHelper.getGrade(
+        updateProfileDto.gradeId,
+        profile,
+      );
 
       if (gradeErr) return [null, gradeErr];
 
