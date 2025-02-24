@@ -6,11 +6,13 @@ import {
   ManyToOne,
   JoinColumn,
   OneToOne,
+  OneToMany,
 } from 'typeorm';
 
 import { UserEntity } from 'src/user/entity/user.entity';
 import { PositionEntity } from 'src/position/entity/position.entity';
 import { GradeEntity } from 'src/grade/entity/grade.entity';
+import { ContactInfoEntity } from 'src/contact-info/entity/contact-info.entity';
 
 @Entity({ name: 'profiles' })
 export class ProfileEntity {
@@ -66,4 +68,9 @@ export class ProfileEntity {
   })
   @JoinColumn({ name: 'grade_id' })
   grade: GradeEntity;
+
+  @OneToMany(() => ContactInfoEntity, (contactInfo) => contactInfo.profile, {
+    eager: true,
+  })
+  contactInfo: ContactInfoEntity[];
 }
