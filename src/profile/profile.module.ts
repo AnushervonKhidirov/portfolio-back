@@ -18,5 +18,6 @@ import { GradeModule } from 'src/grade/grade.module';
   ],
   providers: [ProfileService, ProfileHelper],
   controllers: [ProfileController],
+  exports: [ProfileService],
 })
 export class ProfileModule {}

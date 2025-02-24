@@ -100,8 +100,41 @@ export class ProfileService {
       const createdProfile = await this.profileRepository.save(newProfile);
       if (!createdProfile) return [null, new InternalServerErrorException()];
 
+      const [_, updateUserErr] = await this.userService.update(
+        userRelation.id,
+        { defaultProfile: createdProfile },
+      );
+      if (updateUserErr) return [null, updateUserErr];
+
       const { user, positionId, gradeId, ...profileResponse } = createdProfile;
       return [profileResponse, null];
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async switch(
+    id: number,
+    userRelationId: number,
+  ): TServiceAsyncMethodReturn<TProfileResponse> {
+    try {
+      const defaultProfile = await this.profileRepository.findOneBy({ id });
+      if (!defaultProfile) {
+        return [null, new NotFoundException('Profile not found')];
+      }
+
+      const [userRelation, userErr] = await this.userService.findOne({
+        id: userRelationId,
+      });
+      if (userErr) return [null, userErr];
+
+      const [_, updateUserErr] = await this.userService.update(
+        userRelation.id,
+        { defaultProfile },
+      );
+      if (updateUserErr) return [null, updateUserErr];
+
+      return [defaultProfile, null];
     } catch (err) {
       console.log(err);
     }
