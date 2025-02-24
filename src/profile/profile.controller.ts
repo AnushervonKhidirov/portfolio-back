@@ -14,12 +14,15 @@ import { Request } from 'express';
 import { ProfileService } from './profile.service';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
+import { ProfileEntity } from './entity/profile.entity';
 import { UserEntity } from 'src/user/entity/user.entity';
+import { ApiOkResponse } from '@nestjs/swagger';
 
 @Controller('profile')
 export class ProfileController {
   constructor(private readonly profileService: ProfileService) {}
 
+  @ApiOkResponse({ type: ProfileEntity, isArray: true })
   @Get()
   async findAll() {
     const [profiles, err] = await this.profileService.findAll();
@@ -27,6 +30,7 @@ export class ProfileController {
     return profiles;
   }
 
+  @ApiOkResponse({ type: ProfileEntity })
   @Get(':id')
   async findOne(@Param('id', new ParseIntPipe()) id: number) {
     const [profile, err] = await this.profileService.findOne({ id });
@@ -34,6 +38,7 @@ export class ProfileController {
     return profile;
   }
 
+  @ApiOkResponse({ type: ProfileEntity })
   @Post()
   async create(
     @Body(new ValidationPipe()) createProfileDto: CreateProfileDto,
@@ -50,6 +55,7 @@ export class ProfileController {
     return profile;
   }
 
+  @ApiOkResponse({ type: ProfileEntity })
   @Patch('switch/:id')
   async switch(
     @Param('id', new ParseIntPipe()) id: number,
@@ -63,6 +69,7 @@ export class ProfileController {
     return profile;
   }
 
+  @ApiOkResponse({ type: ProfileEntity })
   @Patch(':id')
   async update(
     @Param('id', new ParseIntPipe()) id: number,
@@ -76,6 +83,7 @@ export class ProfileController {
     return profile;
   }
 
+  @ApiOkResponse({ type: ProfileEntity })
   @Delete(':id')
   async delete(
     @Param('id', new ParseIntPipe()) id: number,
