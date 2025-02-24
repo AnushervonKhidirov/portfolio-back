@@ -10,11 +10,18 @@ import { AuthService } from './auth.service';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { SignInDto } from './dto/sign-in.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
+import { ApiOkResponse } from '@nestjs/swagger';
+
+const tokenExample = {
+  accessToken: 'your.access.token',
+  refreshToken: 'your.refresh.token',
+};
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @ApiOkResponse({ example: tokenExample })
   @HttpCode(HttpStatus.OK)
   @Post('sign-up')
   async signUp(@Body(new ValidationPipe()) createUserDto: CreateUserDto) {
@@ -23,6 +30,7 @@ export class AuthController {
     return token;
   }
 
+  @ApiOkResponse({ example: tokenExample })
   @HttpCode(HttpStatus.OK)
   @Post('sign-in')
   async signIn(@Body(new ValidationPipe()) signInDto: SignInDto) {
@@ -48,6 +56,7 @@ export class AuthController {
     if (err) throw err;
   }
 
+  @ApiOkResponse({ example: tokenExample })
   @Post('refresh')
   async refreshToken(
     @Body(new ValidationPipe()) refreshTokenDto: RefreshTokenDto,
