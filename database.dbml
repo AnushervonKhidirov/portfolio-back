@@ -7,14 +7,16 @@ Table users {
   id int [PK]
   email varchar [unique]
   password varchar
+  first_name varchar
+  last_name varchar
+  birth_date date
+  default_profile_id int [ref: > profiles.id]
   created_at timestamp
   updated_at timestamp
 }
 
 Table profiles {
   id int [PK]
-  first_name varchar
-  last_name varchar
   about text
   created_at timestamp
   updated_at timestamp
@@ -27,6 +29,15 @@ Table social_links {
   id int [PK]
   title varchar
   href varchar
+  profile_id int [ref: > profiles.id]
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table contact_info {
+  id int [PK]
+  title varchar
+  value varchar
   profile_id int [ref: > profiles.id]
   created_at timestamp
   updated_at timestamp

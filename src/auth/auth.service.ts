@@ -8,8 +8,8 @@ import { JwtPayload } from 'jsonwebtoken';
 import { UserService } from 'src/user/user.service';
 import { JwtService } from 'src/jwt/jwt.service';
 
-import { UserDto } from 'src/user/dto/user.dto';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
+import { SignInDto } from './dto/sign-in.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 
 import { JwtEntity } from 'src/jwt/entity/jwt.entity';
@@ -57,15 +57,15 @@ export class AuthService {
     }
   }
 
-  async signIn(userDto: UserDto): TServiceAsyncMethodReturn<TToken> {
+  async signIn(signInDto: SignInDto): TServiceAsyncMethodReturn<TToken> {
     try {
       const [user, userRrr] = await this.userService.findOne({
-        email: userDto.email,
+        email: signInDto.email,
       });
 
       if (userRrr) return [null, userRrr];
 
-      const isCorrectPassword = compareSync(userDto.password, user.password);
+      const isCorrectPassword = compareSync(signInDto.password, user.password);
       if (!isCorrectPassword)
         return [null, new UnauthorizedException('Wrong password')];
 

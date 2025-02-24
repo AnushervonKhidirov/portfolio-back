@@ -5,6 +5,7 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
+  OneToOne,
 } from 'typeorm';
 
 import { UserEntity } from 'src/user/entity/user.entity';
@@ -16,14 +17,6 @@ export class ProfileEntity {
   @ApiProperty({ example: 1 })
   @PrimaryGeneratedColumn()
   id: number;
-
-  @ApiProperty({ example: 'FirstName' })
-  @Column({ name: 'first_name', length: 20 })
-  firstName: string;
-
-  @ApiProperty({ example: 'LastName' })
-  @Column({ name: 'last_name', length: 20 })
-  lastName: string;
 
   @ApiProperty({ example: 'About you' })
   @Column({ type: 'text' })
@@ -50,6 +43,9 @@ export class ProfileEntity {
   @ManyToOne(() => UserEntity, (user) => user.profile)
   @JoinColumn({ name: 'user_id' })
   user: UserEntity;
+
+  @OneToOne(() => UserEntity, (user) => user.defaultProfile)
+  userDefaultProfile: UserEntity;
 
   @ApiProperty({ example: 1 })
   @Column({ name: 'position_id' })

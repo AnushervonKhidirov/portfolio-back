@@ -7,7 +7,8 @@ import {
   HttpCode,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { UserDto } from 'src/user/dto/user.dto';
+import { CreateUserDto } from 'src/user/dto/create-user.dto';
+import { SignInDto } from './dto/sign-in.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 
 @Controller('auth')
@@ -16,16 +17,16 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('sign-up')
-  async signUp(@Body(new ValidationPipe()) userDto: UserDto) {
-    const [token, err] = await this.authService.signUp(userDto);
+  async signUp(@Body(new ValidationPipe()) createUserDto: CreateUserDto) {
+    const [token, err] = await this.authService.signUp(createUserDto);
     if (err) throw err;
     return token;
   }
 
   @HttpCode(HttpStatus.OK)
   @Post('sign-in')
-  async signIn(@Body(new ValidationPipe()) userDto: UserDto) {
-    const [token, err] = await this.authService.signIn(userDto);
+  async signIn(@Body(new ValidationPipe()) signInDto: SignInDto) {
+    const [token, err] = await this.authService.signIn(signInDto);
     if (err) throw err;
     return token;
   }

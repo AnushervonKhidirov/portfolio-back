@@ -45,8 +45,21 @@ export class ProfileController {
       createProfileDto,
       user.id,
     );
-    
+
     if (err) throw err;
+    return profile;
+  }
+
+  @Patch('switch/:id')
+  async switch(
+    @Param('id', new ParseIntPipe()) id: number,
+    @Req() req: Request,
+  ) {
+    const user = req['user'] as Pick<UserEntity, 'id'>;
+
+    const [profile, err] = await this.profileService.switch(id, user.id);
+    if (err) throw err;
+
     return profile;
   }
 
@@ -54,7 +67,6 @@ export class ProfileController {
   async update(
     @Param('id', new ParseIntPipe()) id: number,
     @Body(new ValidationPipe()) updateProfileDto: UpdateProfileDto,
-    @Req() req: Request,
   ) {
     const [profile, err] = await this.profileService.update(
       id,
