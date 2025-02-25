@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { AcquiredSkillEntity } from 'src/acquired-skill/entity/acquired-skill.entity';
 
 @Entity({ name: 'skills' })
 export class SkillEntity {
@@ -22,4 +23,7 @@ export class SkillEntity {
     type: 'bigint',
   })
   updatedAt: number;
+
+  @OneToMany(() => AcquiredSkillEntity, (acquiredSkill) => acquiredSkill.skill)
+  acquiredSkill: AcquiredSkillEntity;
 }
