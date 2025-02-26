@@ -15,11 +15,6 @@ import { ProfileEntity } from './entity/profile.entity';
 
 import { TServiceAsyncMethodReturn } from '@common/type/service-method.type';
 
-export type TProfileResponse = Omit<
-  ProfileEntity,
-  'user' | 'positionId' | 'gradeId'
->;
-
 @Injectable()
 export class ProfileService {
   constructor(
@@ -32,166 +27,130 @@ export class ProfileService {
 
   async findOne(
     where: FindOptionsWhere<ProfileEntity>,
-  ): TServiceAsyncMethodReturn<TProfileResponse> {
-    try {
-      const profile = await this.profileRepository.findOneBy(where);
-      if (!profile) return [null, new NotFoundException('Profile not found')];
-
-      const { user, positionId, gradeId, ...profileResponse } = profile;
-      return [profileResponse, null];
-    } catch (err) {
-      console.log(err);
-    }
+  ): TServiceAsyncMethodReturn<ProfileEntity> {
+    const profile = await this.profileRepository.findOneBy(where);
+    if (!profile) return [null, new NotFoundException('Profile not found')];
+    return [profile, null];
   }
 
   async findAll(
     options?: FindManyOptions<ProfileEntity>,
-  ): TServiceAsyncMethodReturn<TProfileResponse[]> {
-    try {
-      const profiles = await this.profileRepository.find(options);
-      if (!Array.isArray(profiles)) {
-        return [null, new InternalServerErrorException()];
-      }
+  ): TServiceAsyncMethodReturn<ProfileEntity[]> {
+    const profiles = await this.profileRepository.find(options);
 
-      const profilesResponse = profiles.map((profile) => {
-        const { user, positionId, gradeId, ...profileResponse } = profile;
-        return profileResponse;
-      });
-
-      return [profilesResponse, null];
-    } catch (err) {
-      console.log(err);
+    if (!Array.isArray(profiles)) {
+      return [null, new InternalServerErrorException()];
     }
+
+    return [profiles, null];
   }
 
   async create(
     createProfileDto: CreateProfileDto,
     userRelationId: number,
-  ): TServiceAsyncMethodReturn<TProfileResponse> {
-    try {
-      const [userRelation, userErr] = await this.userService.findOne({
-        id: userRelationId,
-      });
-      if (userErr) return [null, userErr];
+  ): TServiceAsyncMethodReturn<ProfileEntity> {
+    const [userRelation, userErr] = await this.userService.findOne({
+      id: userRelationId,
+    });
 
-      const [position, positionErr] = await this.profileHelper.getPosition(
-        createProfileDto.positionId,
-      );
+    if (userErr) return [null, userErr];
 
-      if (positionErr) return [null, positionErr];
+    const [position, positionErr] = await this.profileHelper.getPosition(
+      createProfileDto.positionId,
+    );
 
-      const [grade, gradeErr] = await this.profileHelper.getGrade(
-        createProfileDto.gradeId,
-      );
+    if (positionErr) return [null, positionErr];
 
-      if (gradeErr) return [null, gradeErr];
+    const [grade, gradeErr] = await this.profileHelper.getGrade(
+      createProfileDto.gradeId,
+    );
 
-      const now = Date.now();
+    if (gradeErr) return [null, gradeErr];
 
-      const newProfile = this.profileRepository.create({
-        ...createProfileDto,
-        createdAt: now,
-        updatedAt: now,
-        user: userRelation,
-        position,
-        grade,
-      });
+    const now = Date.now();
 
-      const createdProfile = await this.profileRepository.save(newProfile);
-      if (!createdProfile) return [null, new InternalServerErrorException()];
+    const newProfile = this.profileRepository.create({
+      ...createProfileDto,
+      createdAt: now,
+      updatedAt: now,
+      user: userRelation,
+      position,
+      grade,
+    });
 
-      const [_, updateUserErr] = await this.userService.update(
-        userRelation.id,
-        { defaultProfile: createdProfile },
-      );
-      if (updateUserErr) return [null, updateUserErr];
+    const createdProfile = await this.profileRepository.save(newProfile);
+    if (!createdProfile) return [null, new InternalServerErrorException()];
 
-      const { user, positionId, gradeId, ...profileResponse } = createdProfile;
-      return [profileResponse, null];
-    } catch (err) {
-      console.log(err);
-    }
+    const [_, updateUserErr] = await this.userService.update(userRelation.id, {
+      defaultProfile: createdProfile,
+    });
+    if (updateUserErr) return [null, updateUserErr];
+
+    return [createdProfile, null];
   }
 
   async switch(
     id: number,
     userRelationId: number,
-  ): TServiceAsyncMethodReturn<TProfileResponse> {
-    try {
-      const defaultProfile = await this.profileRepository.findOneBy({ id });
-      if (!defaultProfile) {
-        return [null, new NotFoundException('Profile not found')];
-      }
+  ): TServiceAsyncMethodReturn<ProfileEntity> {
+    const [profile, profileErr] = await this.findOne({ id });
+    if (profileErr) return [null, profileErr];
 
-      const [userRelation, userErr] = await this.userService.findOne({
-        id: userRelationId,
-      });
-      if (userErr) return [null, userErr];
+    const [userRelation, userErr] = await this.userService.findOne({
+      id: userRelationId,
+    });
+    if (userErr) return [null, userErr];
 
-      const [_, updateUserErr] = await this.userService.update(
-        userRelation.id,
-        { defaultProfile },
-      );
-      if (updateUserErr) return [null, updateUserErr];
+    const [_, updateUserErr] = await this.userService.update(userRelation.id, {
+      defaultProfile: profile,
+    });
+    if (updateUserErr) return [null, updateUserErr];
 
-      return [defaultProfile, null];
-    } catch (err) {
-      console.log(err);
-    }
+    return [profile, null];
   }
 
   async update(
     id: number,
     updateProfileDto: UpdateProfileDto,
-  ): TServiceAsyncMethodReturn<TProfileResponse> {
-    try {
-      const profile = await this.profileRepository.findOneBy({ id });
-      if (!profile) return [null, new NotFoundException('Profile not found')];
+  ): TServiceAsyncMethodReturn<ProfileEntity> {
+    const [profile, err] = await this.findOne({ id });
+    if (err) return [null, err];
 
-      const [position, positionErr] = await this.profileHelper.getPosition(
-        updateProfileDto.positionId,
-        profile,
-      );
+    const [position, positionErr] = await this.profileHelper.getPosition(
+      updateProfileDto.positionId,
+      profile,
+    );
 
-      if (positionErr) return [null, positionErr];
+    if (positionErr) return [null, positionErr];
 
-      const [grade, gradeErr] = await this.profileHelper.getGrade(
-        updateProfileDto.gradeId,
-        profile,
-      );
+    const [grade, gradeErr] = await this.profileHelper.getGrade(
+      updateProfileDto.gradeId,
+      profile,
+    );
 
-      if (gradeErr) return [null, gradeErr];
+    if (gradeErr) return [null, gradeErr];
 
-      const newProfile = this.profileRepository.create({
-        ...profile,
-        ...updateProfileDto,
-        position,
-        grade,
-        updatedAt: Date.now(),
-      });
+    const newProfile = this.profileRepository.create({
+      ...profile,
+      ...updateProfileDto,
+      position,
+      grade,
+      updatedAt: Date.now(),
+    });
 
-      const updatedProfile = await this.profileRepository.save(newProfile);
-      if (!updatedProfile) return [null, new InternalServerErrorException()];
+    const updatedProfile = await this.profileRepository.save(newProfile);
+    if (!updatedProfile) return [null, new InternalServerErrorException()];
 
-      const { user, positionId, gradeId, ...profileResponse } = updatedProfile;
-      return [profileResponse, null];
-    } catch (err) {
-      console.log(err);
-    }
+    return [updatedProfile, null];
   }
 
-  async delete(id: number): TServiceAsyncMethodReturn<TProfileResponse> {
-    try {
-      const profile = await this.profileRepository.findOneBy({ id });
-      if (!profile) return [null, new NotFoundException('Profile not found')];
+  async delete(id: number): TServiceAsyncMethodReturn<ProfileEntity> {
+    const [profile, err] = await this.findOne({ id });
+    if (err) return [null, err];
 
-      const result = await this.profileRepository.delete(id);
-      if (!result) return [null, new InternalServerErrorException()];
+    const result = await this.profileRepository.delete(id);
+    if (!result.affected) return [null, new InternalServerErrorException()];
 
-      const { user, positionId, gradeId, ...profileResponse } = profile;
-      return [profileResponse, null];
-    } catch (err) {
-      console.log(err);
-    }
+    return [profile, null];
   }
 }

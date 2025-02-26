@@ -24,112 +24,81 @@ export class SocialLinkService {
   async findOne(
     where: FindOptionsWhere<SocialLinkEntity>,
   ): TServiceAsyncMethodReturn<SocialLinkEntity> {
-    try {
-      const socialLink = await this.socialLinkRepository.findOneBy(where);
-      if (!socialLink) {
-        return [null, new NotFoundException('Social link not found')];
-      }
+    const socialLink = await this.socialLinkRepository.findOneBy(where);
 
-      return [socialLink, null];
-    } catch (err) {
-      console.log(err);
+    if (!socialLink) {
+      return [null, new NotFoundException('Social link not found')];
     }
+
+    return [socialLink, null];
   }
 
   async findAll(
     options?: FindManyOptions<SocialLinkEntity>,
   ): TServiceAsyncMethodReturn<SocialLinkEntity[]> {
-    try {
-      const socialLinks = await this.socialLinkRepository.find(options);
-      if (!Array.isArray(socialLinks)) {
-        return [null, new InternalServerErrorException()];
-      }
+    const socialLinks = await this.socialLinkRepository.find(options);
 
-      return [socialLinks, null];
-    } catch (err) {
-      console.log(err);
+    if (!Array.isArray(socialLinks)) {
+      return [null, new InternalServerErrorException()];
     }
+
+    return [socialLinks, null];
   }
 
   async create(
     createSocialLinkDto: CreateSocialLinkDto,
     profileRelationId: number,
   ): TServiceAsyncMethodReturn<SocialLinkEntity> {
-    try {
-      const [profile, profileErr] = await this.profileService.findOne({
-        id: profileRelationId,
-      });
-      if (profileErr) return [null, profileErr];
+    const [profile, profileErr] = await this.profileService.findOne({
+      id: profileRelationId,
+    });
+    if (profileErr) return [null, profileErr];
 
-      const now = Date.now();
+    const now = Date.now();
 
-      const newSocialLink = this.socialLinkRepository.create({
-        ...createSocialLinkDto,
-        profile,
-        createdAt: now,
-        updatedAt: now,
-      });
+    const newSocialLink = this.socialLinkRepository.create({
+      ...createSocialLinkDto,
+      profile,
+      createdAt: now,
+      updatedAt: now,
+    });
 
-      const createdSocialLink =
-        await this.socialLinkRepository.save(newSocialLink);
+    const createdSocialLink =
+      await this.socialLinkRepository.save(newSocialLink);
 
-      if (!createdSocialLink) {
-        return [null, new InternalServerErrorException()];
-      }
+    if (!createdSocialLink) return [null, new InternalServerErrorException()];
 
-      return [createdSocialLink, null];
-    } catch (err) {
-      console.log(err);
-    }
+    return [createdSocialLink, null];
   }
 
   async update(
     id: number,
     updateSocialLinkDto: UpdateSocialLinkDto,
   ): TServiceAsyncMethodReturn<SocialLinkEntity> {
-    try {
-      const socialLink = await this.socialLinkRepository.findOneBy({ id });
+    const [socialLink, err] = await this.findOne({ id });
+    if (err) return [null, err];
 
-      if (!socialLink) {
-        return [null, new NotFoundException('Social link info not found')];
-      }
+    const newSocialLink = this.socialLinkRepository.create({
+      ...socialLink,
+      ...updateSocialLinkDto,
+      updatedAt: Date.now(),
+    });
 
-      const newSocialLink = this.socialLinkRepository.create({
-        ...socialLink,
-        ...updateSocialLinkDto,
-        updatedAt: Date.now(),
-      });
+    const updatedSocialLink =
+      await this.socialLinkRepository.save(newSocialLink);
 
-      const updatedSocialLink =
-        await this.socialLinkRepository.save(newSocialLink);
+    if (!updatedSocialLink) return [null, new InternalServerErrorException()];
 
-      if (!updatedSocialLink) {
-        return [null, new InternalServerErrorException()];
-      }
-
-      return [updatedSocialLink, null];
-    } catch (err) {
-      console.log(err);
-    }
+    return [updatedSocialLink, null];
   }
 
   async delete(id: number): TServiceAsyncMethodReturn<SocialLinkEntity> {
-    try {
-      const socialLink = await this.socialLinkRepository.findOneBy({ id });
+    const [socialLink, err] = await this.findOne({ id });
+    if (err) return [null, err];
 
-      if (!socialLink) {
-        return [null, new NotFoundException('Social link info not found')];
-      }
+    const result = await this.socialLinkRepository.delete(id);
+    if (!result.affected) return [null, new InternalServerErrorException()];
 
-      const result = await this.socialLinkRepository.delete(id);
-
-      if (!result) {
-        return [null, new InternalServerErrorException()];
-      }
-
-      return [socialLink, null];
-    } catch (err) {
-      console.log(err);
-    }
+    return [socialLink, null];
   }
 }

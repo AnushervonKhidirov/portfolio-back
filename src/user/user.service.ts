@@ -23,70 +23,60 @@ export class UserService {
   async findOne(
     options: FindOptionsWhere<UserEntity>,
   ): TServiceAsyncMethodReturn<UserEntity> {
-    try {
-      const { password, ...properOption } = options;
-      const user = await this.userRepository.findOneBy(properOption);
-      if (!user) return [null, new NotFoundException('User not found')];
-      return [user, null];
-    } catch (err) {
-      console.log(err);
-    }
+    const { password, ...properOption } = options;
+    const user = await this.userRepository.findOneBy(properOption);
+    if (!user) return [null, new NotFoundException('User not found')];
+    return [user, null];
   }
 
   async findAll(
     options?: FindManyOptions<UserEntity>,
   ): TServiceAsyncMethodReturn<UserEntity[]> {
-    try {
-      const users = await this.userRepository.find(options);
+    const users = await this.userRepository.find(options);
 
-      if (!Array.isArray(users)) {
-        return [null, new InternalServerErrorException()];
-      }
-
-      return [users, null];
-    } catch (err) {
-      console.log(err);
+    if (!Array.isArray(users)) {
+      return [null, new InternalServerErrorException()];
     }
+
+    return [users, null];
   }
 
   async create(
     createUserDto: CreateUserDto,
   ): TServiceAsyncMethodReturn<UserEntity> {
-    try {
-      const isExit = await this.userRepository.existsBy({
-        email: createUserDto.email,
-      });
+    const isExit = await this.userRepository.existsBy({
+      email: createUserDto.email,
+    });
 
-      if (isExit) {
-        return [
-          null,
-          new ConflictException(
-            `User with email '${createUserDto.email}' already exist`,
-          ),
-        ];
-      }
-
-      const now = Date.now();
-
-      const newUser = this.userRepository.create({
-        ...createUserDto,
-        createdAt: now,
-        updatedAt: now,
-      });
-      const createUser = await this.userRepository.save(newUser);
-
-      return [createUser, null];
-    } catch (err) {
-      console.log(err);
+    if (isExit) {
+      return [
+        null,
+        new ConflictException(
+          `User with email '${createUserDto.email}' already exist`,
+        ),
+      ];
     }
+
+    const now = Date.now();
+
+    const newUser = this.userRepository.create({
+      ...createUserDto,
+      createdAt: now,
+      updatedAt: now,
+    });
+
+    const createUser = await this.userRepository.save(newUser);
+    if (!createUser) return [null, new InternalServerErrorException()];
+
+    return [createUser, null];
   }
 
   async update(
     id: number,
     updateUserDto: UpdateUserDto,
   ): TServiceAsyncMethodReturn<UserEntity> {
-    const user = await this.userRepository.findOneBy({ id });
-    if (!user) return [null, new NotFoundException('User not found')];
+    const [user, err] = await this.findOne({ id });
+    if (err) return [null, err];
 
     const newUser = this.userRepository.create({
       ...user,
@@ -95,18 +85,18 @@ export class UserService {
     });
 
     const updatedUser = await this.userRepository.save(newUser);
+    if (!updatedUser) return [null, new InternalServerErrorException()];
+
     return [updatedUser, null];
   }
 
   async delete(id: number): TServiceAsyncMethodReturn<UserEntity> {
-    try {
-      const user = await this.userRepository.findOneBy({ id });
-      if (!user) return [null, new NotFoundException('User not found')];
+    const [user, err] = await this.findOne({ id });
+    if (err) return [null, err];
 
-      await this.userRepository.delete(id);
-      return [user, null];
-    } catch (err) {
-      console.log(err);
-    }
+    const result = await this.userRepository.delete(id);
+    if (!result.affected) return [null, new InternalServerErrorException()];
+
+    return [user, null];
   }
 }

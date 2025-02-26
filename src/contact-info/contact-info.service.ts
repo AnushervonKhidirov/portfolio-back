@@ -24,112 +24,86 @@ export class ContactInfoService {
   async findOne(
     where: FindOptionsWhere<ContactInfoEntity>,
   ): TServiceAsyncMethodReturn<ContactInfoEntity> {
-    try {
-      const contactInfo = await this.contactInfoRepository.findOneBy(where);
-      if (!contactInfo) {
-        return [null, new NotFoundException('Contact info not found')];
-      }
+    const contactInfo = await this.contactInfoRepository.findOneBy(where);
 
-      return [contactInfo, null];
-    } catch (err) {
-      console.log(err);
+    if (!contactInfo) {
+      return [null, new NotFoundException('Contact info not found')];
     }
+
+    return [contactInfo, null];
   }
 
   async findAll(
     options?: FindManyOptions<ContactInfoEntity>,
   ): TServiceAsyncMethodReturn<ContactInfoEntity[]> {
-    try {
-      const contactInfo = await this.contactInfoRepository.find(options);
-      if (!Array.isArray(contactInfo)) {
-        return [null, new InternalServerErrorException()];
-      }
+    const contactInfo = await this.contactInfoRepository.find(options);
 
-      return [contactInfo, null];
-    } catch (err) {
-      console.log(err);
+    if (!Array.isArray(contactInfo)) {
+      return [null, new InternalServerErrorException()];
     }
+
+    return [contactInfo, null];
   }
 
   async create(
     createContactInfoDto: CreateContactInfoDto,
     profileRelationId: number,
   ): TServiceAsyncMethodReturn<ContactInfoEntity> {
-    try {
-      const [profile, profileErr] = await this.profileService.findOne({
-        id: profileRelationId,
-      });
-      if (profileErr) return [null, profileErr];
+    const [profile, profileErr] = await this.profileService.findOne({
+      id: profileRelationId,
+    });
 
-      const now = Date.now();
+    if (profileErr) return [null, profileErr];
 
-      const newContactInfo = this.contactInfoRepository.create({
-        ...createContactInfoDto,
-        profile,
-        createdAt: now,
-        updatedAt: now,
-      });
+    const now = Date.now();
 
-      const createdContactInfo =
-        await this.contactInfoRepository.save(newContactInfo);
+    const newContactInfo = this.contactInfoRepository.create({
+      ...createContactInfoDto,
+      profile,
+      createdAt: now,
+      updatedAt: now,
+    });
 
-      if (!createdContactInfo) {
-        return [null, new InternalServerErrorException()];
-      }
+    const createdContactInfo =
+      await this.contactInfoRepository.save(newContactInfo);
 
-      return [createdContactInfo, null];
-    } catch (err) {
-      console.log(err);
+    if (!createdContactInfo) {
+      return [null, new InternalServerErrorException()];
     }
+
+    return [createdContactInfo, null];
   }
 
   async update(
     id: number,
     updateContactInfoDto: UpdateContactInfoDto,
   ): TServiceAsyncMethodReturn<ContactInfoEntity> {
-    try {
-      const contactInfo = await this.contactInfoRepository.findOneBy({ id });
+    const [contactInfo, err] = await this.findOne({ id });
+    if (err) return [null, err];
 
-      if (!contactInfo) {
-        return [null, new NotFoundException('Contact info not found')];
-      }
+    const newContactInfo = this.contactInfoRepository.create({
+      ...contactInfo,
+      ...updateContactInfoDto,
+      updatedAt: Date.now(),
+    });
 
-      const newContactInfo = this.contactInfoRepository.create({
-        ...contactInfo,
-        ...updateContactInfoDto,
-        updatedAt: Date.now(),
-      });
+    const updatedContactInfo =
+      await this.contactInfoRepository.save(newContactInfo);
 
-      const updatedContactInfo =
-        await this.contactInfoRepository.save(newContactInfo);
-
-      if (!updatedContactInfo) {
-        return [null, new InternalServerErrorException()];
-      }
-
-      return [updatedContactInfo, null];
-    } catch (err) {
-      console.log(err);
+    if (!updatedContactInfo) {
+      return [null, new InternalServerErrorException()];
     }
+
+    return [updatedContactInfo, null];
   }
 
   async delete(id: number): TServiceAsyncMethodReturn<ContactInfoEntity> {
-    try {
-      const contactInfo = await this.contactInfoRepository.findOneBy({ id });
+    const [contactInfo, err] = await this.findOne({ id });
+    if (err) return [null, err];
 
-      if (!contactInfo) {
-        return [null, new NotFoundException('Contact info not found')];
-      }
+    const result = await this.contactInfoRepository.delete(id);
+    if (!result.affected) return [null, new InternalServerErrorException()];
 
-      const result = await this.contactInfoRepository.delete(id);
-
-      if (!result) {
-        return [null, new InternalServerErrorException()];
-      }
-
-      return [contactInfo, null];
-    } catch (err) {
-      console.log(err);
-    }
+    return [contactInfo, null];
   }
 }

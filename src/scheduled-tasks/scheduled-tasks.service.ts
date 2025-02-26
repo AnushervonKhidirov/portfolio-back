@@ -8,7 +8,12 @@ export class ScheduledTasksService {
 
   @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async deleteExpiredTokens() {
-    const removedTokens = await this.jwtService.deleteExpiredTokens();
-    console.log(`${removedTokens.length} tokens removed successfully`);
+    const [removedTokens, err] = await this.jwtService.deleteExpiredTokens();
+
+    if (err) {
+      console.error(err);
+    } else {
+      console.log(`${removedTokens.length} tokens removed successfully`);
+    }
   }
 }
