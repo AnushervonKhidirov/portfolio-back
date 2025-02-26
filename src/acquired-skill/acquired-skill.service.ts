@@ -26,128 +26,98 @@ export class AcquiredSkillService {
   async findOne(
     where: FindOptionsWhere<AcquiredSkillEntity>,
   ): TServiceAsyncMethodReturn<AcquiredSkillEntity> {
-    try {
-      const acquiredSkill = await this.acquiredSkillRepository.findOneBy(where);
+    const acquiredSkill = await this.acquiredSkillRepository.findOneBy(where);
 
-      if (!acquiredSkill) {
-        return [null, new NotFoundException('Acquired skill not found')];
-      }
-
-      return [acquiredSkill, null];
-    } catch (err) {
-      console.log(err);
+    if (!acquiredSkill) {
+      return [null, new NotFoundException('Acquired skill not found')];
     }
+
+    return [acquiredSkill, null];
   }
 
   async findAll(
     options?: FindManyOptions<AcquiredSkillEntity>,
   ): TServiceAsyncMethodReturn<AcquiredSkillEntity[]> {
-    try {
-      const acquiredSkills = await this.acquiredSkillRepository.find(options);
+    const acquiredSkills = await this.acquiredSkillRepository.find(options);
 
-      if (!Array.isArray(acquiredSkills)) {
-        return [null, new InternalServerErrorException()];
-      }
-
-      return [acquiredSkills, null];
-    } catch (err) {
-      console.log(err);
+    if (!Array.isArray(acquiredSkills)) {
+      return [null, new InternalServerErrorException()];
     }
+
+    return [acquiredSkills, null];
   }
 
   async create(
     createAcquiredSkillDto: CreateAcquiredSkillDto,
     profileRelationId: number,
   ): TServiceAsyncMethodReturn<AcquiredSkillEntity> {
-    try {
-      const [profile, profileErr] = await this.profileService.findOne({
-        id: profileRelationId,
-      });
-      if (profileErr) return [null, profileErr];
+    const [profile, profileErr] = await this.profileService.findOne({
+      id: profileRelationId,
+    });
+    if (profileErr) return [null, profileErr];
 
-      const [skill, skillErr] = await this.acquiredSkillHelper.getSkill(
-        createAcquiredSkillDto.skillId,
-      );
-      if (skillErr) return [null, skillErr];
+    const [skill, skillErr] = await this.acquiredSkillHelper.getSkill(
+      createAcquiredSkillDto.skillId,
+    );
+    if (skillErr) return [null, skillErr];
 
-      const now = Date.now();
+    const now = Date.now();
 
-      const newAcquiredSkill = this.acquiredSkillRepository.create({
-        ...createAcquiredSkillDto,
-        skill,
-        profile,
-        createdAt: now,
-        updatedAt: now,
-      });
+    const newAcquiredSkill = this.acquiredSkillRepository.create({
+      ...createAcquiredSkillDto,
+      skill,
+      profile,
+      createdAt: now,
+      updatedAt: now,
+    });
 
-      const createdAcquiredSkill =
-        await this.acquiredSkillRepository.save(newAcquiredSkill);
+    const createdAcquiredSkill =
+      await this.acquiredSkillRepository.save(newAcquiredSkill);
 
-      if (!createdAcquiredSkill) {
-        return [null, new InternalServerErrorException()];
-      }
-
-      return [createdAcquiredSkill, null];
-    } catch (err) {
-      console.log(err);
+    if (!createdAcquiredSkill) {
+      return [null, new InternalServerErrorException()];
     }
+
+    return [createdAcquiredSkill, null];
   }
 
   async update(
     id: number,
     updateAcquiredSkillDto: UpdateAcquiredSkillDto,
   ): TServiceAsyncMethodReturn<AcquiredSkillEntity> {
-    try {
-      const acquiredSkill = await this.acquiredSkillRepository.findOneBy({
-        id,
-      });
+    const [acquiredSkill, acquiredErr] = await this.findOne({ id });
+    if (acquiredErr) return [null, acquiredErr];
 
-      if (!acquiredSkill) {
-        return [null, new NotFoundException('Acquired skill not found')];
-      }
+    const [skill, skillErr] = await this.acquiredSkillHelper.getSkill(
+      updateAcquiredSkillDto.skillId,
+      acquiredSkill,
+    );
 
-      const [skill, skillErr] = await this.acquiredSkillHelper.getSkill(
-        updateAcquiredSkillDto.skillId,
-        acquiredSkill,
-      );
+    if (skillErr) return [null, skillErr];
 
-      if (skillErr) return [null, skillErr];
+    const newAcquiredSkill = this.acquiredSkillRepository.create({
+      ...updateAcquiredSkillDto,
+      skill,
+      updatedAt: Date.now(),
+    });
 
-      const newAcquiredSkill = this.acquiredSkillRepository.create({
-        ...updateAcquiredSkillDto,
-        skill,
-        updatedAt: Date.now(),
-      });
+    const updatedAcquiredSkill =
+      await this.acquiredSkillRepository.save(newAcquiredSkill);
 
-      const updatedAcquiredSkill =
-        await this.acquiredSkillRepository.save(newAcquiredSkill);
-
-      if (!updatedAcquiredSkill) {
-        return [null, new InternalServerErrorException()];
-      }
-
-      return [updatedAcquiredSkill, null];
-    } catch (err) {
-      console.log(err);
+    if (!updatedAcquiredSkill) {
+      return [null, new InternalServerErrorException()];
     }
+
+    return [updatedAcquiredSkill, null];
   }
 
   async delete(id: number): TServiceAsyncMethodReturn<AcquiredSkillEntity> {
-    try {
-      const acquiredSkill = await this.acquiredSkillRepository.findOneBy({
-        id,
-      });
+    const [acquiredSkill, acquiredErr] = await this.findOne({ id });
+    if (acquiredErr) return [null, acquiredErr];
 
-      if (!acquiredSkill) {
-        return [null, new NotFoundException('Acquired skill not found')];
-      }
+    const result = await this.acquiredSkillRepository.delete(id);
+    if (!result.affected) return [null, new InternalServerErrorException()];
 
-      const result = await this.acquiredSkillRepository.delete(id);
-      if (!result) return [null, new InternalServerErrorException()];
-
-      return [acquiredSkill, null];
-    } catch (err) {
-      console.log(err);
-    }
+    return [acquiredSkill, null];
   }
 }

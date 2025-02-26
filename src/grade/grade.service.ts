@@ -23,117 +23,90 @@ export class GradeService {
   async findOne(
     where: FindOptionsWhere<GradeEntity>,
   ): TServiceAsyncMethodReturn<GradeEntity> {
-    try {
-      const grade = await this.gradeRepository.findOneBy(where);
-      if (!grade) return [null, new NotFoundException('Grade not found')];
-      return [grade, null];
-    } catch (err) {
-      console.log(err);
-    }
+    const grade = await this.gradeRepository.findOneBy(where);
+    if (!grade) return [null, new NotFoundException('Grade not found')];
+    return [grade, null];
   }
 
   async findAll(
     options?: FindManyOptions<GradeEntity>,
   ): TServiceAsyncMethodReturn<GradeEntity[]> {
-    try {
-      const grades = await this.gradeRepository.find(options);
+    const grades = await this.gradeRepository.find(options);
 
-      if (!Array.isArray(grades)) {
-        return [null, new InternalServerErrorException()];
-      }
-
-      return [grades, null];
-    } catch (err) {
-      console.log(err);
+    if (!Array.isArray(grades)) {
+      return [null, new InternalServerErrorException()];
     }
+
+    return [grades, null];
   }
 
   async create(
     createGradeDto: CreateGradeDto,
   ): TServiceAsyncMethodReturn<GradeEntity> {
-    try {
-      const isExist = await this.gradeRepository.existsBy({
-        value: createGradeDto.value,
-      });
+    const isExist = await this.gradeRepository.existsBy({
+      value: createGradeDto.value,
+    });
 
-      if (isExist) {
-        return [
-          null,
-          new ConflictException(
-            `Grade '${createGradeDto.value}' already exist`,
-          ),
-        ];
-      }
-
-      const now = Date.now();
-
-      const newGrade = this.gradeRepository.create({
-        ...createGradeDto,
-        createdAt: now,
-        updatedAt: now,
-      });
-      const createdGrade = await this.gradeRepository.save(newGrade);
-      if (!createdGrade) return [null, new InternalServerErrorException()];
-
-      return [createdGrade, null];
-    } catch (err) {
-      console.log(err);
+    if (isExist) {
+      return [
+        null,
+        new ConflictException(`Grade '${createGradeDto.value}' already exist`),
+      ];
     }
+
+    const now = Date.now();
+
+    const newGrade = this.gradeRepository.create({
+      ...createGradeDto,
+      createdAt: now,
+      updatedAt: now,
+    });
+
+    const createdGrade = await this.gradeRepository.save(newGrade);
+    if (!createdGrade) return [null, new InternalServerErrorException()];
+
+    return [createdGrade, null];
   }
 
   async update(
     id: number,
     updateGradeDto: UpdateGradeDto,
   ): TServiceAsyncMethodReturn<GradeEntity> {
-    try {
-      const grade = await this.gradeRepository.findOneBy({ id });
+    const [grade, err] = await this.findOne({ id });
+    if (!grade) return [null, err];
 
-      if (!grade) {
-        return [null, new NotFoundException(`Grade with id '${id}' not found`)];
-      }
+    const [existedGrade] = await this.findOne({
+      value: updateGradeDto.value,
+    });
 
-      const existedGrade = await this.gradeRepository.findOneBy({
-        value: updateGradeDto.value,
-      });
-
-      if (existedGrade) {
-        return [
-          null,
-          new ConflictException(
-            `Grade '${updateGradeDto.value}' already exist by id '${existedGrade.id}'`,
-          ),
-        ];
-      }
-
-      const newGrade = this.gradeRepository.create({
-        ...grade,
-        ...updateGradeDto,
-        updatedAt: Date.now(),
-      });
-
-      const updatedGrade = await this.gradeRepository.save(newGrade);
-      if (!updatedGrade) return [null, new InternalServerErrorException()];
-
-      return [updatedGrade, null];
-    } catch (err) {
-      console.log(err);
+    if (existedGrade) {
+      return [
+        null,
+        new ConflictException(
+          `Grade '${updateGradeDto.value}' already exist by id '${existedGrade.id}'`,
+        ),
+      ];
     }
+
+    const newGrade = this.gradeRepository.create({
+      ...grade,
+      ...updateGradeDto,
+      updatedAt: Date.now(),
+    });
+
+    const updatedGrade = await this.gradeRepository.save(newGrade);
+    if (!updatedGrade) return [null, new InternalServerErrorException()];
+
+    return [updatedGrade, null];
   }
 
   async delete(id: number): TServiceAsyncMethodReturn<GradeEntity> {
-    try {
-      const grade = await this.gradeRepository.findOneBy({ id });
+    const [grade, err] = await this.findOne({ id });
+    if (err) return [null, err];
 
-      if (!grade) {
-        return [null, new NotFoundException(`Grade with id '${id}' not found`)];
-      }
+    const result = await this.gradeRepository.delete(id);
+    if (!result.affected) return [null, new InternalServerErrorException()];
 
-      const result = await this.gradeRepository.delete(id);
-      if (!result) return [null, new InternalServerErrorException()];
-
-      return [grade, null];
-    } catch (err) {
-      console.log(err);
-    }
+    return [grade, null];
   }
 }
