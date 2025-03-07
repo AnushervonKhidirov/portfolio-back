@@ -19,6 +19,8 @@ export class AuthMiddleware implements NestMiddleware {
     if (!isValid) throw new UnauthorizedException('Token expired');
 
     const { sub, email } = decode(accessToken) as JwtPayload;
+    if (!sub || !email) throw new UnauthorizedException();
+
     req['user'] = { id: parseInt(sub), email };
 
     next();
