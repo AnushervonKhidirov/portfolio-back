@@ -15,7 +15,7 @@ import { TaskEntity } from 'src/task/entity/task.entity';
 import { AchievementEntity } from 'src/achievement/entity/achievement.entity';
 import { SkillEntity } from 'src/skill/entity/skill.entity';
 
-import { ACTIVITY_TAG } from '../activity.type';
+import { ACTIVITY_TAG, TActivityTags } from '../activity.type';
 
 @Entity({ name: 'activities' })
 export class ActivityEntity {
@@ -25,7 +25,7 @@ export class ActivityEntity {
 
   @ApiProperty({ example: ACTIVITY_TAG.EXPERIENCE })
   @Column({ type: 'enum', enum: ACTIVITY_TAG })
-  tag: string;
+  tag: TActivityTags;
 
   @ApiProperty({ example: 'Google' })
   @Column({ length: 30 })
