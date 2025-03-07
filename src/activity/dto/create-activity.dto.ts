@@ -7,6 +7,11 @@ import {
   IsEnum,
   ValidateIf,
 } from 'class-validator';
+
+import { TaskEntity } from 'src/task/entity/task.entity';
+import { AchievementEntity } from 'src/achievement/entity/achievement.entity';
+import { SkillEntity } from 'src/skill/entity/skill.entity';
+
 import { ACTIVITY_TAG } from '../activity.type';
 
 export class CreateActivityDto {
@@ -30,10 +35,19 @@ export class CreateActivityDto {
 
   @ApiProperty({ example: '2024-02-18' })
   @IsDateString()
-  @ValidateIf((date) => date !== undefined)
-  endAt?: string;
+  @ValidateIf((date) => date !== null)
+  endAt: string | null;
 
   @ApiProperty({ example: 1 })
   @IsNumber()
   positionId: number;
+
+  @IsNumber({}, { each: true })
+  taskIds: TaskEntity[];
+
+  @IsNumber({}, { each: true })
+  achievementIds: AchievementEntity[];
+
+  @IsNumber({}, { each: true })
+  stackIds: SkillEntity[];
 }
