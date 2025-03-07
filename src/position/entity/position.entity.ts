@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { ProfileEntity } from 'src/profile/entity/profile.entity';
+import { ActivityEntity } from 'src/activity/entity/activity.entity';
 
 @Entity({ name: 'positions' })
 export class PositionEntity {
@@ -26,4 +27,7 @@ export class PositionEntity {
 
   @OneToMany(() => ProfileEntity, (profile) => profile)
   profile: ProfileEntity;
+
+  @OneToMany(() => ActivityEntity, (activity) => activity)
+  activity: ActivityEntity;
 }
