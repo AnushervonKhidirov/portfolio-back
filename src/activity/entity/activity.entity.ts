@@ -25,7 +25,7 @@ export class ActivityEntity {
 
   @ApiProperty({ example: ACTIVITY_TAG.EXPERIENCE })
   @Column({ type: 'enum', enum: ACTIVITY_TAG })
-  tag: ACTIVITY_TAG;
+  tag: string;
 
   @ApiProperty({ example: 'Google' })
   @Column({ length: 30 })
@@ -36,8 +36,8 @@ export class ActivityEntity {
   startAt: Date;
 
   @ApiProperty({ example: '2024-02-18' })
-  @Column({ name: 'end_at', type: 'date' })
-  endAt: Date;
+  @Column({ name: 'end_at', type: 'date', nullable: true })
+  endAt: Date | null;
 
   @ApiProperty({ example: 'About google company' })
   @Column({ type: 'text' })
