@@ -20,6 +20,7 @@ import { GradeModule } from './grade/grade.module';
 import { ContactInfoModule } from './contact-info/contact-info.module';
 import { SocialLinkModule } from './social-link/social-link.module';
 import { AcquiredSkillModule } from './acquired-skill/acquired-skill.module';
+import { TaskModule } from './task/task.module';
 
 // entities
 import { JwtEntity } from './jwt/entity/jwt.entity';
@@ -31,6 +32,7 @@ import { GradeEntity } from './grade/entity/grade.entity';
 import { ContactInfoEntity } from './contact-info/entity/contact-info.entity';
 import { SocialLinkEntity } from './social-link/entity/social-link.entity';
 import { AcquiredSkillEntity } from './acquired-skill/entity/acquired-skill.entity';
+import { TaskEntity } from './task/entity/task.entity';
 
 // middlewares
 import { AuthMiddleware } from './common/middleware/auth-middleware';
@@ -55,6 +57,7 @@ import { AuthMiddleware } from './common/middleware/auth-middleware';
         ContactInfoEntity,
         SocialLinkEntity,
         AcquiredSkillEntity,
+        TaskEntity,
       ],
       synchronize: true,
     }),
@@ -70,6 +73,7 @@ import { AuthMiddleware } from './common/middleware/auth-middleware';
     ContactInfoModule,
     SocialLinkModule,
     AcquiredSkillModule,
+    TaskModule,
   ],
   controllers: [],
   providers: [],
