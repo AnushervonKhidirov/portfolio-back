@@ -21,6 +21,7 @@ import { ContactInfoModule } from './contact-info/contact-info.module';
 import { SocialLinkModule } from './social-link/social-link.module';
 import { AcquiredSkillModule } from './acquired-skill/acquired-skill.module';
 import { TaskModule } from './task/task.module';
+import { AchievementModule } from './achievement/achievement.module';
 
 // entities
 import { JwtEntity } from './jwt/entity/jwt.entity';
@@ -33,6 +34,7 @@ import { ContactInfoEntity } from './contact-info/entity/contact-info.entity';
 import { SocialLinkEntity } from './social-link/entity/social-link.entity';
 import { AcquiredSkillEntity } from './acquired-skill/entity/acquired-skill.entity';
 import { TaskEntity } from './task/entity/task.entity';
+import { AchievementEntity } from './achievement/entity/achievement.entity';
 
 // middlewares
 import { AuthMiddleware } from './common/middleware/auth-middleware';
@@ -58,6 +60,7 @@ import { AuthMiddleware } from './common/middleware/auth-middleware';
         SocialLinkEntity,
         AcquiredSkillEntity,
         TaskEntity,
+        AchievementEntity,
       ],
       synchronize: true,
     }),
@@ -74,6 +77,7 @@ import { AuthMiddleware } from './common/middleware/auth-middleware';
     SocialLinkModule,
     AcquiredSkillModule,
     TaskModule,
+    AchievementModule,
   ],
   controllers: [],
   providers: [],
