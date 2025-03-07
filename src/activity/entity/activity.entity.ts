@@ -3,11 +3,17 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   ManyToOne,
+  ManyToMany,
   JoinColumn,
+  JoinTable,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
+
 import { PositionEntity } from 'src/position/entity/position.entity';
 import { ProfileEntity } from 'src/profile/entity/profile.entity';
+import { TaskEntity } from 'src/task/entity/task.entity';
+import { AchievementEntity } from 'src/achievement/entity/achievement.entity';
+import { SkillEntity } from 'src/skill/entity/skill.entity';
 
 import { ACTIVITY_TAG } from '../activity.type';
 
@@ -70,4 +76,16 @@ export class ActivityEntity {
   })
   @JoinColumn({ name: 'profile_id' })
   profile: ProfileEntity;
+
+  @ManyToMany(() => TaskEntity, (task) => task.activity)
+  @JoinTable({ name: 'activities_tasks' })
+  tasks: TaskEntity[];
+
+  @ManyToMany(() => AchievementEntity, (achievement) => achievement)
+  @JoinTable({ name: 'activities_achievements' })
+  achievements: AchievementEntity[];
+
+  @ManyToMany(() => SkillEntity, (stack) => stack.activity)
+  @JoinTable({ name: 'activities_stack' })
+  stack: SkillEntity[];
 }

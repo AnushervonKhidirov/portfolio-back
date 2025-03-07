@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, ManyToMany } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
+import { ActivityEntity } from 'src/activity/entity/activity.entity';
 
 @Entity({ name: 'achievements' })
 export class AchievementEntity {
@@ -24,4 +25,7 @@ export class AchievementEntity {
     type: 'bigint',
   })
   updatedAt: number;
+
+  @ManyToMany(() => ActivityEntity, (activity) => activity.achievements)
+  activity: ActivityEntity[];
 }
