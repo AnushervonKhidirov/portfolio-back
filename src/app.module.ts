@@ -20,6 +20,8 @@ import { GradeModule } from './grade/grade.module';
 import { ContactInfoModule } from './contact-info/contact-info.module';
 import { SocialLinkModule } from './social-link/social-link.module';
 import { AcquiredSkillModule } from './acquired-skill/acquired-skill.module';
+import { TaskModule } from './task/task.module';
+import { AchievementModule } from './achievement/achievement.module';
 import { ActivityModule } from './activity/activity.module';
 
 // entities
@@ -32,6 +34,8 @@ import { GradeEntity } from './grade/entity/grade.entity';
 import { ContactInfoEntity } from './contact-info/entity/contact-info.entity';
 import { SocialLinkEntity } from './social-link/entity/social-link.entity';
 import { AcquiredSkillEntity } from './acquired-skill/entity/acquired-skill.entity';
+import { TaskEntity } from './task/entity/task.entity';
+import { AchievementEntity } from './achievement/entity/achievement.entity';
 import { ActivityEntity } from './activity/entity/activity.entity';
 
 // middlewares
@@ -57,6 +61,8 @@ import { AuthMiddleware } from './common/middleware/auth-middleware';
         ContactInfoEntity,
         SocialLinkEntity,
         AcquiredSkillEntity,
+        TaskEntity,
+        AchievementEntity,
         ActivityEntity,
       ],
       synchronize: true,
@@ -73,6 +79,8 @@ import { AuthMiddleware } from './common/middleware/auth-middleware';
     ContactInfoModule,
     SocialLinkModule,
     AcquiredSkillModule,
+    TaskModule,
+    AchievementModule,
     ActivityModule,
   ],
   controllers: [],
