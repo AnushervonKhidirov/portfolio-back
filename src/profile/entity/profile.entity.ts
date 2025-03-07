@@ -15,6 +15,7 @@ import { GradeEntity } from 'src/grade/entity/grade.entity';
 import { ContactInfoEntity } from 'src/contact-info/entity/contact-info.entity';
 import { SocialLinkEntity } from 'src/social-link/entity/social-link.entity';
 import { AcquiredSkillEntity } from 'src/acquired-skill/entity/acquired-skill.entity';
+import { ActivityEntity } from 'src/activity/entity/activity.entity';
 
 @Entity({ name: 'profiles' })
 export class ProfileEntity {
@@ -89,4 +90,7 @@ export class ProfileEntity {
     },
   )
   acquiredSkills: AcquiredSkillEntity[];
+
+  @OneToMany(() => ActivityEntity, (activity) => activity.profile)
+  activity: ActivityEntity;
 }
